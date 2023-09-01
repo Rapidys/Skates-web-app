@@ -1,7 +1,7 @@
 import React, {FC, useEffect, useState} from 'react';
-import {IData, IServiceData} from "../../types/Dashboard";
-import Convert from "../Convert";
-import Button from "../Button";
+import {IData, IServiceData} from "../../../types/Dashboard";
+import Convert from "../../Convert";
+import Button from "../../Button";
 import {Simulate} from "react-dom/test-utils";
 
 

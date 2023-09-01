@@ -1,9 +1,10 @@
 /* Add this CSS to your component's CSS file or a global stylesheet */
 .menu-item {
   overflow: hidden;
-  transition: height 0.3s ease-in-out; /* Adjust the duration and easing as needed */
+  max-height: 0;
+  transition: max-height 0.3s ease-in-out;
 }
 
 .menu-item.open {
-  height: auto;
+  max-height: 1000px; /* Adjust the max-height to be larger than your menu's expected height */
 }
