@@ -23,19 +23,19 @@ const Login = () => {
 
     return (
             <Card className={'px-4'}>
-                <div>
+                <div className = {'mb-2'}>
                     <h4 className = {'text-custom_light'}>
                         ავტორიზაცია
                     </h4>
                 </div>
                 <Input
-                    label={'Username'}
+                    label={'მომხმარებელი'}
                     value={state.userName}
                     onChange={(e) => handleChange('userName', e)}
                 />
 
                 <Input
-                    label={'Password'}
+                    label={'პაროლი'}
                     type={'password'}
                     value={state.password}
                     onChange={(e) => handleChange('password', e)}
@@ -46,7 +46,7 @@ const Login = () => {
                         handleLogin()
                     }}
                 >
-                    Log in
+                   შესვლა
                 </Button>
             </Card>
     );

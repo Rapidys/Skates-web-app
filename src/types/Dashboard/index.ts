@@ -3,16 +3,18 @@
 
 
 
-export interface headData {
+export interface IHeadData {
    id: number,
    head?: string,
+   checked?:boolean
 }
 
 export interface ServiceData {
-   id: number,
+   id?: number,
    serviceValue?: string,
    trainer?: string,
    price?: string,
    active?: string,
    checked?: boolean,
+   count?:number,
 }

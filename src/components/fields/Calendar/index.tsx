@@ -25,7 +25,7 @@ function classNames(...classes: any) {
 }
 
 interface ICalendar {
-    onChange: (day: Date) => void,
+    onChange: (day: Date,isDay?:string) => void,
     value: number | Date,
     open: boolean
     ref?: any
@@ -73,7 +73,7 @@ const Calendar: FC<ICalendar> = forwardRef(({onChange, value, open}, ref:any) =>
 
     return (
         open && (
-            <div className={`absolute w-full`} ref={ref} style={{zIndex: 9999}}>
+            <div className={`absolute w-72`} ref={ref} style={{zIndex: 9999}}>
                 <div
                     className="max-w-md px-4 mx-auto sm:px-7 md:max-w-4xl md:px-6 py-2 bg-custom_dark_secondary rounded-lg">
                     <div className="md:grid md:grid-cols-1 md:divide-x md:divide-gray-200">
@@ -154,6 +154,7 @@ const Calendar: FC<ICalendar> = forwardRef(({onChange, value, open}, ref:any) =>
                                                         const day = oldVal.getDate()
                                                         const year = oldVal.getFullYear()
                                                         onChange(new Date(year, index, day))
+                                                        setCalendarType(calendarType+1)
                                                     }}
                                                 >
                                                     {item}
@@ -193,7 +194,8 @@ const Calendar: FC<ICalendar> = forwardRef(({onChange, value, open}, ref:any) =>
                                                                 let oldVal = new Date(value)
                                                                 const day = oldVal.getDate()
                                                                 const month = oldVal.getMonth()
-                                                                onChange(new Date(item, month, day))
+                                                                onChange(new Date(item, month, day),'isDay')
+                                                                setCalendarType(0)
                                                             }}
                                                         >
                                                             {item}
@@ -222,7 +224,7 @@ const Calendar: FC<ICalendar> = forwardRef(({onChange, value, open}, ref:any) =>
                                                 if (isBefore(day, startOfToday())) {
                                                     return;
                                                 }
-                                                onChange(day)
+                                                onChange(day,'isDay')
                                             }}
                                             className={classNames(
                                                 isEqual(day, value) && 'text-white',

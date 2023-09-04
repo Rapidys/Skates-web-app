@@ -22,6 +22,8 @@ module.exports = {
         custom_primary_dark:'#080202',
         custom_button:'#1B6B93',
         custom_ocean:'#213555',
+        custom_danger:'#8a1d36',
+        custom_disabled:'#c5c5c5',
         // Add more custom colors here
       },
     },

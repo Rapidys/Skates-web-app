@@ -30,7 +30,7 @@ const FindAccount = () => {
             <div className={'w-full flex justify-center mt-2'}>
                 <div className={'w-full'}>
                     <Input
-                        label={'CardId/Phone'}
+                        label={'ბარ.ნომერი / მობ.ნომერი'}
                         type={'text'}
                         value={AccountId}
                         ref={AccountIdRef}
@@ -41,7 +41,7 @@ const FindAccount = () => {
                     <Button
                         onClick={() => CheckAccount(AccountId)}
                     >
-                        Log in
+                        შესვლა
                     </Button>
                 </div>
 

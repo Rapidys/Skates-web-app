@@ -19,8 +19,11 @@ const DatePicker = ({...props}) => {
 
     useOnClickOutside(ref, () => setOpen(false))
 
-    const handleDateChange = (day: Date) => {
+    const handleDateChange = (day: Date,isDay:string | undefined) => {
         setDate(day)
+        if(isDay){
+            setOpen(false)
+        }
     }
 
     return (

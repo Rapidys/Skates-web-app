@@ -18,6 +18,7 @@ export const PrivateRoutes : IRoute[] = [
     {id:2,name:'createAccount', path:'/createAccount',component:CreateAccount,layout:OnBoardingLayout},
     {id:3,name:'dashboard', path:'/dashboard',component:Dashboard,layout:Layout},
     {id:3,name:'dashboard', path:'/profile',component:Profile,layout:Layout},
+    {id:3,name:'dashboard', path:'/admin',component:Admin,layout:Layout},
 ]
 
 // export const AdminRoutes : IRoute[] = [

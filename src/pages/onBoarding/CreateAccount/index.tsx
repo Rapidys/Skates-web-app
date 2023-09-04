@@ -74,7 +74,9 @@ const CreateAccount = () => {
                             />
                         </div>
                         <div>
-                            <DatePicker/>
+                            <DatePicker
+                                label={'დაბ.თარიღი'}
+                            />
                         </div>
                         <div>
                             <Input
