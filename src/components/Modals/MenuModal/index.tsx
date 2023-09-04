@@ -25,27 +25,38 @@ const MenuModal: FC<IMenuModal> = ({children,items}) => {
 
 
     return (
-        <div className={''}>
+        <>
             <div
                 onClick={handleOpen}
                 className={'relative'}
             >
                 {children}
             </div>
-            <div className={`absolute p-2 rounded-lg top-110 text-white right-5 ${open ? 'opacity-1' : 'opacity-0 h-0 w-0'} transition  bg-custom_light`}
-                 ref={ref}
-            >
-                <div>
-                    {items.map((menuItem) => {
-                        return (
-                            <div onClick={menuItem.onClick} className={'cursor-pointer'}>
-                                {menuItem.title}
-                            </div>
-                        )
-                    })}
-                </div>
-            </div>
-        </div>
+            {
+                open && (
+                    <div className={`absolute p-2 rounded-lg top-110 text-white right-5 ${open ? 'opacity-1' : 'opacity-0 h-0'} transition  bg-custom_dark`}
+                         ref={ref}
+                         style = {{zIndex:999999}}
+                    >
+                        <div>
+                            {items.map((menuItem) => {
+                                return (
+                                    <div onClick={menuItem.onClick} className={'cursor-pointer px-2 flex py-2 items-center'}>
+                                        <div className={'mr-2'}>
+                                            {menuItem.icon}
+                                        </div>
+                                        <div className = {'text-sm'}>
+                                            {menuItem.title}
+                                        </div>
+                                    </div>
+                                )
+                            })}
+                        </div>
+                    </div>
+                )
+            }
+
+        </>
     );
 };
 

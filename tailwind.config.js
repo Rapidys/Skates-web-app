@@ -7,6 +7,7 @@ module.exports = {
         __dirname,
         '{src,pages,components,app}/**/*!(*.stories|*.spec).{ts,tsx,html}'
     ),
+    'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}',
     ...createGlobPatternsForDependencies(__dirname),
   ],
   theme: {
@@ -17,6 +18,7 @@ module.exports = {
         custom_loading: '#9D44C0',
         custom_light: '#EC53B0',
         custom_dark:'#001C30',
+        custom_dark_secondary:'#00101c',
         custom_primary_dark:'#080202',
         custom_button:'#1B6B93',
         custom_ocean:'#213555',
@@ -24,5 +26,9 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    require('tailwindcss-transforms'),
+    require('tailwindcss-transitions'),
+    require('flowbite/plugin')
+  ],
 };

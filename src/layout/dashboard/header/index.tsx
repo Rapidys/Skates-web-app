@@ -1,12 +1,18 @@
 import React from 'react';
-import MenuModal from "../../components/Modals/MenuModal";
-import {faQrcode, faUser} from "@fortawesome/free-solid-svg-icons";
+import MenuModal from "../../../components/Modals/MenuModal";
+import {faQrcode, faSignOutAlt, faUser} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {useAuth} from "../../../context/authContext";
+import {useNavigate} from "react-router-dom";
 
 const Header = () => {
+    const {handleLogout} = useAuth()
+
+    const navigate = useNavigate()
 
     const items = [
-        {id:1,title:'გასვლა',onClick:() => console.log('logout')}
+        {id:2,title:'პროფილი',onClick:() => navigate('/profile'),icon:<FontAwesomeIcon icon={faUser} />},
+        {id:1,title:'გასვლა',onClick:handleLogout,icon:<FontAwesomeIcon icon={faSignOutAlt} />},
     ]
 
     return (

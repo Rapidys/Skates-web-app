@@ -61,7 +61,7 @@ const MenuChildren: FC<MenuChildrenProps> = ({item, level, isOpened}) => {
                 <div className={'flex items-center w-full'}>
                     <div className={`py-2 px-4`}>{item?.icon}</div>
                     {!isTabletOrMobile && (
-                        <div className={`py-2 text-custom_button`}>{item?.title}</div>
+                        <div className={`py-2 text-custom_button text-sm`}>{item?.title}</div>
                     )}
                 </div>
                 <div>

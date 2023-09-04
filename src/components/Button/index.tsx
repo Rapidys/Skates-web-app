@@ -13,7 +13,7 @@ const Button: FC<IButton> = ({children, loading, disabled, ...props}) => {
 
     return (
         <button
-            className={`btn px-4 py-2 flex justify-center items-center bg-custom_ocean text-white shadow ${loading ? 'w-10 h-10 rounded-full' : 'rounded-lg'} hover:bg-custom_light transition`}
+            className={`btn px-4 py-2 flex justify-center items-center bg-custom_ocean text-white shadow ${loading ? 'w-10 h-10 rounded-full' : 'rounded-lg'} ${disabled ? 'bg-custom_ocean' : 'bg-custom_secondary'} hover:bg-custom_light transition`}
             disabled={disabled}
             {...props}
         >

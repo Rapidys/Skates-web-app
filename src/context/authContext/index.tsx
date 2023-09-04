@@ -1,24 +1,49 @@
-import React, {useState} from 'react';
+import React, {FC, useContext, useState} from 'react';
 
 
 const AuthContext = React.createContext({
-    role:'',
-    token:'',
-    user:{}
+   isLoggedIn:false,
+   handleLogin:() => {},
+   handleLogout:() => {}
 })
 
 interface IUserInfo {
-
+  children:React.ReactNode
 }
-const AuthContextProvider = () => {
+const AuthContextProvider:FC<IUserInfo> = ({children}) => {
 
-    const [userInfo,setUserInfo] = useState({})
+
+    const [state,setState] = useState({
+        isLoggedIn:false,
+    })
+
+    const handleLogin = () => {
+        setState({
+            ...state,
+            isLoggedIn: true,
+        })
+    }
+
+
+    const handleLogout = () => {
+        setState({
+            ...state,
+            isLoggedIn: false,
+        })
+    }
+
 
     return (
-        <div>
-
-        </div>
+        <AuthContext.Provider value={{
+            isLoggedIn:state.isLoggedIn,
+            handleLogin,
+            handleLogout
+        }}>
+            {children}
+        </AuthContext.Provider>
     );
 };
 
 export default AuthContextProvider;
+
+export const useAuth = () => useContext(AuthContext)

@@ -2,19 +2,17 @@
 
 
 
-export interface IData {
-   sectionName:string,
-   data:IServiceData[]
+
+export interface headData {
+   id: number,
+   head?: string,
 }
 
-export interface IServiceData {
-   id:number,
-   serviceName?:string,
-   description:string,
-   price:string,
-   time:string,
-   img:string,
-   title:string,
-   serviceType:number,
-   trainerName?:string,
+export interface ServiceData {
+   id: number,
+   serviceValue?: string,
+   trainer?: string,
+   price?: string,
+   active?: string,
+   checked?: boolean,
 }
