@@ -2,7 +2,7 @@ import React, {ChangeEvent, useEffect, useRef, useState} from 'react';
 import Card from "../../../components/Cards/Card";
 import Input from "../../../components/fields/input";
 import Button from "../../../components/Button";
-import {useAuth} from "../../../context/authContext";
+import {useAuth} from "../../../context/AuthContext";
 
 const Login = () => {
 

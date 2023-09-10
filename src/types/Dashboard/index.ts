@@ -1,6 +1,13 @@
 // {id:1,sectionName:'ბოლო დამატებული პროდუქტები',trainerName:'გენადი',description:'ფიზიკური მომზადება სასწავლად , პრაქტიკები კვირაში 2 გაკვეთილი...',price:'150',time:'1'},
 
 
+export interface IServices {
+   "id": number,
+   "displayName": string,
+   "needTrainer": boolean,
+   "quantity": number,
+   "price": number
+}
 
 
 export interface IHeadData {

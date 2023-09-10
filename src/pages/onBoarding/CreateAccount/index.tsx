@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, FC, useState} from 'react';
 import Card from "../../../components/Cards/Card";
 import Input from "../../../components/fields/input";
 import * as yup from "yup";
@@ -6,10 +6,23 @@ import {Form, Formik} from "formik";
 import Button from "../../../components/Button";
 import DatePicker from "../../../components/fields/DatePicker";
 import {useNavigate} from "react-router-dom";
+import {useServices} from "../../../context/Services/ServiceContextProvider";
+import {useAccount} from "../../../context/AccountContext";
+import {IClientInfo} from "../../Profile";
+import Loader from "../../../components/Loader";
 
-const CreateAccount = () => {
+
+interface ICreateAccount {
+    ClientInfo?:IClientInfo,
+    loading?:boolean
+}
+const CreateAccount:FC<ICreateAccount> = ({ClientInfo ,loading=false}) => {
 
     const navigate = useNavigate()
+    const [date, setDate] = useState<number | Date>(new Date())
+
+    const { services } = useServices()
+    const { cardNumber } = useAccount()
 
     const validSchema = () => {
         return yup.object().shape({
@@ -22,20 +35,33 @@ const CreateAccount = () => {
         });
     };
 
+    if(loading){
+        return <Loader/>
+    }
+
 
     return (
         <Formik
             initialValues={{
-                firstName: '',
-                lastName: '',
-                birthDay: '',
-                phoneNumber: ''
+                firstName:ClientInfo?.firstName || '' ,
+                lastName: ClientInfo?.lastName || '',
+                phoneNumber: ClientInfo?.mobile || ''
             }}
             validateOnBlur
             validationSchema={validSchema()}
             onSubmit={(values) => {
                 console.log(values)
-                navigate('/dashboard')
+                const data = {
+                    ClientId:-1000,
+                    CardNumber:cardNumber,
+                    FirstName:values.firstName,
+                    LastName:values.lastName,
+                    Mobile:values.phoneNumber,
+                    BrithDate:date,
+                }
+                services.Card.updateCardInfo(data).then(res => {
+                    navigate('/dashboard')
+                })
             }}
         >
             {({
@@ -76,6 +102,8 @@ const CreateAccount = () => {
                         <div>
                             <DatePicker
                                 label={'დაბ.თარიღი'}
+                                date = {date}
+                                setDate={setDate}
                             />
                         </div>
                         <div>

@@ -4,7 +4,7 @@ import {IHeadData, ServiceData} from "../../types/Dashboard";
 import {headData, rowActiveData, rowData} from "../../utils/constants/mock";
 import MoreModal from "../../components/Modals/MoreModal";
 import Button from "../../components/Button";
-import {useAlert} from "../../context/alertContext";
+import {useAlert} from "../../context/AlertContext";
 import {Modal} from "flowbite-react";
 
 const Admin = () => {

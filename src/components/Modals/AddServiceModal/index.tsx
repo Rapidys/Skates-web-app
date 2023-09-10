@@ -4,6 +4,8 @@ import Select from 'react-select'
 import {rowData} from "../../../utils/constants/mock";
 import DatePicker from "../../fields/DatePicker";
 import Button from '../../Button/index'
+import {useServices} from "../../../context/Services/ServiceContextProvider";
+import {IServices} from "../../../types/Dashboard";
 
 interface IAddService {
     openModal: string | undefined,
@@ -14,15 +16,28 @@ interface IAddService {
 const AddServiceModal: FC<IAddService> = ({openModal, setOpenModal, handleAddService}) => {
 
     const [options, setOptions] = useState([])
+    const [date, setDate] = useState<number | Date>(new Date())
 
+    const {services} = useServices()
 
     useEffect(() => {
-        const arr: any = []
-        rowData.map(item => {
-            arr.push({value: item.serviceValue, label: item.serviceValue,...item})
+        services.Dashboard.getServices().then((res) => {
+            const {data} = res
+            const arr: any = []
+            data.map((item: IServices) => {
+                arr.push({value: item.displayName, label: item.displayName, ...item})
+            })
+            setOptions(arr)
         })
-        setOptions(arr)
-    }, [])
+    }, []);
+
+    // useEffect(() => {
+    //     const arr: any = []
+    //     rowData.map(item => {
+    //         arr.push({value: item.serviceValue, label: item.serviceValue,...item})
+    //     })
+    //     setOptions(arr)
+    // }, [])
     // State to hold selected values
     const [selectedValues, setSelectedValues] = useState([]);
 
@@ -52,10 +67,20 @@ const AddServiceModal: FC<IAddService> = ({openModal, setOpenModal, handleAddSer
 
                 <div className={'flex justify-between mt-3'}>
                     <div>
-                        <DatePicker label={'დან'} labelClassName={'!text-custom_ocean'}/>
+                        <DatePicker
+                            label={'დან'}
+                            labelClassName={'!text-custom_ocean'}
+                            date={date}
+                            setDate={setDate}
+                        />
                     </div>
                     <div>
-                        <DatePicker label={'მდე'} labelClassName={'!text-custom_ocean'}/>
+                        <DatePicker
+                            label={'მდე'}
+                            labelClassName={'!text-custom_ocean'}
+                            date={date}
+                            setDate={setDate}
+                        />
                     </div>
                 </div>
             </Modal.Body>

@@ -1,4 +1,6 @@
-import React, {FC, InputHTMLAttributes, RefObject} from 'react';
+import React, {FC, InputHTMLAttributes, RefObject, useState} from 'react';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faEye, faEyeSlash} from '@fortawesome/free-solid-svg-icons';
 
 
 interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -7,10 +9,17 @@ interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
     isValid?:boolean,
     error?:string,
     labelClassName?:string,
-    renderIcon?:() => React.ReactNode
+    renderIcon?:() => React.ReactNode,
+    withEye?:boolean
 }
 
-const Input: FC<IInputProps> = React.forwardRef(({label,isValid= true,error,labelClassName ,renderIcon,...props},ref) => {
+const Input: FC<IInputProps> = React.forwardRef(({label,isValid= true,withEye,error,labelClassName ,renderIcon,...props},ref) => {
+
+    const [toggleEye,setToggleEye] = useState(withEye)
+
+    const toggle = () => {
+        setToggleEye(!toggleEye)
+    }
 
     return (
         <div className="mb-4">
@@ -21,8 +30,17 @@ const Input: FC<IInputProps> = React.forwardRef(({label,isValid= true,error,labe
                 <input
                     className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${!isValid ? 'border-2 border-r-custom_light' : ''}`}
                     ref = {ref}
+                    type = {toggleEye ? 'password' : 'text'}
                     {...props}
                 />
+                {withEye && (
+                    <div className={'absolute right-4 cursor-pointer'} style = {{top:'50%',transform:'translateY(-50%)'}}
+                      onClick={toggle}
+                    >
+                        {toggleEye ? <FontAwesomeIcon icon={faEye} /> : <FontAwesomeIcon icon={faEyeSlash} />}
+
+                    </div>
+                )}
                 {renderIcon && renderIcon()}
             </div>
 

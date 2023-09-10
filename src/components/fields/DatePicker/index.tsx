@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {FC, useRef, useState} from 'react';
 import Input from "../input";
 import Calendar from "../Calendar";
 import useOnClickOutside from "../../../utils/hooks/useOnClickOtside";
@@ -8,12 +8,15 @@ import {faCalendar} from "@fortawesome/free-solid-svg-icons";
 
 
 interface IDatePicker {
-
+    date:Date | number,
+    setDate:any,
+    onFocus?:() => void,
+    label :string,
+    labelClassName? :string,
 }
 
-const DatePicker = ({...props}) => {
-
-    const [date, setDate] = useState<number | Date>(new Date())
+const DatePicker:FC<IDatePicker> = ({date,setDate,label,labelClassName,...props}) => {
+    // const [date, setDate] = useState<number | Date>(new Date())
     const [open, setOpen] = useState(false)
     const ref = useRef<any>()
 
@@ -29,8 +32,7 @@ const DatePicker = ({...props}) => {
     return (
         <>
             <Input
-                label={'თარიღი'}
-                {...props}
+                label={label ? label : 'თარიღი'}
                 value={format(date, 'yyyy-MM-dd')}
                 renderIcon={() => {
                     return (
@@ -45,6 +47,8 @@ const DatePicker = ({...props}) => {
                         props?.onFocus()
                     }
                 }}
+                labelClassName = {labelClassName}
+                {...props}
             />
 
             <Calendar

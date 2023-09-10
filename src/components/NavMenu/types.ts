@@ -10,7 +10,7 @@ export interface INavItem {
 
 
 // {id:2,title:'მთავარი' , path: '/dashboard'},
-// {id:1,title:'ჩემი სერვისები',path:'/services'},
+// {id:1,title:'ჩემი სერვისები',path:'/Services'},
 // {id:3,title:'სერვისები' , children : [
 //     {id:31,title:'აქსესუარები' , path:'/accessories'},
 //     {id:32,title:'ტრენერები', path:'/trainers'},

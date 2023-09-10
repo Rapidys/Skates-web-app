@@ -2,12 +2,11 @@ import React from 'react';
 import {Navigate, Route, Routes} from 'react-router-dom'
 import {PrivateRoutes, PublicRoutes} from './routing/routs'
 import {IRoute} from "./routing/types";
-import Layout from "./layout/dashboard";
-import {useAuth} from "./context/authContext";
+import {useAuth} from "./context/AuthContext";
 
 const App = () => {
-    const {isLoggedIn} = useAuth()
 
+    const {isLoggedIn} = useAuth()
 
     return (
         <div className={'h-full'}>

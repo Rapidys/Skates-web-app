@@ -1,19 +1,28 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import ServiceTable from "../../components/Tables/ServiceTable";
-import {IHeadData, ServiceData} from "../../types/Dashboard";
+import {IHeadData, IServices, ServiceData} from "../../types/Dashboard";
 import {headData, rowActiveData} from "../../utils/constants/mock";
 import AddServiceModal from "../../components/Modals/AddServiceModal";
 import Button from "../../components/Button";
 import MoreModal from "../../components/Modals/MoreModal";
+import {useServices} from "../../context/Services/ServiceContextProvider";
 
 const Dashboard = () => {
 
     const [state, setState] = useState<{head:IHeadData[],row:ServiceData[]}>({head: headData, row: rowActiveData})
     const [openModal, setOpenModal] = useState<string | undefined>(undefined)
     const [openMoreModal, setOpenMoreModal] = useState<string | undefined>(undefined)
-    const [serviceItem, setServiceItem] = useState({})
+    const [myServiceItems, setMyServiceItem] = useState({})
 
 
+
+    const { services } = useServices()
+
+    useEffect(() => {
+        services.Dashboard.getPaymentTypes().then(res => {
+            console.log(res)
+        })
+    }, []);
 
     const handleAddServiceModal = () => {
         setOpenModal('default')
@@ -44,7 +53,7 @@ const Dashboard = () => {
 
     const handleOpenMore = (item: ServiceData) => {
         setOpenMoreModal('default')
-        setServiceItem(item)
+        setMyServiceItem(item)
     }
 
     return (
@@ -68,7 +77,7 @@ const Dashboard = () => {
                     color={'secondary'}
                 >დამატება</Button>
             </div>
-            <MoreModal openModal={openMoreModal} setOpenModal={setOpenMoreModal} data={serviceItem}/>
+            <MoreModal openModal={openMoreModal} setOpenModal={setOpenMoreModal} data={myServiceItems}/>
             <AddServiceModal openModal={openModal} setOpenModal={setOpenModal} handleAddService={handleAddService}/>
         </div>
     );

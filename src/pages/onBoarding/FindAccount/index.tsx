@@ -2,8 +2,8 @@ import React, {useEffect, useRef, useState} from 'react';
 import Card from "../../../components/Cards/Card";
 import Input from "../../../components/fields/input";
 import Button from "../../../components/Button";
-import {useAuth} from "../../../context/authContext";
-import {useAccount} from "../../../context/accountContext";
+import {useAuth} from "../../../context/AuthContext";
+import {useAccount} from "../../../context/AccountContext";
 
 const FindAccount = () => {
 
@@ -31,12 +31,11 @@ const FindAccount = () => {
                 <div className={'w-full'}>
                     <Input
                         label={'ბარ.ნომერი / მობ.ნომერი'}
-                        type={'text'}
                         value={AccountId}
                         ref={AccountIdRef}
                         onChange={(e) => setAccountId(e.target.value)}
                         onBlur={() => AccountIdRef.current?.focus()}
-
+                        withEye = {true}
                     />
                     <Button
                         onClick={() => CheckAccount(AccountId)}
