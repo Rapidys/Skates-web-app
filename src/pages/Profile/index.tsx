@@ -11,7 +11,8 @@ export interface IClientInfo {
     firstName:string,
     lastName:string,
     birthDate:Date | number,
-    mobile:string
+    mobile:string,
+    documentNumber?:string,
 }
 const Profile = () => {
 

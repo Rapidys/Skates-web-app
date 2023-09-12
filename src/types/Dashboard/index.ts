@@ -2,11 +2,37 @@
 
 
 export interface IServices {
-   "id": number,
+   "id": 1,
    "displayName": string,
    "needTrainer": boolean,
+   "isInstant": boolean,
    "quantity": number,
-   "price": number
+   "price": number,
+   trainerId?:number,
+   StartDate?:Date,
+   EndDate?:Date,
+   label?:string,
+   value?:string
+}
+export interface ITrainers {
+   "id"?: number,
+   "displayName"?: string
+}
+export interface IPaymentTypes {
+   "id"?: number,
+   "displayName"?: string
+}
+
+export interface IOptions  {
+   services:IServices[],
+   trainers:ITrainers[],
+   paymentTypes:IPaymentTypes[],
+}
+
+export interface ISelectedValues {
+   trainers:ITrainers,
+   services:IServices[],
+   paymentTypes:IPaymentTypes,
 }
 
 
@@ -25,3 +51,4 @@ export interface ServiceData {
    checked?: boolean,
    count?:number,
 }
+

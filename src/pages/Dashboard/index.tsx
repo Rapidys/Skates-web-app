@@ -16,14 +16,6 @@ const Dashboard = () => {
 
 
 
-    const { services } = useServices()
-
-    useEffect(() => {
-        services.Dashboard.getPaymentTypes().then(res => {
-            console.log(res)
-        })
-    }, []);
-
     const handleAddServiceModal = () => {
         setOpenModal('default')
     }
@@ -70,6 +62,8 @@ const Dashboard = () => {
                 handleOpenMore={handleOpenMore}
             />
             <div className={'fixed bottom-0 right-0 p2 w-full shadow  flex justify-end items-center px-3 py-2 z-10'}>
+                <Button className={'mr-2'}
+                >გამოყენება & დამატება</Button>
                 <Button className={'mr-2'}
                 >გამოყენება</Button>
                 <Button

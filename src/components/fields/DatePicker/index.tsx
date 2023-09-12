@@ -9,13 +9,15 @@ import {faCalendar} from "@fortawesome/free-solid-svg-icons";
 
 interface IDatePicker {
     date:Date | number,
-    setDate:any,
+    setDate?:any,
     onFocus?:() => void,
     label :string,
     labelClassName? :string,
+    className? :string,
+    onChange?:(day:Date) => void
 }
 
-const DatePicker:FC<IDatePicker> = ({date,setDate,label,labelClassName,...props}) => {
+const DatePicker:FC<IDatePicker> = ({date,setDate,label,onChange,labelClassName,...props}) => {
     // const [date, setDate] = useState<number | Date>(new Date())
     const [open, setOpen] = useState(false)
     const ref = useRef<any>()
@@ -23,7 +25,12 @@ const DatePicker:FC<IDatePicker> = ({date,setDate,label,labelClassName,...props}
     useOnClickOutside(ref, () => setOpen(false))
 
     const handleDateChange = (day: Date,isDay:string | undefined) => {
-        setDate(day)
+        if(onChange){
+            onChange(day)
+        }
+        if(!onChange){
+            setDate(day)
+        }
         if(isDay){
             setOpen(false)
         }

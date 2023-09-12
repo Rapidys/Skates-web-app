@@ -22,7 +22,7 @@ const Input: FC<IInputProps> = React.forwardRef(({label,isValid= true,withEye,er
     }
 
     return (
-        <div className="mb-4">
+        <>
             <label className={`block text-white text-sm font-bold mb-2 ${labelClassName}`} htmlFor="username">
                 {label}  {!isValid && <span className = {'text-custom_light'}> / {error}</span>}
             </label>
@@ -44,7 +44,7 @@ const Input: FC<IInputProps> = React.forwardRef(({label,isValid= true,withEye,er
                 {renderIcon && renderIcon()}
             </div>
 
-        </div>
+        </>
     )
 });
 

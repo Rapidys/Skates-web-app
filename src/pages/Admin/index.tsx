@@ -6,6 +6,7 @@ import MoreModal from "../../components/Modals/MoreModal";
 import Button from "../../components/Button";
 import {useAlert} from "../../context/AlertContext";
 import {Modal} from "flowbite-react";
+import AlertModal from "../../components/Modals/AlertModal";
 
 const Admin = () => {
     const [state, setState] = useState<{ head: IHeadData[], row: ServiceData[] }>({head: headData, row: rowData})
@@ -49,24 +50,13 @@ const Admin = () => {
                 >დამატება</Button>
             </div>
 
-            <Modal show={openModal === 'default'} onClose={() => setOpenModal(undefined)}>
-                <Modal.Header>
-                    <span className={'text-custom_light'}>
-                       ყურადღება !
-                    </span>
-                </Modal.Header>
-                <Modal.Body>
-                    <span className={'text-custom_ocean'}>
-                        ნამდვილად გსურთ არჩეული სერვის(ის / ების) წაშლა ?
-                    </span>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button onClick={() => setOpenModal(undefined)} color={'danger'}>დიახ</Button>
-                    <Button color={'secondary'} onClick={() => setOpenModal(undefined)}>
-                        არა
-                    </Button>
-                </Modal.Footer>
-            </Modal>
+
+            <AlertModal
+                title = {'ყურადღება !'}
+                description = {'ნამდვილად გსურთ არჩეული სერვის(ის / ების) წაშლა ?'}
+                openModal={openModal}
+                setOpenModal={setOpenModal}
+            />
 
             <MoreModal openModal={openMoreModal} setOpenModal={setOpenMoreModal} data={serviceItem}/>
 

@@ -39,6 +39,7 @@ const FindAccount = () => {
                     />
                     <Button
                         onClick={() => CheckAccount(AccountId)}
+                        className = {'mt-4'}
                     >
                         შესვლა
                     </Button>

@@ -45,6 +45,7 @@ const Login = () => {
                     onClick={() => {
                         handleLogin()
                     }}
+                    className = {'mt-4'}
                 >
                    შესვლა
                 </Button>

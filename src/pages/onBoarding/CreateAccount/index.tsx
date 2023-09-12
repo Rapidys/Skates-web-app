@@ -28,6 +28,7 @@ const CreateAccount:FC<ICreateAccount> = ({ClientInfo ,loading=false}) => {
         return yup.object().shape({
             firstName: yup.string().required('აუცილებელი ველი'),
             lastName: yup.string().required('აუცილებელი ველი'),
+            documentNumber: yup.string(),
             phoneNumber: yup
                 .number()
                 .typeError('არავალიდური ნომერი')
@@ -45,7 +46,8 @@ const CreateAccount:FC<ICreateAccount> = ({ClientInfo ,loading=false}) => {
             initialValues={{
                 firstName:ClientInfo?.firstName || '' ,
                 lastName: ClientInfo?.lastName || '',
-                phoneNumber: ClientInfo?.mobile || ''
+                phoneNumber: ClientInfo?.mobile || '',
+                documentNumber: ClientInfo?.documentNumber || '',
             }}
             validateOnBlur
             validationSchema={validSchema()}
@@ -75,7 +77,7 @@ const CreateAccount:FC<ICreateAccount> = ({ClientInfo ,loading=false}) => {
                   dirty,
               }) => (
                     <Card className={'px-4'}>
-                        <div>
+                        <div className = {'mb-2'}>
                             <Input
                                 label={'სახელი'}
                                 value={values.firstName}
@@ -87,7 +89,7 @@ const CreateAccount:FC<ICreateAccount> = ({ClientInfo ,loading=false}) => {
                                 type = {'text'}
                             />
                         </div>
-                        <div>
+                        <div className = {'mb-2'}>
                             <Input
                                 label={'გვარი'}
                                 value={values.lastName}
@@ -99,14 +101,14 @@ const CreateAccount:FC<ICreateAccount> = ({ClientInfo ,loading=false}) => {
                                 type = {'text'}
                             />
                         </div>
-                        <div>
+                        <div className = {'mb-2'}>
                             <DatePicker
                                 label={'დაბ.თარიღი'}
                                 date = {date}
                                 setDate={setDate}
                             />
                         </div>
-                        <div>
+                        <div className = {'mb-2'}>
                             <Input
                                 label={'მობ.ნომერი'}
                                 value={values.phoneNumber}
@@ -119,6 +121,18 @@ const CreateAccount:FC<ICreateAccount> = ({ClientInfo ,loading=false}) => {
                             />
                         </div>
                         <div>
+                            <Input
+                                label={'პირ.ნომერი'}
+                                value={values.documentNumber}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                name={'documentNumber'}
+                                isValid={!(errors.documentNumber && touched.documentNumber)}
+                                error={errors.documentNumber}
+                                type = {'text'}
+                            />
+                        </div>
+                        <div className = {'mt-4'}>
                             <Button
                                 type={'submit'}
                                 disabled={!isValid && !dirty}
