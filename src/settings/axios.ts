@@ -1,8 +1,11 @@
 import axios from 'axios';
 
-const axiosInstance = (handleSetError:any) => {
+const axiosInstance = (handleSetError?:any) => {
     const instance = axios.create({
-        baseURL: import.meta.env.VITE_REACT_APP_API_URL
+        baseURL: import.meta.env.VITE_REACT_APP_API_URL,
+        headers:{
+            Authorization:`Bearer ${localStorage.getItem('token')}`
+        }
     });
 
     instance.interceptors.response.use(

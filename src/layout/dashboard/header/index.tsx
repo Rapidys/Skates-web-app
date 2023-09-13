@@ -1,6 +1,6 @@
 import React from 'react';
 import MenuModal from "../../../components/Modals/MenuModal";
-import {faQrcode, faSignOutAlt, faUser} from "@fortawesome/free-solid-svg-icons";
+import {faDashboard, faHome, faQrcode, faSignOutAlt, faUser, faUserSecret} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {useAuth} from "../../../context/AuthContext";
 import {useNavigate} from "react-router-dom";
@@ -15,6 +15,8 @@ const Header = () => {
 
     const items = [
         {id:2,title:'პროფილი',onClick:() => navigate('/profile'),icon:<FontAwesomeIcon icon={faUser} className={'hover:text-opacity-100'} />},
+        {id:3,title:'მთავარი გვერდი',onClick:() => navigate('/dashboard'),icon:<FontAwesomeIcon icon={faHome} className={'hover:text-opacity-100'} />},
+        {id:3,title:'ახალი მომხმარებლის გვერდი',onClick:() => navigate('/findAccount'),icon:<FontAwesomeIcon icon={faUserSecret} className={'hover:text-opacity-100'} />},
         {id:1,title:'გასვლა',onClick:handleLogout,icon:<FontAwesomeIcon icon={faSignOutAlt} />},
     ]
 

@@ -56,7 +56,7 @@ const CreateAccount:FC<ICreateAccount> = ({ClientInfo ,loading=false}) => {
                 firstName:ClientInfo?.firstName || '' ,
                 lastName: ClientInfo?.lastName || '',
                 phoneNumber: ClientInfo?.mobile || '',
-                documentNumber: ClientInfo?.documentNumber || '',
+                documentNumber: ClientInfo?.IdentificationNumber || '',
             }}
             validateOnBlur
             validationSchema={validSchema()}
@@ -67,6 +67,7 @@ const CreateAccount:FC<ICreateAccount> = ({ClientInfo ,loading=false}) => {
                     FirstName:values.firstName,
                     LastName:values.lastName,
                     Mobile:values.phoneNumber,
+                    IdentificationNumber:values.documentNumber,
                     BrithDate:date,
                 }
                     services.Card.updateCardInfo(data).then(res => {

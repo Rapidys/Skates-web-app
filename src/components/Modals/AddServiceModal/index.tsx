@@ -137,6 +137,8 @@ const AddServiceModal: FC<IAddService> = ({openModal, setOpenModal,callbackFn}) 
                         <div className={'py-1'}>ტრენერი</div>
                         <Select
                             options={(options?.trainers as any)}
+                            menuPortalTarget={document.body}
+                            styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
                             value={items?.trainerInfo}
                             placeholder={'ტრენერი'}
                             onChange={(selectedOptions) => updateState(selectedOptions,items?.id,'trainerId','trainerInfo')}
@@ -206,6 +208,8 @@ const AddServiceModal: FC<IAddService> = ({openModal, setOpenModal,callbackFn}) 
                         isMulti
                         options={options?.services}
                         value={selectedValues.services}
+                        menuPortalTarget={document.body}
+                        styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
                         onChange={(selectedOptions) => onServiceChange(selectedOptions,'services')}
                     />
 
@@ -214,7 +218,10 @@ const AddServiceModal: FC<IAddService> = ({openModal, setOpenModal,callbackFn}) 
 
                         <Select
                             options={options.paymentTypes}
-                            value={selectedValues.paymentTypes}
+                            value={selectedValues.paymentTypes?.label ?selectedValues.paymentTypes : '' }
+                            menuPortalTarget={document.body}
+                            styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+                            placeholder={'გადახდის მეთოდი'}
                             onChange={(selectedOptions) => onSelectChange(selectedOptions,'paymentTypes')}
                         />
                     </div>
@@ -255,7 +262,7 @@ const AddServiceModal: FC<IAddService> = ({openModal, setOpenModal,callbackFn}) 
                         <Button onClick={() => {
                             setOpenAlertModal('default')
                         }}
-                                disabled={selectedValues.paymentTypes?.id ? false : true}
+                                disabled={(selectedValues.paymentTypes?.id ? false : true) || (selectedValues.services?.length > 0 ? false : true)}
                                 color="secondary"
                                 className={'mr-2'}
                         >დამატება</Button>

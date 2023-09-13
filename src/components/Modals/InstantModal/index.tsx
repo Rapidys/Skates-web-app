@@ -74,6 +74,8 @@ const InstantModal: FC<IInstantModal> = ({openModal, setOpenModal, onYes, setIns
                                         value={chosenType}
                                         placeholder={'გადახდის მეთოდი'}
                                         onChange={(value) => setChosenType(value)}
+                                        menuPortalTarget={document.body}
+                                        styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
                                     />
                                 </div>
                             </div>

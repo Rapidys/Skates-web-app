@@ -31,7 +31,8 @@ const Login = () => {
 
                 <form onKeyDown={(event) => {
                     if(event.keyCode === 13){
-                        handleLogin()
+                        const data = {userName:state.userName,password:state.password}
+                        handleLogin(data)
                     }
                 }}>
                     <Input
@@ -51,8 +52,10 @@ const Login = () => {
 
                 <Button
                     onClick={() => {
-                        handleLogin()
+                        const data = {userName:state.userName,password:state.password}
+                        handleLogin(data)
                     }}
+                    disabled={!state.password || !state.userName}
                     className = {'mt-4'}
                 >
                    შესვლა

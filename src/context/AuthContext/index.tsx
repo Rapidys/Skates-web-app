@@ -1,10 +1,13 @@
 import React, {FC, useContext, useState} from 'react';
+import {useServices} from "../Services/ServiceContextProvider";
+import axiosInstance from "../../settings/axios";
 
 
 const AuthContext = React.createContext({
    isLoggedIn:false,
-   handleLogin:() => {},
-   handleLogout:() => {}
+   handleLogin:(data:any) => {},
+   handleLogout:() => {},
+   token:'',
 })
 
 interface IUserInfo {
@@ -15,13 +18,25 @@ const AuthContextProvider:FC<IUserInfo> = ({children}) => {
 
     const [state,setState] = useState({
         isLoggedIn:false,
+        token:''
     })
 
-    const handleLogin = () => {
-        setState({
-            ...state,
-            isLoggedIn: true,
-        })
+    const { services } = useServices()
+
+    const handleLogin = (data:any) => {
+        try {
+            services.Auth.login(data).then(res => {
+                const {token} = res?.data
+                setState({
+                    ...state,
+                    isLoggedIn: true,
+                    token:token
+                })
+                localStorage.setItem('token',token)
+            })
+        }catch (e){
+            console.log(e)
+        }
     }
 
 
@@ -37,7 +52,8 @@ const AuthContextProvider:FC<IUserInfo> = ({children}) => {
         <AuthContext.Provider value={{
             isLoggedIn:state.isLoggedIn,
             handleLogin,
-            handleLogout
+            handleLogout,
+            token:state.token
         }}>
             {children}
         </AuthContext.Provider>

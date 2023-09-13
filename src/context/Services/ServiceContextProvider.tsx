@@ -1,10 +1,12 @@
-import React, {FC, useContext, useState} from 'react';
+import React, {FC, useContext, useEffect, useState} from 'react';
 import axiosInstance from "../../settings/axios";
 import {useErrorHandling} from "../ErrorHandlingContext";
 import CardServices, {ICardServices, IUpdateCardInfo} from "./CardServices";
 import Dashboard, {IDashboardServices} from "./DashboardServices";
 import DashboardServices from "./DashboardServices";
 import {IConsumeOrder} from "../../types/Dashboard";
+import AuthServices, {IAuthServices} from "./AuthServices";
+import {useAuth} from "../AuthContext";
 
 const ServiceContext = React.createContext<Record<'services', IServices>>({
     services: {
@@ -21,6 +23,9 @@ const ServiceContext = React.createContext<Record<'services', IServices>>({
             getClientOrders: async (clientId:number) => {},
             consumeOrder: async (data:IConsumeOrder) => {},
             updateOrder: async (data:any) => {},
+        },
+        Auth: {
+            login: async () => {},
         }
     }
 })
@@ -31,7 +36,8 @@ interface IServiceContextProvider {
 
 interface IServices {
     Card: ICardServices,
-    Dashboard:IDashboardServices
+    Dashboard:IDashboardServices,
+    Auth:IAuthServices
 }
 
 const ServiceContextProvider: FC<IServiceContextProvider> = ({children}) => {
@@ -41,10 +47,12 @@ const ServiceContextProvider: FC<IServiceContextProvider> = ({children}) => {
 
     const Card = CardServices(axios)
     const Dashboard = DashboardServices(axios)
+    const Auth = AuthServices(axios)
 
     const services: IServices = {
         Card,
-        Dashboard
+        Dashboard,
+        Auth
     }
 
     return (

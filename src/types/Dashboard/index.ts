@@ -33,7 +33,7 @@ export interface IOptions  {
 export interface ISelectedValues {
    trainers:ITrainers[],
    services:IServices[],
-   paymentTypes:IPaymentTypes,
+   paymentTypes:any,
 }
 
 
