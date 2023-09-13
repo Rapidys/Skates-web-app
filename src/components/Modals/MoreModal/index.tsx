@@ -10,9 +10,9 @@ import {format} from "date-fns";
 interface IMoreModal {
     openModal: string | undefined,
     setOpenModal: any,
-    data: any,
-    setData: any,
-    handleUpdateOrder:any,
+    data?: any,
+    setData?: any,
+    handleUpdateOrder?:any,
 }
 
 const MoreModal: FC<IMoreModal> = ({openModal,handleUpdateOrder, setOpenModal, data,setData}) => {

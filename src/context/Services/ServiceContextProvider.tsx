@@ -8,7 +8,7 @@ import {IConsumeOrder} from "../../types/Dashboard";
 import AuthServices, {IAuthServices} from "./AuthServices";
 import {useAuth} from "../AuthContext";
 
-const ServiceContext = React.createContext<Record<'services', IServices>>({
+const ServiceContext = React.createContext<any>({
     services: {
         Card: {
             getClientInfo: async (body: Record<"ClientId", number>) => {},
@@ -27,7 +27,8 @@ const ServiceContext = React.createContext<Record<'services', IServices>>({
         Auth: {
             login: async () => {},
         }
-    }
+    },
+    setToken:() => {}
 })
 
 interface IServiceContextProvider {
@@ -43,7 +44,10 @@ interface IServices {
 const ServiceContextProvider: FC<IServiceContextProvider> = ({children}) => {
     const {handleSetError} = useErrorHandling()
 
+    const [token,setToken] = useState('')
+
     const axios = axiosInstance(handleSetError)
+    axios.defaults.headers.common['Authorization'] = `bearer ${token}`
 
     const Card = CardServices(axios)
     const Dashboard = DashboardServices(axios)
@@ -55,10 +59,12 @@ const ServiceContextProvider: FC<IServiceContextProvider> = ({children}) => {
         Auth
     }
 
+
     return (
         <ServiceContext.Provider
             value={{
-                services
+                services,
+                setToken
             }}
         >
             {children}

@@ -3,9 +3,6 @@ import axios from 'axios';
 const axiosInstance = (handleSetError?:any) => {
     const instance = axios.create({
         baseURL: import.meta.env.VITE_REACT_APP_API_URL,
-        headers:{
-            Authorization:`Bearer ${localStorage.getItem('token')}`
-        }
     });
 
     instance.interceptors.response.use(
@@ -18,6 +15,9 @@ const axiosInstance = (handleSetError?:any) => {
             const { status } = error?.response
             const { Message } = error?.response?.data
 
+            if(status === 401){
+                localStorage.removeItem('token')
+            }
             if (error.response) {
                 handleSetError(Message);
                 return Promise.reject(error.response.data);

@@ -8,7 +8,7 @@
     "start:dev": "REACT_APP_ENV=development nx serve",
     "start:prod": "REACT_APP_ENV=production nx serve",
     "build:dev": "REACT_APP_ENV=development nx build",
-    "build:prod": "REACT_APP_ENV=production nx build",
+    "build:prod": "NX_CLOUD_NO_TIMEOUTS=true REACT_APP_ENV=production nx build",
     "test": "nx test"
   },
   "private": true,
