@@ -48,7 +48,8 @@ const AccountContextProvider: FC<IAccountContext> = ({children}) => {
                 setState({
                     ...state,
                     ClientId: clientId,
-                    DisplayName: displayName
+                    DisplayName: displayName,
+                    Identifier: accountId
                 })
                 navigate(('/dashboard'))
             })

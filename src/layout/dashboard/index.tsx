@@ -25,23 +25,24 @@ const Layout:FC<ILayout> = ({children}) => {
     return (
         <div className = {'h-full'}>
             <div className = {'w-full h-full flex'}>
-                <div className={`flex ${isTabletOrMobile ? 'w-0' : 'w-1/12'}`}>
-                    <div className={`${isTabletOrMobile ? 'w-0' : 'w-1/12'} bg-custom_dark`}>
-                        <div className={`${isTabletOrMobile ? 'w-0' : 'w-1/12' } bg-custom_dark fixed top-0 bottom-0 left-0 flex-row z-20`}>
-                            <div className={'h-20 bg-custom_dark border-b-2 border-b-custom_light text-italic text-custom_ocean flex items-center justify-center text-xl transition'}>
-                                <div className={'text-custom_light text-center'}>
-                                    {DisplayName}
-                                </div>
-                            </div>
-                            <div className = {'py-8 px-1'}>
-                                <NavMenu data={MenuItems} />
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {/*<div className={`flex ${isTabletOrMobile ? 'w-0' : 'w-1/12'}`}>*/}
+                {/*    <div className={`${isTabletOrMobile ? 'w-0' : 'w-1/12'} bg-custom_dark`}>*/}
+                {/*        <div className={`${isTabletOrMobile ? 'w-0' : 'w-1/12' } bg-custom_dark fixed top-0 bottom-0 left-0 flex-row z-20`}>*/}
+                {/*            <div className={'h-20 bg-custom_dark border-b-2 border-b-custom_light text-italic text-custom_ocean flex items-center justify-center text-xl transition'}>*/}
+                {/*                <div className={'text-custom_light text-center'}>*/}
+                {/*                    {DisplayName}*/}
+                {/*                </div>*/}
+                {/*            </div>*/}
+                {/*            <div className = {'py-8 px-1'}>*/}
+                {/*                <NavMenu data={MenuItems} />*/}
+                {/*            </div>*/}
+                {/*        </div>*/}
+                {/*    </div>*/}
+                {/*</div>*/}
 
 
-                <div className={`${isTabletOrMobile ? 'w-full' : 'w-11/12'}`}>
+                {/*<div className={`${isTabletOrMobile ? 'w-full' : 'w-11/12'}`}>*/}
+                <div className={'w-full'}>
                     <Header />
                     {children}
                 </div>

@@ -18,7 +18,6 @@ interface IDatePicker {
 }
 
 const DatePicker:FC<IDatePicker> = ({date,setDate,label,onChange,labelClassName,...props}) => {
-    // const [date, setDate] = useState<number | Date>(new Date())
     const [open, setOpen] = useState(false)
     const ref = useRef<any>()
 
@@ -29,7 +28,7 @@ const DatePicker:FC<IDatePicker> = ({date,setDate,label,onChange,labelClassName,
             onChange(day)
         }
         if(!onChange){
-            setDate(day)
+            setDate(format(day, 'yyyy-MM-dd'))
         }
         if(isDay){
             setOpen(false)
@@ -41,6 +40,7 @@ const DatePicker:FC<IDatePicker> = ({date,setDate,label,onChange,labelClassName,
             <Input
                 label={label ? label : 'თარიღი'}
                 value={format(date, 'yyyy-MM-dd')}
+                onChange={() => null}
                 renderIcon={() => {
                     return (
                         <span className={'absolute right-5'} style={{transform: 'translateY(-50%)', top: '50%'}}>
@@ -63,6 +63,7 @@ const DatePicker:FC<IDatePicker> = ({date,setDate,label,onChange,labelClassName,
                 value={date}
                 open={open}
                 ref={ref}
+                disableOldDates = {false}
             />
 
         </>

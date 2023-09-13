@@ -27,11 +27,12 @@ function classNames(...classes: any) {
 interface ICalendar {
     onChange: (day: Date,isDay?:string) => void,
     value: number | Date,
-    open: boolean
+    open: boolean,
+    disableOldDates: boolean,
     ref?: any
 }
 
-const Calendar: FC<ICalendar> = forwardRef(({onChange, value, open}, ref:any) => {
+const Calendar: FC<ICalendar> = forwardRef(({onChange, value, open,disableOldDates}, ref:any) => {
     let today = startOfToday()
     let [currentMonth, setCurrentMonth] = useState(format(today, 'MMM-yyyy'))
     const [calendarType, setCalendarType] = useState(0) // 0 - days / 1 - month / 2-  years
@@ -176,7 +177,7 @@ const Calendar: FC<ICalendar> = forwardRef(({onChange, value, open}, ref:any) =>
                                             <FontAwesomeIcon icon={faLeftLong}/>
                                         </button>
                                         <button
-                                            onClick={() => leftOffset !== new Date().getFullYear() && setLeftOffset(leftOffset+16)}
+                                            onClick={() => leftOffset <= (new Date().getFullYear() + 50) && setLeftOffset(leftOffset+16)}
                                             type="button"
                                             className="-my-1.5 -mr-1.5 ml-2 flex flex-none items-center justify-center p-1.5 text-custom_secondary hover:text-white"
                                         >
@@ -221,7 +222,7 @@ const Calendar: FC<ICalendar> = forwardRef(({onChange, value, open}, ref:any) =>
                                         <button
                                             type="button"
                                             onClick={() => {
-                                                if (isBefore(day, startOfToday())) {
+                                                if (disableOldDates && isBefore(day, startOfToday())) {
                                                     return;
                                                 }
                                                 onChange(day,'isDay')

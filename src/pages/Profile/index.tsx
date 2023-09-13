@@ -25,7 +25,6 @@ const Profile = () => {
     useEffect(() => {
         setLoading(true)
         services.Card.getClientInfo({ClientId}).then(res => {
-            const { } = res?.data
             setState({
                 ...res.data
             })

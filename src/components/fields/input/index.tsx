@@ -10,16 +10,24 @@ interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
     error?:string,
     labelClassName?:string,
     renderIcon?:() => React.ReactNode,
-    withEye?:boolean
+    withEye?:boolean,
+    onEnterPress?:() => void,
 }
 
-const Input: FC<IInputProps> = React.forwardRef(({label,isValid= true,withEye,error,labelClassName ,renderIcon,...props},ref) => {
+const Input: FC<IInputProps> = React.forwardRef(({label,isValid= true,withEye,error,labelClassName,onEnterPress ,renderIcon,...props},ref) => {
 
     const [toggleEye,setToggleEye] = useState(withEye)
 
     const toggle = () => {
         setToggleEye(!toggleEye)
     }
+
+    const handleKeyDown = (event:any) => {
+        if (event.keyCode === 13 && onEnterPress) {
+            onEnterPress()
+        }
+    }
+
 
     return (
         <>
@@ -31,6 +39,7 @@ const Input: FC<IInputProps> = React.forwardRef(({label,isValid= true,withEye,er
                     className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${!isValid ? 'border-2 border-r-custom_light' : ''}`}
                     ref = {ref}
                     type = {toggleEye ? 'password' : 'text'}
+                    onKeyDown={handleKeyDown}
                     {...props}
                 />
                 {withEye && (

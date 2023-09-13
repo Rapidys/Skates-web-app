@@ -36,10 +36,12 @@ const FindAccount = () => {
                         onChange={(e) => setAccountId(e.target.value)}
                         onBlur={() => AccountIdRef.current?.focus()}
                         withEye = {true}
+                        onEnterPress = {() => CheckAccount(AccountId)}
                     />
                     <Button
                         onClick={() => CheckAccount(AccountId)}
                         className = {'mt-4'}
+                        disabled = {!AccountId}
                     >
                         შესვლა
                     </Button>

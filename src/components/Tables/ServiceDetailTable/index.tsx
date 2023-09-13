@@ -8,10 +8,9 @@ interface IServiceDetails {
 const ServiceDetails: FC<IServiceDetails> = ({data}) => {
     return (
         <div className={'w-full px-2 text-custom_ocean'}>
-            <Item text={data?.serviceValue} title = {'სერვისის სახელი'}/>
-            <Item text={data?.count} title = {'რაოდენობა'}/>
+            <Item text={data?.displayName} title = {'სერვისის სახელი'}/>
+            <Item text={data?.quantity} title = {'რაოდენობა'}/>
             <Item text={data?.trainer} title = {'ტრენერი'}/>
-            <Item text={data?.price} title = {'ფასი'}/>
         </div>
     );
 };

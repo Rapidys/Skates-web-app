@@ -28,18 +28,26 @@ const Login = () => {
                         ავტორიზაცია
                     </h4>
                 </div>
-                <Input
-                    label={'მომხმარებელი'}
-                    value={state.userName}
-                    onChange={(e) => handleChange('userName', e)}
-                />
 
-                <Input
-                    label={'პაროლი'}
-                    type={'password'}
-                    value={state.password}
-                    onChange={(e) => handleChange('password', e)}
-                />
+                <form onKeyDown={(event) => {
+                    if(event.keyCode === 13){
+                        handleLogin()
+                    }
+                }}>
+                    <Input
+                        label={'მომხმარებელი'}
+                        value={state.userName}
+                        onChange={(e) => handleChange('userName', e)}
+                    />
+
+                    <Input
+                        label={'პაროლი'}
+                        type={'password'}
+                        value={state.password}
+                        onChange={(e) => handleChange('password', e)}
+                    />
+                </form>
+
 
                 <Button
                     onClick={() => {

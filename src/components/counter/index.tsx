@@ -16,7 +16,7 @@ const Counter:FC<ICounter> = ({counter,onChange}) => {
                 <div onClick={() => onChange(counter + 1)} className={'cursor-pointer hover:text-custom_light'}>
                     <FontAwesomeIcon icon={faArrowAltCircleUp} />
                 </div>
-                <div onClick={() => onChange(counter - 1)} className={'cursor-pointer hover:text-custom_light'}>
+                <div onClick={() => counter > 1 && onChange(counter - 1)} className={'cursor-pointer hover:text-custom_light'}>
                     <FontAwesomeIcon icon={faArrowAltCircleDown} />
                 </div>
             </div>

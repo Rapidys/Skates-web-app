@@ -27,6 +27,7 @@ const Button: FC<IButton> = ({children, loading, className, color, disabled, ...
         }
     }
 
+
     return (
         <button
             className={`btn px-4 py-2 flex justify-center items-center text-white shadow ${loading ? 'w-10 h-10 rounded-full' : 'rounded-lg'} ${ButtonStyleByType(disabled)} hover:bg-custom_light transition ${className ? className : ''}`}

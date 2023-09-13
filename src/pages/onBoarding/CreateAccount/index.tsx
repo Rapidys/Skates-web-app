@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FC, useState} from 'react';
+import React, {ChangeEvent, FC, useCallback, useState} from 'react';
 import Card from "../../../components/Cards/Card";
 import Input from "../../../components/fields/input";
 import * as yup from "yup";
@@ -10,6 +10,7 @@ import {useServices} from "../../../context/Services/ServiceContextProvider";
 import {useAccount} from "../../../context/AccountContext";
 import {IClientInfo} from "../../Profile";
 import Loader from "../../../components/Loader";
+import {format} from "date-fns";
 
 
 interface ICreateAccount {
@@ -19,10 +20,10 @@ interface ICreateAccount {
 const CreateAccount:FC<ICreateAccount> = ({ClientInfo ,loading=false}) => {
 
     const navigate = useNavigate()
-    const [date, setDate] = useState<number | Date>(new Date())
+    const [date, setDate] = useState<any>(format(new Date(), 'yyyy-MM-dd'))
 
     const { services } = useServices()
-    const { cardNumber } = useAccount()
+    const { cardNumber,ClientId,CheckAccount } = useAccount()
 
     const validSchema = () => {
         return yup.object().shape({
@@ -35,6 +36,14 @@ const CreateAccount:FC<ICreateAccount> = ({ClientInfo ,loading=false}) => {
                 .required('აუცილებელი'),
         });
     };
+
+    const RenderDate = useCallback(() => {
+       return <DatePicker
+            label={'დაბ.თარიღი'}
+            date = {new Date(date)}
+            setDate={setDate}
+        />
+    },[date])
 
     if(loading){
         return <Loader/>
@@ -52,18 +61,20 @@ const CreateAccount:FC<ICreateAccount> = ({ClientInfo ,loading=false}) => {
             validateOnBlur
             validationSchema={validSchema()}
             onSubmit={(values) => {
-                console.log(values)
                 const data = {
-                    ClientId:-1000,
+                    ClientId:ClientId,
                     CardNumber:cardNumber,
                     FirstName:values.firstName,
                     LastName:values.lastName,
                     Mobile:values.phoneNumber,
                     BrithDate:date,
                 }
-                services.Card.updateCardInfo(data).then(res => {
-                    navigate('/dashboard')
-                })
+                    services.Card.updateCardInfo(data).then(res => {
+                        CheckAccount(cardNumber)
+                        if(ClientId < 0) {
+                            navigate('/dashboard')
+                        }
+                    })
             }}
         >
             {({
@@ -102,11 +113,7 @@ const CreateAccount:FC<ICreateAccount> = ({ClientInfo ,loading=false}) => {
                             />
                         </div>
                         <div className = {'mb-2'}>
-                            <DatePicker
-                                label={'დაბ.თარიღი'}
-                                date = {date}
-                                setDate={setDate}
-                            />
+                          <RenderDate />
                         </div>
                         <div className = {'mb-2'}>
                             <Input

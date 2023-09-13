@@ -3,6 +3,7 @@ import {Checkbox, Table} from "flowbite-react";
 import {IHeadData, ServiceData} from "../../../types/Dashboard";
 import {faEllipsisV} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {format} from "date-fns";
 
 
 interface IServiceTable {
@@ -15,8 +16,9 @@ const ServiceTable: FC<IServiceTable> = ({ state,setState, handleOpenMore}) => {
 
     const { row, head } = state
     const handleHeadCheckboxChange = (item:IHeadData) => {
-        const newHead = [ ...state.head]
-        const newRow = [ ...state.row]
+        const newState = {...state}
+        const newHead = [ ...newState.head]
+        const newRow = [ ...newState.row]
 
         const checkRowIndex = newHead.findIndex(el => el.id === item.id)
         newHead[checkRowIndex].checked = !newHead[checkRowIndex].checked
@@ -26,20 +28,17 @@ const ServiceTable: FC<IServiceTable> = ({ state,setState, handleOpenMore}) => {
         newRow.forEach((element) => {
             arr.push({...element,checked:newHead[checkRowIndex].checked})
         })
-
-
         setState({
-            ...state,
+            ...newState,
             head:newHead,
             row:arr
         })
-
-
     }
 
     const handleUpdateTable = (item: ServiceData) => {
-        const newRow = [...state.row]
-        const checkedItem = newRow.find(el => el.id === item.id)
+        const copiedState = {...state}
+        const newRow = [...copiedState.row]
+        const checkedItem = newRow.find(el => el.orderId === item.orderId)
         if (checkedItem) {
             checkedItem.checked = !checkedItem.checked
             setState({
@@ -70,22 +69,22 @@ const ServiceTable: FC<IServiceTable> = ({ state,setState, handleOpenMore}) => {
 
             </Table.Head>
             <Table.Body className="divide-y">
-                {row.map(item => {
-                    return <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800" key={item.id}>
+                {row.map((item:any) => {
+                    return <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800" key={item.orderId}>
                         <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                            {item.serviceValue}
+                            {item.displayName}
                         </Table.Cell>
                         <Table.Cell>
                             {item.trainer}
                         </Table.Cell>
                         <Table.Cell>
-                            {item.price}
+                            {format(new Date(item?.startDate), 'yyyy-MM-dd')}
                         </Table.Cell>
                         <Table.Cell>
-                            {item.active}
+                            {format(new Date(item?.endDate), 'yyyy-MM-dd')}
                         </Table.Cell>
                         <Table.Cell>
-                            {item.count}
+                            {item.quantity} / {item.usedQuantity}
                         </Table.Cell>
                         <Table.Cell>
                             <Checkbox checked={item.checked} onChange={() => handleUpdateTable(item)}/>

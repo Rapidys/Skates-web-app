@@ -3,8 +3,8 @@ import {Checkbox} from "flowbite-react";
 export const headData = [
     {id: 1, head: 'სერვისი',},
     {id: 2, head: 'ტრენერი'},
-    {id: 3, head: 'ფასი'},
-    {id: 4, head: 'აქტიური'},
+    {id: 3, head: 'დან'},
+    {id: 4, head: 'მდე'},
     {id: 5, head: 'რაოდენობა'},
     {id: 6, head: 'checkbox',checked:false},
     {id: 7, head: ''},

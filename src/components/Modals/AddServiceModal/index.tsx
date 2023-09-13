@@ -1,25 +1,22 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC, useCallback, useEffect, useState} from 'react';
 import {Modal} from "flowbite-react";
 import Select from 'react-select'
 import DatePicker from "../../fields/DatePicker";
 import Button from '../../Button/index'
 import {useServices} from "../../../context/Services/ServiceContextProvider";
-import {IOptions, ISelectedValues, IServices, ITrainers} from "../../../types/Dashboard";
+import {IOptions, ISelectedValues, IServices} from "../../../types/Dashboard";
 import {addMonths, format} from "date-fns";
 import AlertModal from "../AlertModal";
-import myServices from "../../../pages/MyServices";
 import {useAccount} from "../../../context/AccountContext";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faArrowAltCircleDown, faArrowAltCircleUp} from "@fortawesome/free-solid-svg-icons";
 import Counter from "../../counter";
 
 interface IAddService {
     openModal: string | undefined,
     setOpenModal: any,
-    handleAddService: (selectedValues: any) => void,
+    callbackFn: any,
 }
 
-const AddServiceModal: FC<IAddService> = ({openModal, setOpenModal, handleAddService}) => {
+const AddServiceModal: FC<IAddService> = ({openModal, setOpenModal,callbackFn}) => {
 
     const currentDate = new Date();
     const oneMonthLater = addMonths(currentDate, 1);
@@ -35,7 +32,7 @@ const AddServiceModal: FC<IAddService> = ({openModal, setOpenModal, handleAddSer
     })
 
     const [selectedValues, setSelectedValues] = useState<ISelectedValues>({
-        trainers:{},
+        trainers:[],
         services:[],
         paymentTypes:{},
     });
@@ -55,7 +52,6 @@ const AddServiceModal: FC<IAddService> = ({openModal, setOpenModal, handleAddSer
             ...prevState,
             [obj]:arr
         }))
-        console.log(arr,obj)
     }
 
     const checkApiCallType = (url:string) => {
@@ -85,13 +81,18 @@ const AddServiceModal: FC<IAddService> = ({openModal, setOpenModal, handleAddSer
     }, []);
 
 
-    const updateState = (newValue:any,serviceId:number | undefined,objKey:string) => {
+    const updateState = (newValue:any,serviceId:number | undefined,objKey:string,objKeySec?:string) => {
 
         const copiedServices = [...selectedValues.services];
         const findServiceIndex = copiedServices.findIndex(el => el.id === serviceId)
 
         if (findServiceIndex !== null && findServiceIndex !== undefined) {
-            (copiedServices[findServiceIndex] as any)[objKey] = newValue;
+            if(objKeySec){
+                (copiedServices[findServiceIndex] as any)[objKey] = newValue.id;
+                (copiedServices[findServiceIndex] as any)[objKeySec] = newValue;
+            }else{
+                (copiedServices[findServiceIndex] as any)[objKey] = newValue;
+            }
             setSelectedValues((prevState => ({
                 ...prevState,
                 services:copiedServices
@@ -99,24 +100,101 @@ const AddServiceModal: FC<IAddService> = ({openModal, setOpenModal, handleAddSer
         }
     }
     const onSelectChange = (selectedOptions: any,type:string,serviceId?:number) => {
-        setSelectedValues({
-            ...selectedValues,
-            [type]:selectedOptions
-        });
-        if(type === 'trainers') {
-            const {id} = selectedOptions
-            updateState(id,serviceId,'trainerId')
-        }
+            setSelectedValues({
+                ...selectedValues,
+                [type]:selectedOptions
+            });
     };
 
-    const onDateChange = (newValue:Date,type:string,serviceId:number) => {
-        setDate({
-            ...date,
-            [type]:newValue
+    const onServiceChange = (selectedOptions:any,type:string) => {
+        const newArr = selectedOptions.map((element:any) => {
+            if(element?.needTrainer){
+                return { ...element,quantity:element?.quantity > 1 ? element.quantity : 1,ServiceId:element?.id,StartDate:format(new Date(), 'yyyy-MM-dd'),EndDate:format(oneMonthLater, 'yyyy-MM-dd') }
+            }else{
+                return {...element,quantity:element?.quantity > 1 ? element.quantity : 1,ServiceId:element?.id}
+            }
         })
+        setSelectedValues({
+            ...selectedValues,
+            [type]:newArr
+        })
+    }
+
+    const onDateChange = (newValue:any,type:string,serviceId:number) => {
         updateState(newValue,serviceId,type)
     }
 
+
+    const RenderItem = useCallback(({items}:any) => {
+       return <div className={'flex justify-between items-end border p-2 rounded-lg mb-2'}>
+            <div className={`${items?.needTrainer ? 'w-1/3' : 'w-full'}`}>
+                <div className={'flex justify-between items-center'}>
+                    <div className={'py-1'}><span className={'font-bold'}>სერვისი : </span>{items.label}</div>
+                </div>
+
+                {items?.needTrainer && (
+                    <>
+                        <div className={'py-1'}>ტრენერი</div>
+                        <Select
+                            options={(options?.trainers as any)}
+                            value={items?.trainerInfo}
+                            placeholder={'ტრენერი'}
+                            onChange={(selectedOptions) => updateState(selectedOptions,items?.id,'trainerId','trainerInfo')}
+                        />
+                    </>
+                )}
+            </div>
+            {items?.needTrainer && items?.StartDate && items?.EndDate && (
+                <div className={'flex items-end justify-between mt-3 '}>
+                    <div className={'mr-2'}>
+                        <DatePicker
+                            label={'დან'}
+                            labelClassName={'!text-custom_ocean'}
+                            date={new Date(items?.StartDate)}
+                            onChange={(day) => {
+                                onDateChange(format(day, 'yyyy-MM-dd'),'StartDate',items?.id)
+                            }}
+                            className = {'border-0 border-b-2 border-b-custom_light !ring-0 text-sm'}
+                        />
+                    </div>
+                    <div>
+                        <DatePicker
+                            label={'მდე'}
+                            labelClassName={'!text-custom_ocean'}
+                            date={new Date(items?.EndDate)}
+                            onChange={(day) => {
+                                onDateChange(format(day, 'yyyy-MM-dd'),'EndDate',items?.id)
+                            }}
+                            className = {'border-0 border-b-2 border-b-custom_light !ring-0 text-sm'}
+                        />
+                    </div>
+                </div>
+            )}
+            <Counter counter={items?.quantity} onChange={(val) => updateState(val,items?.id,'quantity')}/>
+        </div>
+    },[selectedValues])
+
+    const calculatePrice = () => {
+        let price = 0
+        selectedValues.services.forEach((el) => {
+            price += el?.price * el.quantity
+        })
+        return price
+    }
+
+    const GenPrice = useCallback(() => {
+        return (
+            <div className={'p-2 border border-custom_loading rounded-lg'}>
+                <span>
+                  {calculatePrice()}
+                  {' '}
+                </span>
+                <span>
+                    GEL
+                </span>
+            </div>
+        )
+    },[selectedValues])
 
     return (
         <Modal show={openModal === 'default'} onClose={() => setOpenModal(undefined)} size={'4xl'}>
@@ -128,7 +206,7 @@ const AddServiceModal: FC<IAddService> = ({openModal, setOpenModal, handleAddSer
                         isMulti
                         options={options?.services}
                         value={selectedValues.services}
-                        onChange={(selectedOptions) => onSelectChange(selectedOptions,'services')}
+                        onChange={(selectedOptions) => onServiceChange(selectedOptions,'services')}
                     />
 
                     <div className={'w-1/3 mt-2'}>
@@ -144,57 +222,11 @@ const AddServiceModal: FC<IAddService> = ({openModal, setOpenModal, handleAddSer
                     <div className={'text-custom_ocean mt-2 text-sm'}>
                         <h6 className={''}>არჩეული:</h6>
                         {selectedValues.services?.map((items: IServices) => (
-                            <div className={'flex justify-between items-end border p-2 rounded-lg mb-2'} key={items.value}>
-                                <div className={`${items?.needTrainer ? 'w-1/3' : 'w-full'}`}>
-                                    <div className={'flex justify-between items-center'}>
-                                        <div className={'py-1'}><span className={'font-bold'}>სერვისი : </span>{items.label}</div>
-                                        {items?.isInstant && (
-                                            <Counter counter={items?.quantity} onChange={(val) => updateState(val,items?.id,'quantity')}/>
-                                        )}
-                                    </div>
-
-                                    {items?.needTrainer && (
-                                        <>
-                                            <div className={'py-1'}>ტრენერი</div>
-                                            <Select
-                                                options={options?.trainers}
-                                                value={selectedValues.trainers}
-                                                placeholder={'ტრენერი'}
-                                                onChange={(selectedOptions) => onSelectChange(selectedOptions,'trainers',items?.id)}
-                                            />
-                                        </>
-                                    )}
-                                </div>
-                                {items?.needTrainer && (
-                                        <div className={'flex items-end justify-between mt-3 '}>
-                                            <div className={'mr-2'}>
-                                                <DatePicker
-                                                    label={'დან'}
-                                                    labelClassName={'!text-custom_ocean'}
-                                                    date={date.StartDate}
-                                                    onChange={(day) => {
-                                                        onDateChange(day,'StartDate',items?.id)
-                                                    }}
-                                                    className = {'border-0 border-b-2 border-b-custom_light !ring-0 text-sm'}
-                                                />
-                                            </div>
-                                            <div>
-                                                <DatePicker
-                                                    label={'მდე'}
-                                                    labelClassName={'!text-custom_ocean'}
-                                                    date={date.EndDate}
-                                                    onChange={(day) => {
-                                                        onDateChange(day,'EndDate',items?.id)
-                                                    }}
-                                                    className = {'border-0 border-b-2 border-b-custom_light !ring-0 text-sm'}
-                                                />
-                                            </div>
-                                        </div>
-                                )}
-                            </div>
+                           <RenderItem items={items} key={items.value}/>
                         ))}
                     </div>
                 </div>
+
 
 
             </Modal.Body>
@@ -210,20 +242,34 @@ const AddServiceModal: FC<IAddService> = ({openModal, setOpenModal, handleAddSer
                         Services:selectedValues.services,
                         PaymentType:selectedValues.paymentTypes?.id,
                     }
-                    console.log(data)
-                    // setOpenModal(undefined)
+                    services.Dashboard.makeOrder(data).then(res => {
+                        setOpenModal(undefined)
+                        callbackFn()
+                    })
                 }}
             />
 
             <Modal.Footer>
-                <Button onClick={() => {
-                    setOpenAlertModal('default')
-                }}
-                        color="secondary"
-                >დამატება</Button>
-                <Button onClick={() => setOpenModal(undefined)}>
-                    დახურვა
-                </Button>
+                <div className={'flex w-full justify-between items-center'}>
+                    <div className={'flex'}>
+                        <Button onClick={() => {
+                            setOpenAlertModal('default')
+                        }}
+                                disabled={selectedValues.paymentTypes?.id ? false : true}
+                                color="secondary"
+                                className={'mr-2'}
+                        >დამატება</Button>
+                        <Button onClick={() => setOpenModal(undefined)}>
+                            დახურვა
+                        </Button>
+                    </div>
+
+                    <div>
+                        <GenPrice />
+                    </div>
+                </div>
+
+
             </Modal.Footer>
         </Modal>
     );

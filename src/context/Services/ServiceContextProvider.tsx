@@ -4,6 +4,7 @@ import {useErrorHandling} from "../ErrorHandlingContext";
 import CardServices, {ICardServices, IUpdateCardInfo} from "./CardServices";
 import Dashboard, {IDashboardServices} from "./DashboardServices";
 import DashboardServices from "./DashboardServices";
+import {IConsumeOrder} from "../../types/Dashboard";
 
 const ServiceContext = React.createContext<Record<'services', IServices>>({
     services: {
@@ -16,6 +17,10 @@ const ServiceContext = React.createContext<Record<'services', IServices>>({
             getServices: async () => {},
             getPaymentTypes: async () => {},
             getTrainers: async () => {},
+            makeOrder: async (data:any) => {},
+            getClientOrders: async (clientId:number) => {},
+            consumeOrder: async (data:IConsumeOrder) => {},
+            updateOrder: async (data:any) => {},
         }
     }
 })

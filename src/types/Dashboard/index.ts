@@ -13,6 +13,7 @@ export interface IServices {
    EndDate?:Date,
    label?:string,
    value?:string
+   trainerInfo?:string
 }
 export interface ITrainers {
    "id"?: number,
@@ -30,7 +31,7 @@ export interface IOptions  {
 }
 
 export interface ISelectedValues {
-   trainers:ITrainers,
+   trainers:ITrainers[],
    services:IServices[],
    paymentTypes:IPaymentTypes,
 }
@@ -43,12 +44,31 @@ export interface IHeadData {
 }
 
 export interface ServiceData {
-   id?: number,
-   serviceValue?: string,
+   orderId?: number,
+   displayName?: string,
    trainer?: string,
-   price?: string,
-   active?: string,
-   checked?: boolean,
-   count?:number,
+   quantity?: string,
+   usedQuantity?: string,
+   startDate?: Date,
+   endDate?:Date,
+   checked?:boolean
+
+
 }
 
+
+export interface IConsumeOrder {
+   "ClientId": number,
+   "identifier":string,
+   "orders":any[],
+   "instantOrders": any[]
+}
+// {
+//    "orderId": 1,
+//     "displayName": "დილის საათები სრიალი",
+//     "trainer": "ქეთი",
+//     "quantity": 64,
+//     "usedQuantity": 0,
+//     "startDate": "2023-09-13T11:55:21.911",
+//     "endDate": "2023-10-13T11:55:19.298"
+// }

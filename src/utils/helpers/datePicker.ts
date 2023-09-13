@@ -2,7 +2,7 @@ export const GetYearsArray = () => {
     const arr = []
     const dateNow = new Date()
 
-    for (let i = 1; i <= dateNow.getFullYear(); i++) {
+    for (let i = 1; i <= dateNow.getFullYear() + 50; i++) {
         arr.push(i)
     }
     return arr

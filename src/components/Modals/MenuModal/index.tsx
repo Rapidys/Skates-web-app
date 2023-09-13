@@ -36,7 +36,7 @@ const MenuModal: FC<IMenuModal> = ({children,items}) => {
                 open && (
                     <div className={`absolute p-2 rounded-lg top-110 text-white right-5 ${open ? 'opacity-1' : 'opacity-0 h-0'} transition  bg-custom_dark`}
                          ref={ref}
-                         style = {{zIndex:999999}}
+                         style = {{zIndex:999999,top:50}}
                     >
                         <div>
                             {items.map((menuItem) => {
