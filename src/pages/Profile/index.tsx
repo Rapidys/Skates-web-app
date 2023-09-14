@@ -23,16 +23,23 @@ const Profile = () => {
     const { ClientId } = useAccount()
     const { services } = useServices()
 
-    useEffect(() => {
+    const getClientData = () => {
         setLoading(true)
         services.Card.getClientInfo({ClientId}).then(res => {
             setState({
                 ...res.data
             })
             setLoading(false)
-
         })
+    }
+
+    useEffect(() => {
+        getClientData()
     }, []);
+
+    const callbackFn = () => {
+        getClientData()
+    }
 
     return (
         <div className={'flex mt-20 items-center h-full'} style = {{flexDirection:'column'}}>
@@ -41,7 +48,7 @@ const Profile = () => {
                     პროფილი
                 </h2>
             </div>
-            <CreateAccount  ClientInfo = {state} loading={loading}/>
+            <CreateAccount  ClientInfo = {state} loading={loading} callbackFn = {callbackFn}/>
         </div>
     );
 };

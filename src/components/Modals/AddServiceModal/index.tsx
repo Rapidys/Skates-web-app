@@ -207,7 +207,7 @@ const AddServiceModal: FC<IAddService> = ({openModal, setOpenModal,callbackFn}) 
                     <div className={'text-custom_ocean mt-2 text-sm'}>
                         <h6 className={''}>არჩეული:</h6>
                         {selectedValues.services?.map((items: IServices) => (
-                            <div className={'flex justify-between items-end border p-2 rounded-lg mb-2'}>
+                            <div className={'flex justify-between items-end border p-2 rounded-lg mb-2'} key={items?.id}>
                                 <div className={`${items?.needTrainer ? 'w-1/3' : 'w-full'}`}>
                                     <div className={'flex justify-between items-center'}>
                                         <div className={'py-1'}><span className={'font-bold'}>სერვისი : </span>{items.label}</div>

@@ -15,9 +15,10 @@ import {format} from "date-fns";
 
 interface ICreateAccount {
     ClientInfo?:IClientInfo,
-    loading?:boolean
+    loading?:boolean,
+    callbackFn?:any,
 }
-const CreateAccount:FC<ICreateAccount> = ({ClientInfo ,loading=false}) => {
+const CreateAccount:FC<ICreateAccount> = ({ClientInfo ,loading=false,callbackFn}) => {
 
     const navigate = useNavigate()
     const [date, setDate] = useState<any>(format(new Date(), 'yyyy-MM-dd'))
@@ -65,9 +66,11 @@ const CreateAccount:FC<ICreateAccount> = ({ClientInfo ,loading=false}) => {
                     BrithDate:date,
                 }
                     services.Card.updateCardInfo(data).then(res => {
-                        CheckAccount(cardNumber)
-                        if(ClientId < 0) {
+                        if(ClientId === -1000) {
+                            CheckAccount(cardNumber)
                             navigate('/dashboard')
+                        }else{
+                           callbackFn()
                         }
                     })
             }}
