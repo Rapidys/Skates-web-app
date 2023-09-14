@@ -44,7 +44,9 @@ const DatePicker:FC<IDatePicker> = ({date,setDate,label,onChange,labelClassName,
                 onChange={() => null}
                 renderIcon={() => {
                     return (
-                        <span className={'absolute right-5'} style={{transform: 'translateY(-50%)', top: '50%'}}>
+                        <span className={'absolute right-5 cursor-pointer'} style={{transform: 'translateY(-50%)', top: '50%'}}
+                          onClick={() => setOpen(true)}
+                        >
                                  <FontAwesomeIcon icon={faCalendar} className={'text-custom_light'}/>
                             </span>
                     )
