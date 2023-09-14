@@ -10,6 +10,7 @@ import {useAccount} from "../../context/AccountContext";
 import AlertModal from "../../components/Modals/AlertModal";
 import InstantModal from "../../components/Modals/InstantModal";
 import {format} from "date-fns";
+import {useNavigate} from "react-router-dom";
 
 const Dashboard = () => {
 
@@ -22,6 +23,7 @@ const Dashboard = () => {
 
     const [instantData, setInstantData] = useState([])
 
+    const navigate = useNavigate()
     const {ClientId, cardNumber} = useAccount()
     const {services} = useServices()
 
@@ -176,8 +178,11 @@ const Dashboard = () => {
                 openModal={openConsumeAlert}
                 setOpenModal={setOpenConsumeAlert}
                 title={'ყურადღებით !'}
-                onYes={() => handleConsumeOrder('add')}
-                description={'ნამდვილად გსურთ სერვისის დამატება ?'}
+                onYes={() => {
+                    handleConsumeOrder('add')
+                    navigate('/findAccount')
+                }}
+                description={'ნამდვილად გსურთ სერვისის გამოყენება ?'}
             />
             <InstantModal
                 onYes={ handleConsumeOrder}

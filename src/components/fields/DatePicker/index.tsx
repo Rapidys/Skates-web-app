@@ -23,7 +23,7 @@ const DatePicker:FC<IDatePicker> = ({date,setDate,label,onChange,labelClassName,
 
     useOnClickOutside(ref, () => setOpen(false))
 
-    const handleDateChange = (day: Date,isDay:string | undefined) => {
+    const handleDateChange = (day: any,isDay:string | undefined) => {
         if(onChange){
             onChange(day)
         }
@@ -34,6 +34,7 @@ const DatePicker:FC<IDatePicker> = ({date,setDate,label,onChange,labelClassName,
             setOpen(false)
         }
     }
+
 
     return (
         <>

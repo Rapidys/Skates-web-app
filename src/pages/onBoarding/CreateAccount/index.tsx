@@ -37,13 +37,7 @@ const CreateAccount:FC<ICreateAccount> = ({ClientInfo ,loading=false}) => {
         });
     };
 
-    const RenderDate = useCallback(() => {
-       return <DatePicker
-            label={'დაბ.თარიღი'}
-            date = {new Date(date)}
-            setDate={setDate}
-        />
-    },[date])
+
 
     if(loading){
         return <Loader/>
@@ -114,7 +108,11 @@ const CreateAccount:FC<ICreateAccount> = ({ClientInfo ,loading=false}) => {
                             />
                         </div>
                         <div className = {'mb-2'}>
-                          <RenderDate />
+                            <DatePicker
+                                label={'დაბ.თარიღი'}
+                                date = {new Date(date)}
+                                setDate={setDate}
+                            />
                         </div>
                         <div className = {'mb-2'}>
                             <Input

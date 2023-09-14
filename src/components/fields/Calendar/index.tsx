@@ -64,7 +64,7 @@ const Calendar: FC<ICalendar> = forwardRef(({onChange, value, open,disableOldDat
     }
 
     function handleChangeYear() {
-        if(calendarType !== 2){
+        if(calendarType !== 1){
             setCalendarType(calendarType + 1)
         }else{
             setCalendarType(0)
@@ -143,29 +143,29 @@ const Calendar: FC<ICalendar> = forwardRef(({onChange, value, open,disableOldDat
 
                             )}
 
+                            {/*{calendarType === 1 && (*/}
+                            {/*    <div className={'flex flex-wrap w-full mt-2 justify-center'}>*/}
+                            {/*        {*/}
+                            {/*            months.map((item, index) => {*/}
+                            {/*                return (*/}
+                            {/*                    <div*/}
+                            {/*                        className={'text-white w-22 text-sm rounded-lg bg-custom_loading p-2 mb-2 mr-2 cursor-pointer flex-wrap'}*/}
+                            {/*                        onClick={() => {*/}
+                            {/*                            let oldVal = new Date(value)*/}
+                            {/*                            const day = oldVal.getDate()*/}
+                            {/*                            const year = oldVal.getFullYear()*/}
+                            {/*                            onChange(new Date(year, index, day))*/}
+                            {/*                            setCalendarType(calendarType-1)*/}
+                            {/*                        }}*/}
+                            {/*                    >*/}
+                            {/*                        {item}*/}
+                            {/*                    </div>*/}
+                            {/*                )*/}
+                            {/*            })*/}
+                            {/*        }*/}
+                            {/*    </div>*/}
+                            {/*)}*/}
                             {calendarType === 1 && (
-                                <div className={'flex flex-wrap w-full mt-2 justify-center'}>
-                                    {
-                                        months.map((item, index) => {
-                                            return (
-                                                <div
-                                                    className={'text-white w-22 text-sm rounded-lg bg-custom_loading p-2 mb-2 mr-2 cursor-pointer flex-wrap'}
-                                                    onClick={() => {
-                                                        let oldVal = new Date(value)
-                                                        const day = oldVal.getDate()
-                                                        const year = oldVal.getFullYear()
-                                                        onChange(new Date(year, index, day))
-                                                        setCalendarType(calendarType+1)
-                                                    }}
-                                                >
-                                                    {item}
-                                                </div>
-                                            )
-                                        })
-                                    }
-                                </div>
-                            )}
-                            {calendarType === 2 && (
                                 <div className={''}>
                                     <div className={'flex justify-end mb-4'}>
                                         <button
@@ -192,12 +192,14 @@ const Calendar: FC<ICalendar> = forwardRef(({onChange, value, open,disableOldDat
                                                         <div
                                                             className={'text-white text-sm rounded-lg bg-custom_loading p-2 mb-2 mr-2 cursor-pointer flex-wrap'}
                                                             onClick={() => {
-                                                                let oldVal = new Date(value)
-                                                                const day = oldVal.getDate()
-                                                                const month = oldVal.getMonth()
-                                                                onChange(new Date(item, month, day),'isDay')
-                                                                setCalendarType(0)
+                                                                let oldVal = new Date(value);
+                                                                const day = oldVal.getDate();
+                                                                const month = oldVal.getMonth();
+                                                                onChange(new Date(item, month, day));
+                                                                setCalendarType(calendarType - 1);
+                                                                setCurrentMonth(format(new Date(item, month, day), 'MMM-yyyy'));
                                                             }}
+                                                            key = {item}
                                                         >
                                                             {item}
                                                         </div>

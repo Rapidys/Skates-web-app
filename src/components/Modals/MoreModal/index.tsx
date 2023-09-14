@@ -27,47 +27,40 @@ const MoreModal: FC<IMoreModal> = ({openModal,handleUpdateOrder, setOpenModal, d
     }
 
 
-
-    const RenderItem = useCallback(() => {
-        return (
-            <div>
-                <div className={'mb-3 flex-col py-2'}>
-                    <ServiceDetails data={data}/>
-                </div>
-                <div>
-                    <h6 className={'text-sm text-custom_light font-bold'}>
-                        ვალიდურია :
-                    </h6>
-                </div>
-                <div className={'flex justify-between mt-3'}>
-                    {data?.startDate && data?.endDate && (
-                        <>
-                            <div>
-                                <DatePicker label={'დან'}
-                                            labelClassName={'!text-custom_ocean'}
-                                            date={data.startDate}
-                                            onChange={(date) => handleChangeDate(date, 'startDate')}
-                                />
-                            </div>
-                            <div>
-                                <DatePicker label={'მდე'} labelClassName={'!text-custom_ocean'}
-                                            date={data.endDate}
-                                            onChange={(date) => handleChangeDate(date, 'endDate')}
-                                />
-                            </div>
-                        </>
-                    )}
-
-                </div>
-            </div>
-        )
-    },[data])
-
     return (
         <Modal show={openModal === 'default'} onClose={() => setOpenModal(undefined)} size={'xl'}>
             <Modal.Header>დეტალები</Modal.Header>
             <Modal.Body>
-                <RenderItem />
+                <div>
+                    <div className={'mb-3 flex-col py-2'}>
+                        <ServiceDetails data={data}/>
+                    </div>
+                    <div>
+                        <h6 className={'text-sm text-custom_light font-bold'}>
+                            ვალიდურია :
+                        </h6>
+                    </div>
+                    <div className={'flex justify-between mt-3'}>
+                        {data?.startDate && data?.endDate && (
+                            <>
+                                <div>
+                                    <DatePicker label={'დან'}
+                                                labelClassName={'!text-custom_ocean'}
+                                                date={data.startDate}
+                                                onChange={(date) => handleChangeDate(date, 'startDate')}
+                                    />
+                                </div>
+                                <div>
+                                    <DatePicker label={'მდე'} labelClassName={'!text-custom_ocean'}
+                                                date={data.endDate}
+                                                onChange={(date) => handleChangeDate(date, 'endDate')}
+                                    />
+                                </div>
+                            </>
+                        )}
+
+                    </div>
+                </div>
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={() => {
