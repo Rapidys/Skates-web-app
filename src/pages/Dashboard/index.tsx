@@ -158,6 +158,8 @@ const Dashboard = () => {
                 setState={setState}
                 handleOpenMore={handleOpenMore}
             />
+            <div style={{height:60,width:'100%'}}/>
+
             <div className={'fixed bottom-0 right-0 p2 w-full shadow  flex justify-end items-center px-3 py-2 z-10'}>
                 <Button className={'mr-2'}
                         disabled={!checkBtnDis()}

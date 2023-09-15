@@ -34,7 +34,7 @@ interface ICalendar {
 
 const Calendar: FC<ICalendar> = forwardRef(({onChange, value, open,disableOldDates}, ref:any) => {
     let today = startOfToday()
-    let [currentMonth, setCurrentMonth] = useState(format(today, 'MMM-yyyy'))
+    let [currentMonth, setCurrentMonth] = useState(format(value, 'MMM-yyyy'))
     const [calendarType, setCalendarType] = useState(0) // 0 - days / 1 - month / 2-  years
     const [portions,setPortions] = useState<any>([])
     const [leftOffset,setLeftOffset] = useState(new Date().getFullYear())
