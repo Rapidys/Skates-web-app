@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import MenuModal from "../../../components/Modals/MenuModal";
 import {faDashboard, faHome, faQrcode, faSignOutAlt, faUser, faUserSecret} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -6,8 +6,11 @@ import {useAuth} from "../../../context/AuthContext";
 import {useNavigate} from "react-router-dom";
 import {useAccount} from "../../../context/AccountContext";
 import IceSkating from '../../../assets/skating.jpg'
+import s from './animation.module.css'
 const Header = () => {
     const {handleLogout} = useAuth()
+
+    const [isMouseEntered,setMouseEntered] = useState(false)
 
     const navigate = useNavigate()
 
@@ -20,12 +23,20 @@ const Header = () => {
         {id:1,title:'გასვლა',onClick:handleLogout,icon:<FontAwesomeIcon icon={faSignOutAlt} />},
     ]
 
+
+    const handleMouseEnter = () => {
+        setMouseEntered(true)
+    }
+
+    const handleMouseleave = () => {
+        setMouseEntered(false)
+    }
+
     return (
-        <div className={'w-full h-20 border-b-2 border-b-custom_dark '}>
+        <div className={'w-full h-20 border-b-2 border-b-custom_dark '} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseleave}>
             <div className={"flex justify-between items-center h-full px-4"}>
                 <div className={'text-custom_ocean'}>
-                    {/*<FontAwesomeIcon icon={faQrcode} className={'cursor-pointer text-3xl'}/>*/}
-                    <img src={IceSkating} alt="#" width={40} height = {40}/>
+                    <img src={IceSkating} alt="#" width={40} height = {40} />
                 </div>
                 <div className={'flex items-center'}>
                     <div className={'mr-2'}>
@@ -33,7 +44,7 @@ const Header = () => {
                     </div>
                     <MenuModal items={items}>
                         <div className={'w-10 h-10 rounded-full bg-custom_dark cursor-pointer flex items-center justify-center'}>
-                            <FontAwesomeIcon icon={faUser} className = {'text-custom_secondary'}/>
+                            <FontAwesomeIcon icon={faUser} className = {`text-custom_secondary`}/>
                         </div>
                     </MenuModal>
                 </div>

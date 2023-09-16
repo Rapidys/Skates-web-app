@@ -1,0 +1,15 @@
+.animationIceSkating {
+   animation: animation 1s;
+}
+
+@keyframes animation {
+    from {
+        transform: translateX(0);
+    }
+    to  {
+        transform: translateX(300px);
+    }
+}
+.animationIceSkatingLeave {
+    animation: animation 1s;
+}
