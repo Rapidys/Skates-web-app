@@ -1,6 +1,7 @@
 export interface IAdminServices {
     getUsers: () => Promise<any>,
     updateUsers: (data:any) => Promise<any>,
+    updateService: (data:any) => Promise<any>,
 }
 
 
@@ -13,17 +14,15 @@ const AdminServices = (axios: any): IAdminServices => {
         return axios.post('/user/UpdateUser',data)
     }
 
-    return { getUsers,updateUsers }
+    const updateService = (data:any) => {
+        return axios.post('/reference/UpdateService',data)
+    }
+
+
+
+    return { getUsers,updateUsers,updateService }
 
 }
 
 export default AdminServices
 
-// {
-//     "Id": -1000, //tu 0 ze metia axali tu 0ze naklebi dzveli
-//     "displayName": "jumberiko",
-//     "userName: "jumberiko@arena.ge",
-//     "password": "asdASD123",
-//     "IsAdmin": false,
-//     "IsActive": true,
-// }

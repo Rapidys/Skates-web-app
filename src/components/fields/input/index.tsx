@@ -12,9 +12,10 @@ interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
     renderIcon?:() => React.ReactNode,
     withEye?:boolean,
     onEnterPress?:() => void,
+    textColor?:string,
 }
 
-const Input: FC<IInputProps> = React.forwardRef(({label,isValid= true,withEye,error,labelClassName,onEnterPress ,renderIcon,...props},ref) => {
+const Input: FC<IInputProps> = React.forwardRef(({label,textColor,isValid= true,withEye,error,labelClassName,onEnterPress ,renderIcon,...props},ref) => {
 
     const [toggleEye,setToggleEye] = useState(withEye)
 
@@ -31,7 +32,7 @@ const Input: FC<IInputProps> = React.forwardRef(({label,isValid= true,withEye,er
 
     return (
         <>
-            <label className={`block text-white text-sm font-bold mb-2 ${labelClassName}`} htmlFor="username">
+            <label className={`block text-${textColor ? textColor : 'white'} text-sm font-bold mb-2 ${labelClassName}`} htmlFor="username">
                 {label}  {!isValid && <span className = {'text-custom_light'}> / {error}</span>}
             </label>
             <div className = {'relative'}>

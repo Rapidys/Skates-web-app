@@ -32,11 +32,11 @@ const CreateUser: FC<ICreateUser> = ({modals, setOpenModal,getUsers}) => {
 
 
     const handleCloseModal = () => {
-        setOpenModal({...modals, createUserModal: undefined})
+        setOpenModal({...modals, createUserModal: false})
     }
 
     return (
-        <Modal show={modals.createUserModal === 'default'} dismissible onClose={handleCloseModal} className={'bg-custom_dark'}>
+        <Modal show={modals.createUserModal} dismissible onClose={handleCloseModal} className={'bg-custom_dark'}>
             <Modal.Header className={'bg-custom_dark'}>
                     <span className={'text-custom_light'}>
                        მომხმარებლის შექმნა

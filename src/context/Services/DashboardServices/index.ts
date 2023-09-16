@@ -1,8 +1,8 @@
 import {IConsumeOrder} from "../../../types/Dashboard";
 
 export interface IDashboardServices {
-    getServices: () => Promise<any>,
-    getPaymentTypes: () => Promise<any>,
+    getServices: (all:boolean) => Promise<any>,
+    getPaymentTypes: (all:boolean) => Promise<any>,
     getTrainers: () => Promise<any>,
     makeOrder: (data:any) => Promise<any>,
     getClientOrders: (clientId:number) => Promise<any>,
@@ -13,14 +13,14 @@ export interface IDashboardServices {
 
 const DashboardServices = (axios: any): IDashboardServices => {
 
-    const getServices = () => {
-        return axios.get('/Reference/GetServices')
+    const getServices = (all = false) => {
+        return axios.get(`/Reference/GetServices?all=${all}`)
     }
-    const getPaymentTypes = () => {
-        return axios.get('/Reference/GetPaymentTypes')
+    const getPaymentTypes = (all = false) => {
+        return axios.get(`/Reference/GetPaymentTypes?all=${all}`)
     }
-    const getTrainers = () => {
-        return axios.get('/Reference/GetTrainers')
+    const getTrainers = (all = false) => {
+        return axios.get(`/Reference/GetTrainers?all=${all}`)
     }
     const makeOrder = (data:any) => {
         return axios.post('/Orders/MakeOrder',data)

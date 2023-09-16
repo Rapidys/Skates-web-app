@@ -9,11 +9,20 @@ export const headData = [
     {id: 6, head: 'checkbox',checked:false},
     {id: 7, head: ''},
 ]
-export const adminheadData = [
+export const adminheadDataUsers = [
     {id: 1, head: 'Id',},
     {id: 2, head: 'სახელი'},
     {id: 3, head: 'ელ-ფოსტა'},
     {id: 4, head: 'ადმინი'},
+]
+
+export const adminheadDataServices = [
+    {id: 1, head: 'Id',},
+    {id: 2, head: 'სახელი'},
+    {id: 3, head: 'ფასი'},
+    {id: 3, head: 'დამატებითი სერვისები'},
+    {id: 4, head: 'ტრენერი'},
+    {id: 4, head: 'აქტიური'},
 ]
 
 export const rowData = [
