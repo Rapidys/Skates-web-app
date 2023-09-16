@@ -133,7 +133,7 @@ const CreateUser: FC<ICreateUser> = ({modals, setOpenModal,getUsers}) => {
                                 </Label>
                             </div>
 
-                            <div className={'flex'}>
+                            <div className={'flex mt-2'}>
                                 <Button className={'mr-2'} color={'danger'}
                                         disabled={!isValid && !dirty}
                                         onClick={() => handleSubmit()}

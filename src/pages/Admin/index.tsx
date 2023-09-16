@@ -28,6 +28,7 @@ const Admin = () => {
 
     const referenceOptions = [
         {id:1,label:'მომხმარებლების ადმინისტრირება',value:'მომხმარებლების ადმინისტრირება'},
+        // {id:1,label:'მომხმარებლების ადმინისტრირება',value:'გადა'},
     ]
 
     const getUsers = () => {

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import MenuModal from "../../../components/Modals/MenuModal";
 import {
     faDashboard,
@@ -17,6 +17,7 @@ import IceSkating from '../../../assets/skating.jpg'
 import s from './animation.module.css'
 import jwt_decode from "jwt-decode";
 import {useServices} from "../../../context/Services/ServiceContextProvider";
+import {deepCopy} from "../../../utils/helpers/deepCopy";
 
 const Header = () => {
     const {handleLogout} = useAuth()
@@ -27,16 +28,12 @@ const Header = () => {
 
     const navigate = useNavigate()
 
-    const {DisplayName} = useAccount()
+    const {DisplayName,Clients} = useAccount()
 
     const clientItems = [
         {
             id: 2, title: 'პროფილი', onClick: () => navigate('/profile'), icon: <FontAwesomeIcon icon={faUser}
                                                                                                  className={'hover:text-opacity-100'}/>
-        },
-        {
-            id: 3, title: 'მომხმარებლის შეცვლა', onClick: () => navigate('/chooseUser'), icon: <FontAwesomeIcon
-                icon={faUsersCog} className={'hover:text-opacity-100'}/>
         },
         {
             id: 5, title: 'მთავარი გვერდი', onClick: () => navigate('/dashboard'), icon: <FontAwesomeIcon icon={faHome}
@@ -55,6 +52,21 @@ const Header = () => {
         {id: 1, title: 'გასვლა', onClick: handleLogout, icon: <FontAwesomeIcon icon={faSignOutAlt}/>},
     ]
 
+    const checkItems = location.pathname.toLowerCase().includes('admin') ? itemsForAdminRoute : clientItems
+
+
+    const [items,setItems] = useState(checkItems)
+
+    useEffect(() => {
+        if(Clients?.length > 1){
+            const newItems = [...items]
+            newItems.push( {
+                id: 3, title: 'მომხმარებლის შეცვლა', onClick: () => navigate('/chooseUser'), icon: <FontAwesomeIcon
+                    icon={faUsersCog} className={'hover:text-opacity-100'}/>,
+            },)
+            setItems(newItems)
+        }
+    }, [Clients]);
 
     const handleMouseEnter = () => {
         setMouseEntered(true)
@@ -65,7 +77,6 @@ const Header = () => {
     }
 
 
-    const items = location.pathname.toLowerCase().includes('admin') ? itemsForAdminRoute : clientItems
 
     return (
         <div className={'w-full h-20 border-b-2 border-b-custom_dark '} onMouseEnter={handleMouseEnter}
