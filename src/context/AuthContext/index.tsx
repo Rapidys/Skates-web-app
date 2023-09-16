@@ -53,6 +53,8 @@ const AuthContextProvider:FC<IUserInfo> = ({children}) => {
 
 
     const handleLogout = () => {
+        localStorage.removeItem('token')
+        setToken('')
         setState({
             ...state,
             isLoggedIn: false,

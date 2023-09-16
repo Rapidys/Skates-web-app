@@ -38,6 +38,15 @@ const Header = () => {
                 <div className={'text-custom_ocean'}>
                     <img src={IceSkating} alt="#" width={40} height = {40} />
                 </div>
+
+                <div className={'cursor-pointer text-custom_dark hover:text-custom_light'}
+                  onClick={() => navigate('/findAccount')}
+                >
+                    <FontAwesomeIcon icon={faUserSecret} className = {`mr-2`}/>
+                    <span>
+                        ახალი მომხმარებლის გვერდი
+                    </span>
+                </div>
                 <div className={'flex items-center'}>
                     <div className={'mr-2'}>
                         {DisplayName}

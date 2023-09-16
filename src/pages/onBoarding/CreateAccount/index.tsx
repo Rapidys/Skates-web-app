@@ -32,7 +32,8 @@ const CreateAccount:FC<ICreateAccount> = ({ClientInfo,clientInfoCardNumber ,load
         if(ClientInfo){
             setDate(ClientInfo?.birthDate)
         }
-    }, []);
+    }, [ClientInfo]);
+
     const validSchema = () => {
         return yup.object().shape({
             firstName: yup.string().required('აუცილებელი ველი'),
@@ -58,14 +59,15 @@ const CreateAccount:FC<ICreateAccount> = ({ClientInfo,clientInfoCardNumber ,load
                 firstName:ClientInfo?.firstName || '' ,
                 lastName: ClientInfo?.lastName || '',
                 phoneNumber: ClientInfo?.mobile || '',
-                documentNumber: ClientInfo?.IdentificationNumber || '',
+                documentNumber: ClientInfo?.identificationNumber || '',
+                clientInfoCardNumber: clientInfoCardNumber || '',
             }}
             validateOnBlur
             validationSchema={validSchema()}
             onSubmit={(values) => {
                 const data = {
                     ClientId:ClientId,
-                    CardNumber:cardNumber,
+                    CardNumber:values?.clientInfoCardNumber,
                     FirstName:values.firstName,
                     LastName:values.lastName,
                     Mobile:values.phoneNumber,
@@ -93,14 +95,27 @@ const CreateAccount:FC<ICreateAccount> = ({ClientInfo,clientInfoCardNumber ,load
                   dirty,
               }) => (
                     <Card className={'px-4'}>
-                        <div className = {'mb-2'}>
-                            <Input
-                                label={'ბარათის იდენტიფიკატორი'}
-                                defaultValue={clientInfoCardNumber ? clientInfoCardNumber : cardNumber}
-                                name={'firstName'}
-                                type = {'text'}
-                            />
-                        </div>
+                        {clientInfoCardNumber ? (
+                            <div className = {'mb-2'}>
+                                <Input
+                                    label={'ბარათის იდენტიფიკატორი'}
+                                    value={values?.clientInfoCardNumber}
+                                    onChange={handleChange}
+                                    name={'clientInfoCardNumber'}
+                                    type = {'text'}
+                                />
+                            </div>
+                        ) : (
+                            <div className = {'mb-2'}>
+                                <Input
+                                    label={'ბარათის იდენტიფიკატორი'}
+                                    defaultValue={cardNumber}
+                                    name={'firstName'}
+                                    type = {'text'}
+                                />
+                            </div>
+                        )}
+
                         <div className = {'mb-2'}>
                             <Input
                                 label={'სახელი'}

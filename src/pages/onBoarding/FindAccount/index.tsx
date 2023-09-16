@@ -4,6 +4,8 @@ import Input from "../../../components/fields/input";
 import Button from "../../../components/Button";
 import {useAuth} from "../../../context/AuthContext";
 import {useAccount} from "../../../context/AccountContext";
+import {faSignOutAlt} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 const FindAccount = () => {
 
@@ -24,6 +26,7 @@ const FindAccount = () => {
 
     return (
         <Card className={'px-4'}>
+
             <div className={'mt-2 text-custom_light'}>
                 დააფიქსირეთ ბარათი ან შეიყვანეთ მობ.ნომერი
             </div>
