@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import ServiceTable from "../../components/Tables/ServiceTable";
 import {IHeadData, ServiceData} from "../../types/Dashboard";
 import {headData, rowActiveData, rowData} from "../../utils/constants/mock";
-import MoreModal from "../../components/Modals/MoreModal";
+import MoreModal from "../Dashboard/MoreModal";
 import Button from "../../components/Button";
 import {useAlert} from "../../context/AlertContext";
 import {Modal} from "flowbite-react";

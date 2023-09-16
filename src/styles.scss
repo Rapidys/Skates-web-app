@@ -8,3 +8,7 @@ body, html {
 #root{
   height: 100%;
 }
+
+.custom-date-picker {
+  @apply border-0 border-b-2 border-b-custom_light text-sm;
+}

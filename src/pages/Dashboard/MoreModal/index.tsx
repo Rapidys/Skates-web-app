@@ -1,9 +1,9 @@
 import React, {FC, useCallback, useEffect, useState} from 'react';
 import {Modal} from "flowbite-react";
-import DatePicker from "../../fields/DatePicker";
-import Button from '../../Button/index'
+import DatePicker from "../../../components/fields/DatePicker";
+import Button from '../../../components/Button'
 import {ServiceData} from "../../../types/Dashboard";
-import ServiceDetails from "../../Tables/ServiceDetailTable";
+import ServiceDetails from "../../../components/Tables/ServiceDetailTable";
 import {useServices} from "../../../context/Services/ServiceContextProvider";
 import {format} from "date-fns";
 
@@ -48,12 +48,14 @@ const MoreModal: FC<IMoreModal> = ({openModal,handleUpdateOrder, setOpenModal, d
                                                 labelClassName={'!text-custom_ocean'}
                                                 date={data.startDate}
                                                 onChange={(date) => handleChangeDate(date, 'startDate')}
+                                                className={'custom-date-picker !ring-0'}
                                     />
                                 </div>
                                 <div>
                                     <DatePicker label={'მდე'} labelClassName={'!text-custom_ocean'}
                                                 date={data.endDate}
                                                 onChange={(date) => handleChangeDate(date, 'endDate')}
+                                                className={'custom-date-picker !ring-0'}
                                     />
                                 </div>
                             </>

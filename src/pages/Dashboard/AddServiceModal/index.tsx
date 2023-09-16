@@ -1,14 +1,14 @@
 import React, {FC, useCallback, useEffect, useState} from 'react';
 import {Modal} from "flowbite-react";
 import Select from 'react-select'
-import DatePicker from "../../fields/DatePicker";
-import Button from '../../Button/index'
+import DatePicker from "../../../components/fields/DatePicker";
+import Button from '../../../components/Button'
 import {useServices} from "../../../context/Services/ServiceContextProvider";
 import {IOptions, ISelectedValues, IServices} from "../../../types/Dashboard";
 import {addMonths, format} from "date-fns";
-import AlertModal from "../AlertModal";
+import AlertModal from "../../../components/Modals/AlertModal";
 import {useAccount} from "../../../context/AccountContext";
-import Counter from "../../counter";
+import Counter from "../../../components/counter";
 
 interface IAddService {
     openModal: string | undefined,
@@ -237,7 +237,7 @@ const AddServiceModal: FC<IAddService> = ({openModal, setOpenModal,callbackFn}) 
                                                 onChange={(day) => {
                                                     onDateChange(format(day, 'yyyy-MM-dd'),'StartDate',items?.id)
                                                 }}
-                                                className = {'border-0 border-b-2 border-b-custom_light !ring-0 text-sm'}
+                                                className = {'custom-date-picker !ring-0'}
                                             />
                                         </div>
                                         <div>
@@ -248,7 +248,7 @@ const AddServiceModal: FC<IAddService> = ({openModal, setOpenModal,callbackFn}) 
                                                 onChange={(day) => {
                                                     onDateChange(format(day, 'yyyy-MM-dd'),'EndDate',items?.id)
                                                 }}
-                                                className = {'border-0 border-b-2 border-b-custom_light !ring-0 text-sm'}
+                                                className = {'custom-date-picker !ring-0'}
                                             />
                                         </div>
                                     </div>

@@ -1,20 +1,22 @@
 import React, {useEffect, useState} from 'react';
 import ServiceTable from "../../components/Tables/ServiceTable";
-import {IHeadData, IServices, ServiceData} from "../../types/Dashboard";
-import {headData, rowActiveData} from "../../utils/constants/mock";
-import AddServiceModal from "../../components/Modals/AddServiceModal";
+import {IHeadData, ServiceData} from "../../types/Dashboard";
+import {headData} from "../../utils/constants/mock";
+import AddServiceModal from "./AddServiceModal";
 import Button from "../../components/Button";
-import MoreModal from "../../components/Modals/MoreModal";
+import MoreModal from "./MoreModal";
 import {useServices} from "../../context/Services/ServiceContextProvider";
 import {useAccount} from "../../context/AccountContext";
 import AlertModal from "../../components/Modals/AlertModal";
-import InstantModal from "../../components/Modals/InstantModal";
-import {format} from "date-fns";
+import InstantModal from "./InstantModal";
 import {useNavigate} from "react-router-dom";
+import {deepCopy} from "../../utils/helpers/deepCopy";
 
 const Dashboard = () => {
 
-    const [state, setState] = useState<{ head: IHeadData[], row: ServiceData[] }>({head: [], row: []})
+    const copiedHeadData = deepCopy(headData)
+
+    const [state, setState] = useState<{ head: IHeadData[], row: ServiceData[] }>({head: copiedHeadData, row: []})
     const [openModal, setOpenModal] = useState<string | undefined>(undefined)
     const [openMoreModal, setOpenMoreModal] = useState<string | undefined>(undefined)
     const [openConsumeAlert, setOpenConsumeAlert] = useState<string | undefined>(undefined)
@@ -34,39 +36,37 @@ const Dashboard = () => {
         return newArr
     }
 
+    const instantDataBase = (data:any) =>{
+        const arr: any = []
+        data.forEach((element: any) => {
+            if (element?.isInstant) {
+                arr.push({...element, checked: false})
+            }
+        })
+        setInstantData(arr)
+    }
+
     const getClientOrders = () => {
         services.Dashboard.getClientOrders(ClientId).then(res => {
             const newArr = recreateRow(res)
             setState({
                 ...state,
                 row: newArr,
-                head: headData
             })
         })
     }
 
     const getServices = () => {
         services.Dashboard.getServices().then(res => {
-            const arr: any = []
-            res?.data.forEach((element: any) => {
-                if (element?.isInstant) {
-                    arr.push({...element, checked: false})
-                }
-            })
-            setInstantData(arr)
+           instantDataBase(res?.data)
         })
     }
 
     useEffect(() => {
         getClientOrders()
+        getServices()
     }, []);
 
-
-    useEffect(() => {
-        if (openInstantModal) {
-            getServices()
-        }
-    }, [openInstantModal]);
 
     const handleAddServiceModal = () => {
         setOpenModal('default')
@@ -98,17 +98,10 @@ const Dashboard = () => {
         services.Dashboard.consumeOrder(data).then(res => {
             services.Dashboard.getClientOrders(ClientId).then(serv => {
                 const newArr = recreateRow(serv)
-                const defHead = headData.map((item) => {
-                    if (item?.checked) {
-                        return {...item, checked: false}
-                    } else {
-                        return item
-                    }
-                })
                 setState({
                     ...state,
                     row: newArr,
-                    head: defHead
+                    head: copiedHeadData,
                 })
             })
         })
@@ -193,7 +186,7 @@ const Dashboard = () => {
                 openModal={openInstantModal}
                 setOpenModal={setOpenInstantModal}
                 title={'სწრაფი სერვისები'}
-                setInstantData={setInstantData}
+                instantDataBase={instantDataBase}
             />
             <MoreModal openModal={openMoreModal} handleUpdateOrder={handleUpdateOrder} setOpenModal={setOpenMoreModal}
                        data={myServiceItems} setData={setMyServiceItem}/>

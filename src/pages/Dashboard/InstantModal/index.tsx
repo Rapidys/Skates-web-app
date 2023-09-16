@@ -1,9 +1,10 @@
 import React, {FC, useCallback, useEffect, useState} from 'react';
 import {Checkbox, Modal} from "flowbite-react";
-import Button from "../../Button";
+import Button from "../../../components/Button";
 import {useServices} from "../../../context/Services/ServiceContextProvider";
 import Select from "react-select";
 import {IServices} from "../../../types/Dashboard";
+import { useNavigate } from 'react-router-dom';
 
 
 interface IInstantModal {
@@ -13,10 +14,10 @@ interface IInstantModal {
     onYes?: (type:string,chosenType:any) => void,
     instantData: any[],
     handleInstantChange: any,
-    setInstantData: any,
+    instantDataBase: any,
 }
 
-const InstantModal: FC<IInstantModal> = ({openModal, setOpenModal, onYes, setInstantData, handleInstantChange, instantData, title}) => {
+const InstantModal: FC<IInstantModal> = ({openModal, setOpenModal, onYes, instantDataBase, handleInstantChange, instantData, title}) => {
 
 
     const {services} = useServices()
@@ -25,7 +26,7 @@ const InstantModal: FC<IInstantModal> = ({openModal, setOpenModal, onYes, setIns
 
     const [chosenType, setChosenType] = useState<any>({})
 
-    useEffect(() => () => setInstantData([]), []);
+    const navigate = useNavigate()
 
     const ArrayToOptions = (data: any[]) => {
         const arr: any = []
@@ -82,10 +83,16 @@ const InstantModal: FC<IInstantModal> = ({openModal, setOpenModal, onYes, setIns
     }
 
 
+    const ClearData = () => {
+        setOpenModal(undefined)
+        setChosenType({})
+        instantDataBase(instantData)
+    }
+
+
     return (
         <Modal show={openModal === 'default'} onClose={() => {
-            setOpenModal(undefined)
-            setChosenType({})
+            ClearData()
         }} >
             <Modal.Header>
                     <span className={'text-custom_light'}>
@@ -93,22 +100,26 @@ const InstantModal: FC<IInstantModal> = ({openModal, setOpenModal, onYes, setIns
                     </span>
             </Modal.Header>
             <Modal.Body>
-                <div className={'flex w-full items-center justify-between'}>
-                    {instantData?.map(item => {
-                        return (
-                            <div className={'w-1/2'} key={item.id}>
-                                <div className = {'flex justify-between items-center'}>
-                                    <div className={'text-custom_ocean'}>
-                                        {item?.displayName}
-                                    </div>
-                                    <div>
-                                        <Checkbox checked={item?.checked} onChange={() => handleInstantChange(item)}/>
+                <div className={'w-full items-center justify-between'}>
+                    <div className = {'w-full'}>
+                        {instantData?.map(item => {
+                            return (
+                                <div className={'w-full mt-2'} key={item.id}>
+                                    <div className = {'flex justify-between items-center'}>
+                                        <div className={'text-custom_ocean'}>
+                                            {item?.displayName}
+                                        </div>
+                                        <div>
+                                            <Checkbox checked={item?.checked} onChange={() => handleInstantChange(item)}/>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        )
-                    })}
-                    <div>
+                            )
+                        })}
+                    </div>
+
+
+                    <div className={'mt-5 w-1/2'}>
                         <Select
                             options={paymentTypes}
                             value={chosenType.label ? chosenType : ''}
@@ -123,17 +134,19 @@ const InstantModal: FC<IInstantModal> = ({openModal, setOpenModal, onYes, setIns
             <Modal.Footer>
                 <div className={'flex justify-between w-full'}>
                     <div className={'flex'}>
-                        <Button onClick={() => {
-                            setOpenModal(undefined)
+                        <Button
+                            onClick={() => {
                             if (onYes) {
                                 onYes('addWithInstant',chosenType)
                             }
+                            ClearData()
+                            navigate('/findAccount')
                         }} color={'danger'} className={'mr-2'}
                          disabled = {checkBtnDisabled()}
+
                         >დასრულება</Button>
                         <Button color={'secondary'} onClick={() => {
-                            setOpenModal(undefined)
-                            setChosenType({})
+                            ClearData()
                         }}>
                             დახურვა
                         </Button>

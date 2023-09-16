@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FC, useCallback, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import Card from "../../../components/Cards/Card";
 import Input from "../../../components/fields/input";
 import * as yup from "yup";
@@ -26,6 +26,12 @@ const CreateAccount:FC<ICreateAccount> = ({ClientInfo ,loading=false,callbackFn}
     const { services } = useServices()
     const { cardNumber,ClientId,CheckAccount } = useAccount()
 
+
+    useEffect(() => {
+        if(ClientInfo){
+            setDate(ClientInfo?.birthDate)
+        }
+    }, []);
     const validSchema = () => {
         return yup.object().shape({
             firstName: yup.string().required('აუცილებელი ველი'),
@@ -63,7 +69,7 @@ const CreateAccount:FC<ICreateAccount> = ({ClientInfo ,loading=false,callbackFn}
                     LastName:values.lastName,
                     Mobile:values.phoneNumber,
                     IdentificationNumber:values.documentNumber,
-                    BrithDate:date,
+                    BirthDate:date,
                 }
                     services.Card.updateCardInfo(data).then(res => {
                         if(ClientId === -1000) {
@@ -86,6 +92,14 @@ const CreateAccount:FC<ICreateAccount> = ({ClientInfo ,loading=false,callbackFn}
                   dirty,
               }) => (
                     <Card className={'px-4'}>
+                        <div className = {'mb-2'}>
+                            <Input
+                                label={'ბარათის იდენტიფიკატორი'}
+                                defaultValue={cardNumber}
+                                name={'firstName'}
+                                type = {'text'}
+                            />
+                        </div>
                         <div className = {'mb-2'}>
                             <Input
                                 label={'სახელი'}

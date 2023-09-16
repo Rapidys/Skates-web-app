@@ -7,17 +7,22 @@ const axiosInstance = (handleSetError?:any) => {
 
     instance.interceptors.response.use(
         (response) => {
-            // If the request was successful, return the response
+            const { errorMessage ,status } = response?.data
+
+            if(response.status === 200 && errorMessage){
+                handleSetError(errorMessage);
+            }
             return response;
         },
         (error) => {
             // Handle any errors here
             const { status } = error?.response
-            const { Message } = error?.response?.data
+            const { Message ,errorMessage } = error?.response?.data
 
             if(status === 401){
                 localStorage.removeItem('token')
             }
+
             if (error.response) {
                 handleSetError(Message);
                 return Promise.reject(error.response.data);

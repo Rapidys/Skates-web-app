@@ -4,6 +4,7 @@ import {IHeadData, ServiceData} from "../../../types/Dashboard";
 import {faEllipsisV} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {format} from "date-fns";
+import {headData} from "../../../utils/constants/mock";
 
 
 interface IServiceTable {

@@ -5,7 +5,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {useAuth} from "../../../context/AuthContext";
 import {useNavigate} from "react-router-dom";
 import {useAccount} from "../../../context/AccountContext";
-
+import IceSkating from '../../../assets/skating.jpg'
 const Header = () => {
     const {handleLogout} = useAuth()
 
@@ -24,7 +24,8 @@ const Header = () => {
         <div className={'w-full h-20 border-b-2 border-b-custom_dark '}>
             <div className={"flex justify-between items-center h-full px-4"}>
                 <div className={'text-custom_ocean'}>
-                    <FontAwesomeIcon icon={faQrcode} className={'cursor-pointer text-3xl'}/>
+                    {/*<FontAwesomeIcon icon={faQrcode} className={'cursor-pointer text-3xl'}/>*/}
+                    <img src={IceSkating} alt="#" width={40} height = {40}/>
                 </div>
                 <div className={'flex items-center'}>
                     <div className={'mr-2'}>
