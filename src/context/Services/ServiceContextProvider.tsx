@@ -7,6 +7,7 @@ import DashboardServices from "./DashboardServices";
 import {IConsumeOrder} from "../../types/Dashboard";
 import AuthServices, {IAuthServices} from "./AuthServices";
 import {useAuth} from "../AuthContext";
+import AdminServices, {IAdminServices} from "./AdminServices";
 
 const ServiceContext = React.createContext<any>({
     services: {
@@ -26,6 +27,10 @@ const ServiceContext = React.createContext<any>({
         },
         Auth: {
             login: async () => {},
+        },
+        AdminServices: {
+            getUsers: async () => {},
+            updateUsers: async () => {},
         }
     },
     setToken:() => {}
@@ -39,6 +44,7 @@ interface IServices {
     Card: ICardServices,
     Dashboard:IDashboardServices,
     Auth:IAuthServices
+    Admin:IAdminServices
 }
 
 const ServiceContextProvider: FC<IServiceContextProvider> = ({children}) => {
@@ -52,11 +58,13 @@ const ServiceContextProvider: FC<IServiceContextProvider> = ({children}) => {
     const Card = CardServices(axios)
     const Dashboard = DashboardServices(axios)
     const Auth = AuthServices(axios)
+    const Admin = AdminServices(axios)
 
     const services: IServices = {
         Card,
         Dashboard,
-        Auth
+        Auth,
+        Admin
     }
 
 

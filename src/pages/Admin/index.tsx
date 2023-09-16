@@ -1,31 +1,47 @@
 import React, {useEffect, useState} from 'react';
-import ServiceTable from "../../components/Tables/ServiceTable";
-import {IHeadData, ServiceData} from "../../types/Dashboard";
-import {headData, rowActiveData, rowData} from "../../utils/constants/mock";
+import {ServiceData} from "../../types/Dashboard";
+import {adminheadData} from "../../utils/constants/mock";
 import MoreModal from "../Dashboard/MoreModal";
 import Button from "../../components/Button";
-import {useAlert} from "../../context/AlertContext";
-import {Modal} from "flowbite-react";
 import AlertModal from "../../components/Modals/AlertModal";
+import Select from "react-select";
+import ReferenceTable from "./_common/referenceTable";
+import {useServices} from "../../context/Services/ServiceContextProvider";
+import CreateUser from "./createUser";
 
 const Admin = () => {
-    const [state, setState] = useState<{ head: IHeadData[], row: ServiceData[] }>({head: headData, row: rowData})
+
+
+    const [state, setState] = useState<{ head: any[], row: any[] }>({head: adminheadData, row:[]})
 
     const [openMoreModal, setOpenMoreModal] = useState<string | undefined>(undefined)
     const [serviceItem, setServiceItem] = useState({})
     const [openModal, setOpenModal] = useState<string | undefined>();
     const [isChecked,setIsChecked] = useState(false)
+    const [modals,setOpenModals] = useState({
+        createUserModal:undefined,
+    })
 
+
+    const { services } = useServices()
+
+
+    const referenceOptions = [
+        {id:1,label:'მომხმარებლების ადმინისტრირება',value:'მომხმარებლების ადმინისტრირება'},
+    ]
+
+    const getUsers = () => {
+        services.Admin.getUsers().then((res) => {
+            setState({
+                ...state,
+                row:res?.data
+            })
+        })
+    }
 
     useEffect(() => {
-        let isChecked = false
-        state?.row.forEach((item) => {
-            if(item.checked === true){
-                isChecked = true
-            }
-        })
-        setIsChecked(isChecked)
-    },[state])
+        getUsers()
+    },[])
 
     const handleOpenMore = (item: ServiceData) => {
         setOpenMoreModal('default')
@@ -36,8 +52,9 @@ const Admin = () => {
     }
 
     return (
-        <div>
-            <ServiceTable state={state} setState={setState} handleOpenMore={handleOpenMore} />
+        <div className = {'px-2 py-2'}>
+            <Select options={referenceOptions}/>
+            <ReferenceTable state = {state} setState={setState}/>
             <div className={'fixed bottom-0 right-0 p2 w-full shadow  flex justify-end items-center px-3 py-2 z-10'}>
                 <Button className={'mr-2'}
                         color={'danger'}
@@ -45,7 +62,7 @@ const Admin = () => {
                         disabled={!isChecked}
                 >წაშლა</Button>
                 <Button
-                    onClick={() => console.log('asd')}
+                    onClick={() => setOpenModals({...modals,createUserModal:'default'})}
                     color={'secondary'}
                 >დამატება</Button>
             </div>
@@ -58,7 +75,9 @@ const Admin = () => {
                 setOpenModal={setOpenModal}
             />
 
-            <MoreModal openModal={openMoreModal} setOpenModal={setOpenMoreModal} data={serviceItem}/>
+            <CreateUser  modals={modals} setOpenModal={setOpenModals} getUsers = {getUsers}/>
+
+            <MoreModal openModal={openMoreModal} setOpenModal={setOpenMoreModal} data={serviceItem} />
 
         </div>
     );

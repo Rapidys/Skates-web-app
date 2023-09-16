@@ -9,6 +9,12 @@ export const headData = [
     {id: 6, head: 'checkbox',checked:false},
     {id: 7, head: ''},
 ]
+export const adminheadData = [
+    {id: 1, head: 'Id',},
+    {id: 2, head: 'სახელი'},
+    {id: 3, head: 'ელ-ფოსტა'},
+    {id: 4, head: 'ადმინი'},
+]
 
 export const rowData = [
     {id: 1, serviceValue: '8 გაკვეთილი (კვირის დღეები)', trainer: '', price: '120', active: 'არა',checked:false,count:8},
