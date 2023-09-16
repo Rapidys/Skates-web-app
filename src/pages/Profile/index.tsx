@@ -48,7 +48,7 @@ const Profile = () => {
                     პროფილი
                 </h2>
             </div>
-            <CreateAccount  ClientInfo = {state} loading={loading} callbackFn = {callbackFn}/>
+            <CreateAccount  ClientInfo = {state} loading={loading} clientInfoCardNumber = {state?.cardNumber} callbackFn = {callbackFn}/>
         </div>
     );
 };

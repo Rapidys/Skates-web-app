@@ -17,8 +17,9 @@ interface ICreateAccount {
     ClientInfo?:IClientInfo,
     loading?:boolean,
     callbackFn?:any,
+    clientInfoCardNumber?:any,
 }
-const CreateAccount:FC<ICreateAccount> = ({ClientInfo ,loading=false,callbackFn}) => {
+const CreateAccount:FC<ICreateAccount> = ({ClientInfo,clientInfoCardNumber ,loading=false,callbackFn}) => {
 
     const navigate = useNavigate()
     const [date, setDate] = useState<any>(format(new Date(), 'yyyy-MM-dd'))
@@ -95,7 +96,7 @@ const CreateAccount:FC<ICreateAccount> = ({ClientInfo ,loading=false,callbackFn}
                         <div className = {'mb-2'}>
                             <Input
                                 label={'ბარათის იდენტიფიკატორი'}
-                                defaultValue={cardNumber}
+                                defaultValue={clientInfoCardNumber ? clientInfoCardNumber : cardNumber}
                                 name={'firstName'}
                                 type = {'text'}
                             />
