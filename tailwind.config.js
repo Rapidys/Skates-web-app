@@ -23,7 +23,7 @@ module.exports = {
         custom_button:'#1B6B93',
         custom_ocean:'#213555',
         custom_danger:'#8a1d36',
-        custom_disabled:'#c5c5c5',
+        custom_disabled:'#8a8a8a',
         // Add more custom colors here
       },
     },

@@ -15,11 +15,11 @@
     "baseUrl": ".",
     "paths": {},
     "jsx": "react-jsx",
-    "allowJs": false,
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
     "strict": false,
-    "types": ["vite/client", "vitest"]
+    "types": ["vite/client", "vitest"],
+    "allowJs": true
   },
   "files": [],
   "include": [],

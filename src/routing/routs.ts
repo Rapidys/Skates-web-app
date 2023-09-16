@@ -7,6 +7,7 @@ import OnBoardingLayout from "../layout/onBoarding";
 import Dashboard from "../pages/Dashboard";
 import Layout from "../layout/dashboard";
 import Profile from "../pages/Profile";
+import ChooseUser from "../pages/onBoarding/ChooseUser";
 
 
 export const PublicRoutes: IRoute[] = [
@@ -16,11 +17,12 @@ export const PublicRoutes: IRoute[] = [
 export const PrivateRoutes : IRoute[] = [
     {id:1,name:'findAccount', path:'/findAccount',component:FindAccount,layout:OnBoardingLayout},
     {id:2,name:'createAccount', path:'/createAccount',component:CreateAccount,layout:OnBoardingLayout},
+    {id:2,name:'createAccount', path:'/chooseUser',component:ChooseUser,layout:OnBoardingLayout},
     {id:3,name:'dashboard', path:'/dashboard',component:Dashboard,layout:Layout},
     {id:3,name:'dashboard', path:'/profile',component:Profile,layout:Layout},
-    {id:3,name:'dashboard', path:'/admin',component:Admin,layout:Layout},
 ]
 
-// export const AdminRoutes : IRoute[] = [
-//     {id:1,name:'admin', path:'/admin',component:Admin},
-// ]
+export const AdminRoutes : IRoute[] = [
+    ...PrivateRoutes,
+    {id:1,name:'admin', path:'/admin',component:Admin,layout:Layout},
+]

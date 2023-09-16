@@ -1,27 +1,36 @@
-import React, {useEffect, useState} from 'react';
-import {Card} from "flowbite-react";
+import React, {FC, useEffect, useState} from 'react';
+import {Button, Card, Modal} from "flowbite-react";
 import CreateAccount from "../onBoarding/CreateAccount";
 import {useServices} from "../../context/Services/ServiceContextProvider";
 import {useAccount} from "../../context/AccountContext";
+import ClientForm from "../../context/_common/ClientForm";
+import {useFormikContext} from "formik";
 
 
 export interface IClientInfo {
-    clientId:number,
-    cardNumber:string,
-    firstName:string,
-    lastName:string,
-    birthDate:Date | number,
-    mobile:string,
-    documentNumber?:string,
-    identificationNumber?:string,
+    clientId: number,
+    cardNumber: string,
+    firstName: string,
+    lastName: string,
+    birthDate: Date | number,
+    mobile: string,
+    documentNumber?: string,
+    identificationNumber?: string,
 }
-const Profile = () => {
 
-    const [ state,setState ] = useState<IClientInfo>()
+interface IProfile {
+    open: boolean,
+    setOpen: any,
+}
 
-    const [ loading ,setLoading ] = useState(false)
-    const { ClientId } = useAccount()
-    const { services } = useServices()
+const Profile: FC<IProfile> = ({open, setOpen}) => {
+
+    const [state, setState] = useState<IClientInfo>()
+
+
+    const [loading, setLoading] = useState(false)
+    const {ClientId} = useAccount()
+    const {services} = useServices()
 
     const getClientData = () => {
         setLoading(true)
@@ -37,19 +46,38 @@ const Profile = () => {
         getClientData()
     }, []);
 
-    const callbackFn = () => {
-        getClientData()
+    const onSubmit = (data: any) => {
+        services.Card.updateCardInfo(data).then(res => {
+            getClientData()
+        })
+    }
+
+    const handleClear = () => {
+        setOpen(false)
     }
 
     return (
-        <div className={'flex mt-20 items-center h-full'} style = {{flexDirection:'column'}}>
-            <div className={'w-1/3 mb-3 bg-custom_dark rounded-lg px-2 py-3'}>
-                <h2 className={'text-custom_light text-lg'}>
-                    პროფილი
-                </h2>
+        <div className={'flex justify-center bg-custom_dark h-full'}>
+
+            <div className={'w-1/2 mt-4'}>
+                <div className={'mb-2'}>
+                    <h2 className={'text-lg text-white font-bold'}>
+                        პროფილი
+                    </h2>
+                </div>
+                <ClientForm
+                    ClientInfo={state}
+                    loading={loading}
+                    onSubmit={onSubmit}
+                    isReadOnly={false}
+                    cardNumber={state?.cardNumber}
+                />
+
             </div>
-            <CreateAccount  ClientInfo = {state} loading={loading} clientInfoCardNumber = {state?.cardNumber} callbackFn = {callbackFn}/>
         </div>
+
+
+
     );
 };
 

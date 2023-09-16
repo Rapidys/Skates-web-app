@@ -18,7 +18,7 @@ const Card: FC<ICard> = ({children, slide = false, className}) => {
 
     return (
         <div
-            className={`bg-custom_dark w-1/3 shadow-sm shadow-custom_button border-b-2 border-b-custom_light p-8 rounded-lg ${className}`}>
+            className={`shadow-sm w-full shadow-custom_button border-b-2 border-b-custom_light p-8 rounded-lg ${className}`}>
             <Transition
                 className="h-full"
                 show={show}

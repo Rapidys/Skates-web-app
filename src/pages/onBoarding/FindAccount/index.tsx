@@ -25,34 +25,37 @@ const FindAccount = () => {
     }, [isLoggedIn])
 
     return (
-        <Card className={'px-4'}>
+        <div className={'w-1/3'}>
+            <Card className={'px-4'}>
 
-            <div className={'mt-2 text-custom_light'}>
-                დააფიქსირეთ ბარათი ან შეიყვანეთ მობ.ნომერი
-            </div>
-            <div className={'w-full flex justify-center mt-2'}>
-                <div className={'w-full'}>
-                    <Input
-                        label={'ბარ.ნომერი / მობ.ნომერი'}
-                        value={AccountId}
-                        ref={AccountIdRef}
-                        onChange={(e) => setAccountId(e.target.value)}
-                        onBlur={() => AccountIdRef.current?.focus()}
-                        withEye = {true}
-                        onEnterPress = {() => CheckAccount(AccountId)}
-                    />
-                    <Button
-                        onClick={() => CheckAccount(AccountId)}
-                        className = {'mt-4'}
-                        disabled = {!AccountId}
-                    >
-                        შესვლა
-                    </Button>
+                <div className={'mt-2 text-custom_light'}>
+                    დააფიქსირეთ ბარათი ან შეიყვანეთ მობ.ნომერი
+                </div>
+                <div className={'w-full flex justify-center mt-2'}>
+                    <div className={'w-full'}>
+                        <Input
+                            label={'ბარ.ნომერი / მობ.ნომერი'}
+                            value={AccountId}
+                            ref={AccountIdRef}
+                            onChange={(e) => setAccountId(e.target.value)}
+                            onBlur={() => AccountIdRef.current?.focus()}
+                            withEye = {true}
+                            onEnterPress = {() => CheckAccount(AccountId)}
+                        />
+                        <Button
+                            onClick={() => CheckAccount(AccountId)}
+                            className = {'mt-4'}
+                            disabled = {!AccountId}
+                        >
+                            შესვლა
+                        </Button>
+                    </div>
+
                 </div>
 
-            </div>
+            </Card>
+        </div>
 
-        </Card>
     );
 };
 

@@ -22,6 +22,7 @@ const Login = () => {
 
 
     return (
+        <div className={'w-1/3'}>
             <Card className={'px-4'}>
                 <div className = {'mb-2'}>
                     <h4 className = {'text-custom_light'}>
@@ -58,9 +59,10 @@ const Login = () => {
                     disabled={!state.password || !state.userName}
                     className = {'mt-4'}
                 >
-                   შესვლა
+                    შესვლა
                 </Button>
             </Card>
+        </div>
     );
 };
 

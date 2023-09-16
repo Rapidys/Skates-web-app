@@ -72,6 +72,7 @@ const ServiceContextProvider: FC<IServiceContextProvider> = ({children}) => {
         <ServiceContext.Provider
             value={{
                 services,
+                token,
                 setToken
             }}
         >

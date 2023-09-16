@@ -11,6 +11,8 @@ import AlertModal from "../../components/Modals/AlertModal";
 import InstantModal from "./InstantModal";
 import {useNavigate} from "react-router-dom";
 import {deepCopy} from "../../utils/helpers/deepCopy";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faArrowLeft, faUserSecret} from "@fortawesome/free-solid-svg-icons";
 
 const Dashboard = () => {
 
@@ -153,21 +155,35 @@ const Dashboard = () => {
             />
             <div style={{height:60,width:'100%'}}/>
 
-            <div className={'fixed bottom-0 right-0 p2 w-full shadow  flex justify-end items-center px-3 py-2 z-10'}>
-                <Button className={'mr-2'}
-                        disabled={!checkBtnDis()}
-                        onClick={() => {
-                            setOpenInstantModal('default')
-                        }}
-                >გამოყენება & დამატება</Button>
-                <Button className={'mr-2'}
-                        onClick={() => setOpenConsumeAlert('default')}
-                        disabled={!checkBtnDis()}
-                >გამოყენება</Button>
-                <Button
-                    onClick={handleAddServiceModal}
-                    color={'secondary'}
-                >დამატება</Button>
+            <div className={'fixed bottom-0 right-0 p2 w-full shadow  flex justify-between items-center px-3 py-2 z-10'}>
+                <div>
+                    <Button className={'mr-2'}
+                            onClick={() => {
+                                navigate('/findAccount')
+                            }}
+                            color={'danger'}
+                    >
+                        <FontAwesomeIcon icon={faArrowLeft} className = {`mr-2`}/>
+                        <span>უკან</span>
+                    </Button>
+                </div>
+                <div className={'flex'}>
+                    <Button className={'mr-2'}
+                            disabled={!checkBtnDis()}
+                            onClick={() => {
+                                setOpenInstantModal('default')
+                            }}
+                    >გამოყენება & დამატება</Button>
+                    <Button className={'mr-2'}
+                            onClick={() => setOpenConsumeAlert('default')}
+                            disabled={!checkBtnDis()}
+                    >გამოყენება</Button>
+                    <Button
+                        onClick={handleAddServiceModal}
+                        color={'secondary'}
+                    >დამატება</Button>
+                </div>
+
             </div>
             <AlertModal
                 openModal={openConsumeAlert}
