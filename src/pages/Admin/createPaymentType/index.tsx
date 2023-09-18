@@ -5,17 +5,11 @@ import Button from "../../../components/Button";
 import * as yup from "yup";
 import {useFormik} from "formik";
 import {useServices} from "../../../context/Services/ServiceContextProvider";
+import {ICreate, IModal} from "../types";
+import {IServiceItem} from "../../Dashboard/types";
 
 
-interface ICreatePaymentType {
-    modals: any,
-    setModals: any,
-    currentPaymentItem: any,
-    getPaymentTypes: any,
-    setCurrentPaymentItem: any,
-}
-
-const CreatePaymentType: FC<ICreatePaymentType> = ({modals, setModals, currentPaymentItem, getPaymentTypes,setCurrentPaymentItem}) => {
+const CreatePaymentType: FC<ICreate> = ({modals, setModals, currentReferenceItem, getCall, setCurrentServiceItem}) => {
 
 
     const {services} = useServices()
@@ -24,12 +18,15 @@ const CreatePaymentType: FC<ICreatePaymentType> = ({modals, setModals, currentPa
             displayName: yup.string().required('აუცილებელი ველი'),
         });
     };
-
+    const handleClear = () => {
+        setModals({...modals, createPaymentType: false})
+        setCurrentServiceItem(null)
+    }
 
     const {values, touched, setFieldValue, handleChange, handleSubmit, errors, isValid, handleBlur, dirty, resetForm} = useFormik({
         initialValues: {
-            id: currentPaymentItem?.id ? currentPaymentItem.id : -1000,
-            displayName: currentPaymentItem?.displayName ? currentPaymentItem?.displayName : '',
+            id: currentReferenceItem?.id ? currentReferenceItem.id : -1000,
+            displayName: currentReferenceItem?.displayName ? currentReferenceItem?.displayName : '',
         },
         validationSchema: validSchema,
         validateOnBlur: true,
@@ -40,17 +37,13 @@ const CreatePaymentType: FC<ICreatePaymentType> = ({modals, setModals, currentPa
                 IsActive: true
             }
             services.Admin.updatePaymentTypes(data).then(res => {
-                getPaymentTypes()
+                getCall()
                 handleClear()
             })
         }),
         enableReinitialize: true
     })
 
-    const handleClear = () => {
-        setModals({...modals, createPaymentType: false})
-        setCurrentPaymentItem(null)
-    }
 
     return (
         <Modal show={modals.createPaymentType} onClose={handleClear} dismissible>

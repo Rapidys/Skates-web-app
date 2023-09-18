@@ -13,6 +13,7 @@ import CreateService from "./createService";
 import CreateUser from './createUser';
 import CreatePaymentType from "./createPaymentType";
 import CreateTrainers from "./createTrainers";
+import {IModal} from "./types";
 
 const Admin = () => {
 
@@ -24,7 +25,7 @@ const Admin = () => {
         trainers: {head: [], row: []},
     })
 
-    const [modals, setOpenModals] = useState({
+    const [modals, setOpenModals] = useState<IModal>({
         createUserModal: false,
         createServiceModal: false,
         alertModal: false,
@@ -101,7 +102,7 @@ const Admin = () => {
         // const copiedUsersHead = deepCopy(adminheadDataUsers)
 
         // console.log(response)
-        type responseProps = Record<'data',IService[] | IUsers | IPaymentTypes>
+         type responseProps = Record<'data',IService[] | IUsers | IPaymentTypes>
          let newObj:any = {}
          response?.forEach(({data,config}:responseProps | any) => {
             const value = checkStateType(config?.url)
@@ -194,17 +195,17 @@ const Admin = () => {
                 })
             })
         }
-
+        setCurrentReferenceItem(null)
     }
 
     const handleEdit = ({item, remove,modalType}) => {
         if (remove) {
             setCurrentReferenceItem(item)
             //remove modal
-            setOpenModals({
-                ...modals,
+            setOpenModals((prevState) => ({
+                ...prevState,
                 alertModal: true
-            })
+            }))
             return
         }
         setCurrentReferenceItem(item)
@@ -219,7 +220,9 @@ const Admin = () => {
         <div className={'px-2 py-2'}>
             <Select options={referenceOptions} onChange={handleReferenceChange} value={currentReference}/>
 
-            <MyTable columnData={currentState?.head} rowData={currentState?.row}/>
+            <div className={'mb-12'}>
+                <MyTable columnData={currentState?.head} rowData={currentState?.row}/>
+            </div>
 
             <div className={'fixed bottom-0 right-0 p2 w-full shadow  flex justify-end items-center px-3 py-2 z-10'}>
                 <Button
@@ -240,9 +243,9 @@ const Admin = () => {
             <CreatePaymentType
                 modals={modals}
                 setModals={setOpenModals}
-                currentPaymentItem={currentReferenceItem}
-                getPaymentTypes={getPaymentTypes}
-                setCurrentPaymentItem={setCurrentReferenceItem}
+                currentReferenceItem={currentReferenceItem}
+                getCall={getPaymentTypes}
+                setCurrentServiceItem={setCurrentReferenceItem}
             />
 
             <CreateTrainers
