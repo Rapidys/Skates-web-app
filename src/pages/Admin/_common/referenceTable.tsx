@@ -1,12 +1,16 @@
 import React, {FC} from 'react';
 import {Checkbox, Table} from "flowbite-react";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faDeleteLeft, faEllipsisV, faRemove, faTrash, faUndo} from "@fortawesome/free-solid-svg-icons";
 
 interface IReferenceTable {
     state:any,
     setState:any,
     currentReference:any,
+    handleEditService?:any,
+    handleEditReference?:any,
 }
-const ReferenceTable:FC<IReferenceTable> = ({state,setState,currentReference}) => {
+const ReferenceTable:FC<IReferenceTable> = ({state,setState,currentReference,handleEditService,handleEditReference}) => {
     const { row,head } = state
 
 
@@ -14,7 +18,6 @@ const ReferenceTable:FC<IReferenceTable> = ({state,setState,currentReference}) =
         const copiedState = {...state}
         const copiedRow = [...copiedState.row]
 
-        console.log(copiedRow)
         const elementIndex = copiedRow.findIndex(el => el?.id === id)
 
         copiedRow[elementIndex][key] = !copiedRow[elementIndex][key]
@@ -46,7 +49,7 @@ const ReferenceTable:FC<IReferenceTable> = ({state,setState,currentReference}) =
                                     {item.id}
                                 </Table.Cell>
                                 <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                    {item.displayName}
+                                    {`${item.displayName} (ფასი: ${item.price}; რაოდენობა: ${item.serviceQuantity})`}
                                 </Table.Cell>
                                 <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                                     {item.price}
@@ -62,6 +65,18 @@ const ReferenceTable:FC<IReferenceTable> = ({state,setState,currentReference}) =
                                 <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
                                     {item.isActive ? 'კი' : 'არა'}
                                     {/*<Checkbox checked = {item.isActive} onChange = {() => handleChecked(item.id,'isActive')}/>*/}
+                                </Table.Cell>
+                                {item.isActive ? (
+                                    <Table.Cell className={'cursor-pointer'} onClick={() => handleEditService(item,'undo')}>
+                                        <FontAwesomeIcon icon={faTrash}/>
+                                    </Table.Cell>
+                                ) : (
+                                    <Table.Cell className={'cursor-pointer'} onClick={() => handleEditService(item,'remove')}>
+                                        <FontAwesomeIcon icon={faUndo}/>
+                                    </Table.Cell>
+                                )}
+                                <Table.Cell className={'cursor-pointer'} onClick={() => handleEditService(item)}>
+                                    <FontAwesomeIcon icon={faEllipsisV}/>
                                 </Table.Cell>
                             </Table.Row>
                         })}
@@ -80,8 +95,26 @@ const ReferenceTable:FC<IReferenceTable> = ({state,setState,currentReference}) =
                                 {item.username}
                             </Table.Cell>
                             <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                <Checkbox checked = {item.isAdmin} onChange = {() => handleChecked(item.id,'isAdmin')}/>
+                                {item.isActive ? 'კი' : 'არა'}
                             </Table.Cell>
+                            <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+                                {item.isAdmin ? 'კი' : 'არა'}
+                            </Table.Cell>
+                            {item.isActive ? (
+                                <Table.Cell className={'cursor-pointer'} onClick={() => handleEditReference(item,'undo')}>
+                                    <FontAwesomeIcon icon={faTrash}/>
+                                </Table.Cell>
+                            ) : (
+                                <Table.Cell className={'cursor-pointer'} onClick={() => handleEditReference(item,'remove')}>
+                                    <FontAwesomeIcon icon={faUndo}/>
+                                </Table.Cell>
+                            )}
+                            <Table.Cell className={'cursor-pointer'} onClick={() => handleEditReference(item)}>
+                                <FontAwesomeIcon icon={faEllipsisV}/>
+                            </Table.Cell>
+                            {/*<Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">*/}
+                            {/*    <Checkbox checked = {item.isAdmin} onChange = {() => handleChecked(item.id,'isAdmin')}/>*/}
+                            {/*</Table.Cell>*/}
                         </Table.Row>
                     })}
                 </Table.Body>
@@ -92,22 +125,3 @@ const ReferenceTable:FC<IReferenceTable> = ({state,setState,currentReference}) =
 };
 
 export default ReferenceTable;
-//
-// displayName
-//     :
-//     "ციგურის ქირაობა"
-// id
-//     :
-//     3
-// isActive
-//     :
-//     true
-// isInstant
-//     :
-//     true
-// needTrainer
-//     :
-//     false
-// price
-//     :
-//     5

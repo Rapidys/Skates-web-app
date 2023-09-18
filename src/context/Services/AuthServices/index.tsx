@@ -1,13 +1,14 @@
-import {IConsumeOrder} from "../../../types/Dashboard";
+import {MyAxios} from "../ServiceContextProvider";
+import {AxiosResponse} from "axios";
+import {ILogin} from "../../../types/auth";
 
 export interface IAuthServices {
-    login: (data:any) => Promise<any>,
+    login: (data:ILogin) => Promise<AxiosResponse>,
 }
 
+const AuthServices = (axios: MyAxios): IAuthServices => {
 
-const AuthServices = (axios: any): IAuthServices => {
-
-    const login = (data:any) => {
+    const login = (data:ILogin) => {
         return axios.post('/auth/login',data)
     }
 

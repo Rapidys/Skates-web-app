@@ -6,44 +6,52 @@ import {useServices} from "../../../context/Services/ServiceContextProvider";
 import {useFormik} from "formik";
 import Button from '../../../components/Button'
 import * as yup from "yup";
+import {IServiceItem} from "../../Dashboard/types";
 
 
 interface ICreateService {
     modals:any,
     setOpenModals:any,
     getServices:any,
+    currentServiceItem:IServiceItem,
+    setCurrentServiceItem:any,
 }
-const CreateService:FC<ICreateService> = ({modals, setOpenModals,getServices}) => {
+const CreateService:FC<ICreateService> = ({modals, setOpenModals,getServices,currentServiceItem,setCurrentServiceItem}) => {
 
     const [state, setState] = useState<any>({
         quantity: 0,
     })
-    const [isSubmitting,setSubmitting] = useState(false)
+    const {services } = useServices()
 
     const validSchema = () => {
         return yup.object().shape({
             displayName: yup.string().required('აუცილებელი ველი'),
             price: yup.string().required('აუცილებელი ველი'),
+            quantity: yup.number()
+                .test('non-zero', 'რიცხვი უნდა იყოს 0 ზე მეტი', (value) => value !== 0)
+                .required('აუცილებელი ველი'),
         });
     };
 
-    const {values,touched,handleChange,handleSubmit,errors,isValid,handleBlur,dirty,resetForm} = useFormik({
+
+    const {values,touched,setFieldValue,handleChange,handleSubmit,errors,isValid,handleBlur,dirty,resetForm} = useFormik({
         initialValues:{
-            isInstant: false,
-            quantity: 0,
-            needTrainer: false,
-            displayName: '',
-            price: ''
+            id:currentServiceItem?.id ? currentServiceItem?.id :  -1000,
+            isInstant: currentServiceItem?.isInstant ? currentServiceItem.isInstant : false,
+            quantity: currentServiceItem?.serviceQuantity ? currentServiceItem?.serviceQuantity :  0,
+            needTrainer: currentServiceItem?.needTrainer ? currentServiceItem.needTrainer : false,
+            displayName: currentServiceItem?.displayName ? currentServiceItem.displayName :  '',
+            price:currentServiceItem?.price ? currentServiceItem.price :  ''
         },
         validationSchema:validSchema,
         validateOnBlur:true,
         onSubmit:(values => {
             const data = {
-                Id: -1000,
+                Id: values.id,
                 DisplayName:values.displayName,
                 NeedTrainer: values.needTrainer,
                 IsInstant: values.isInstant,
-                Quantity: state.quantity,
+                ServiceQuantity: values.quantity,
                 Price: values.price,
                 IsActive: true
             }
@@ -51,18 +59,18 @@ const CreateService:FC<ICreateService> = ({modals, setOpenModals,getServices}) =
                 getServices()
                 handleClear()
             })
-        })
+        }),
+        enableReinitialize:true
     })
 
-    const {services } = useServices()
+
 
     const handleClear = () => {
         setOpenModals({...modals, createServiceModal: false})
-        setSubmitting(false)
         setState({...state,quantity:0})
+        setCurrentServiceItem(null)
         resetForm()
     }
-
 
 
     return (
@@ -98,7 +106,7 @@ const CreateService:FC<ICreateService> = ({modals, setOpenModals,getServices}) =
                         <Checkbox id="isInstant"
                                   className={'mr-2 mb-2 mt-2'}
                                   onChange = {handleChange}
-                                  value = {(values.isInstant as any)}
+                                  checked = {(values.isInstant as any)}
                                   name = {'isInstant'}
                                   onBlur = {handleBlur}
                         />
@@ -109,7 +117,7 @@ const CreateService:FC<ICreateService> = ({modals, setOpenModals,getServices}) =
                         <Checkbox id="needTrainer"
                                   className={'mr-2 mb-2 mt-2'}
                                   onChange = {handleChange}
-                                  value = {(values.needTrainer as any)}
+                                  checked = {(values.needTrainer as any)}
                                   name = {'needTrainer'}
                                   onBlur = {handleBlur}
                         />
@@ -118,13 +126,13 @@ const CreateService:FC<ICreateService> = ({modals, setOpenModals,getServices}) =
                         </Label>
                     </div>
 
-                    <div >
+                    <div>
                         <div className={'flex justify-end'}>
-                            <Counter counter={state?.quantity} onChange={(e) => setState({...state,quantity:e})} />
+                            <Counter counter={values?.quantity} onChange={(e) => setFieldValue('quantity',e)} />
                         </div>
-                        {state.quantity === 0 && isSubmitting && (
+                        {!isValid && errors?.quantity && (
                             <Label className={'text-custom_light'}>
-                                აირჩიეთ რაოდენობა
+                                {errors?.quantity}
                             </Label>
                         )}
 
@@ -137,10 +145,9 @@ const CreateService:FC<ICreateService> = ({modals, setOpenModals,getServices}) =
 
             <Modal.Footer>
                 <Button onClick = {() => {
-                    setSubmitting(true)
                     handleSubmit()
                 }}
-                        disabled={!isValid || !dirty || state.quantity === 0}
+                        disabled={!isValid && !dirty}
                 >
                     დამატება
                 </Button>

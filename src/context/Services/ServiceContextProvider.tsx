@@ -8,6 +8,7 @@ import {IConsumeOrder} from "../../types/Dashboard";
 import AuthServices, {IAuthServices} from "./AuthServices";
 import {useAuth} from "../AuthContext";
 import AdminServices, {IAdminServices} from "./AdminServices";
+import { AxiosInstance } from "axios";
 
 const ServiceContext = React.createContext<any>({
     services: {
@@ -46,6 +47,8 @@ interface IServices {
     Auth:IAuthServices
     Admin:IAdminServices
 }
+export interface MyAxios extends AxiosInstance {}
+
 
 const ServiceContextProvider: FC<IServiceContextProvider> = ({children}) => {
     const {handleSetError} = useErrorHandling()

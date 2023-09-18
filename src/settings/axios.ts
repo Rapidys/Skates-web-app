@@ -21,6 +21,8 @@ const axiosInstance = (handleSetError?:any) => {
 
             if(status === 401){
                 localStorage.removeItem('token')
+                handleSetError(Message);
+                return Promise.reject(error.response.data);
             }
 
             if (error.response) {

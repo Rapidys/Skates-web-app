@@ -1,3 +1,6 @@
+import {MyAxios} from "../ServiceContextProvider";
+import {AxiosResponse} from "axios";
+
 export interface IUpdateCardInfo {
     ClientId:number,
     CardNumber:string,
@@ -8,21 +11,21 @@ export interface IUpdateCardInfo {
 }
 
 export interface ICardServices {
-    getClientInfo: (body: Record<'ClientId',number>) => Promise<any>;
-    updateCardInfo:(body:IUpdateCardInfo) => Promise<any>,
-    getCardInfo:(body:Record<'Identifier',string>) => Promise<any>,
+    getClientInfo: (body: Record<'ClientId',number>) => Promise<AxiosResponse>;
+    updateCardInfo:(body:IUpdateCardInfo) => Promise<AxiosResponse>,
+    getCardInfo:(body:Record<'Identifier',string>) => Promise<AxiosResponse>,
 }
 
-const CardServices = (axios: any):ICardServices => {
+const CardServices = (axios: MyAxios):ICardServices => {
 
-    const getCardInfo = (body: Record<'Identifier',string>) => {
+    const getCardInfo = (body: Record<'Identifier',string>) : Promise<AxiosResponse> => {
         return axios.post('/Card/GetCardInfo', body)
     }
 
-    const getClientInfo = (body: Record<'ClientId',number>) => {
+    const getClientInfo = (body: Record<'ClientId',number>): Promise<AxiosResponse> => {
         return axios.post('/card/GetClientInfo', body)
     }
-    const updateCardInfo = (body:IUpdateCardInfo) => {
+    const updateCardInfo = (body:IUpdateCardInfo): Promise<AxiosResponse> => {
         return axios.post('/card/UpdateCard', body)
     }
 

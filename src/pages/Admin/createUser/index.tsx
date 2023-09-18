@@ -10,12 +10,12 @@ import {useServices} from "../../../context/Services/ServiceContextProvider";
 interface ICreateUser {
     modals: any,
     setOpenModal: any,
-    getUsers:() => void
+    getUsers:() => void,
+    currentUserItem:any,
+    setCurrentUserItem:any
 }
 
-const CreateUser: FC<ICreateUser> = ({modals, setOpenModal,getUsers}) => {
-
-    const [isAdmin,setCheckedAdmin] = useState<any>(false)
+const CreateUser: FC<ICreateUser> = ({modals, setOpenModal,getUsers,currentUserItem,setCurrentUserItem}) => {
 
     const { services } = useServices()
 
@@ -33,6 +33,7 @@ const CreateUser: FC<ICreateUser> = ({modals, setOpenModal,getUsers}) => {
 
     const handleCloseModal = () => {
         setOpenModal({...modals, createUserModal: false})
+        setCurrentUserItem(null)
     }
 
     return (
@@ -45,11 +46,11 @@ const CreateUser: FC<ICreateUser> = ({modals, setOpenModal,getUsers}) => {
             <Modal.Body className={'bg-custom_dark'}>
                 <Formik
                     initialValues={{
-                        displayName: '',
-                        username: '',
-                        isAdmin: false,
-                        password: '',
-                        repeatPassword: '',
+                        displayName: currentUserItem?.displayName ? currentUserItem.displayName : '',
+                        username:currentUserItem?.username ? currentUserItem.username :  '',
+                        isAdmin: currentUserItem?.isAdmin ? currentUserItem.isAdmin : false,
+                        password: currentUserItem?.password ? currentUserItem.password : '',
+                        repeatPassword: currentUserItem?.repeatPassword ? currentUserItem.repeatPassword : '',
                     }}
                     validateOnBlur
                     validationSchema={validSchema()}
@@ -57,7 +58,7 @@ const CreateUser: FC<ICreateUser> = ({modals, setOpenModal,getUsers}) => {
                         const data = {
                             displayName: values.displayName,
                             username: values.username,
-                            isAdmin: isAdmin,
+                            isAdmin: values?.isAdmin,
                             password: values.password,
                         }
                         try {
@@ -87,7 +88,7 @@ const CreateUser: FC<ICreateUser> = ({modals, setOpenModal,getUsers}) => {
                                 onBlur={handleBlur}
                                 name={'displayName'}
                                 isValid={!(errors.displayName && touched.displayName)}
-                                error={errors?.displayName}
+                                error={(errors?.displayName as any)}
                                 label={'მომხმარებლის სახელი'}
                             />
 
@@ -97,7 +98,7 @@ const CreateUser: FC<ICreateUser> = ({modals, setOpenModal,getUsers}) => {
                                 onBlur={handleBlur}
                                 name={'username'}
                                 isValid={!(errors.username && touched.username)}
-                                error={errors?.username}
+                                error={(errors?.username as any)}
                                 label={'ელ-ფოსტა'}
                             />
 
@@ -107,8 +108,9 @@ const CreateUser: FC<ICreateUser> = ({modals, setOpenModal,getUsers}) => {
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 name={'password'}
+                                type = {'password'}
                                 isValid={!(errors.password && touched.password)}
-                                error={errors?.password}
+                                error={(errors?.password as any)}
                                 label={'პაროლი'}
                             />
 
@@ -117,16 +119,17 @@ const CreateUser: FC<ICreateUser> = ({modals, setOpenModal,getUsers}) => {
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 name={'repeatPassword'}
+                                type = {'password'}
                                 isValid={!(errors.repeatPassword && touched.repeatPassword)}
-                                error={errors?.repeatPassword}
+                                error={(errors?.repeatPassword as any)}
                                 label={'გაიმეორეთ პაროლი'}
                             />
 
-                            <div>
+                            <div className={'mt-2'}>
                                 <Checkbox id="isAdmin"
                                           className={'mr-2 mb-2 mt-2'}
-                                          onChange = {() => setCheckedAdmin(!isAdmin)}
-                                          value = {isAdmin}
+                                          onChange = {handleChange}
+                                          value = {values.isAdmin}
                                 />
                                 <Label htmlFor="isAdmin" className={'text-white'}>
                                     ადმინი

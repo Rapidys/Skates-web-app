@@ -21,7 +21,7 @@ const Dashboard = () => {
     const [state, setState] = useState<{ head: IHeadData[], row: ServiceData[] }>({head: copiedHeadData, row: []})
     const [openModal, setOpenModal] = useState<string | undefined>(undefined)
     const [openMoreModal, setOpenMoreModal] = useState<string | undefined>(undefined)
-    const [openConsumeAlert, setOpenConsumeAlert] = useState<string | undefined>(undefined)
+    const [openConsumeAlert, setOpenConsumeAlert] = useState(false)
     const [openInstantModal, setOpenInstantModal] = useState<string | undefined>(undefined)
     const [myServiceItems, setMyServiceItem] = useState({})
 
@@ -175,7 +175,7 @@ const Dashboard = () => {
                             }}
                     >გამოყენება & დამატება</Button>
                     <Button className={'mr-2'}
-                            onClick={() => setOpenConsumeAlert('default')}
+                            onClick={() => setOpenConsumeAlert(true)}
                             disabled={!checkBtnDis()}
                     >გამოყენება</Button>
                     <Button

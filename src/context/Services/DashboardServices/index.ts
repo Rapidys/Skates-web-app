@@ -1,28 +1,31 @@
-import {IConsumeOrder} from "../../../types/Dashboard";
+import {IConsumeOrder, IMakeOrder, IServices, IUpdateOrder} from "../../../types/Dashboard";
+import {MyAxios} from "../ServiceContextProvider";
+import {AxiosResponse} from "axios";
+import {IPaymentTypes, ITrainers} from "../../../types";
 
 export interface IDashboardServices {
-    getServices: (all:boolean) => Promise<any>,
-    getPaymentTypes: (all:boolean) => Promise<any>,
-    getTrainers: () => Promise<any>,
-    makeOrder: (data:any) => Promise<any>,
-    getClientOrders: (clientId:number) => Promise<any>,
-    consumeOrder: (data:IConsumeOrder) => Promise<any>,
-    updateOrder: (data:any) => Promise<any>,
+    getServices: (all:boolean) => Promise<AxiosResponse>,
+    getPaymentTypes: (all:boolean) => Promise<AxiosResponse>,
+    getTrainers: () => Promise<AxiosResponse>,
+    makeOrder: (data:IMakeOrder) => Promise<AxiosResponse>,
+    getClientOrders: (clientId:number) => Promise<AxiosResponse>,
+    consumeOrder: (data:IConsumeOrder) => Promise<AxiosResponse>,
+    updateOrder: (data:IUpdateOrder) => Promise<AxiosResponse>,
 }
 
 
-const DashboardServices = (axios: any): IDashboardServices => {
+const DashboardServices = (axios: MyAxios): IDashboardServices => {
 
     const getServices = (all = false) => {
-        return axios.get(`/Reference/GetServices?all=${all}`)
+        return axios.get<IServices[]>(`/Reference/GetServices?all=${all}`)
     }
     const getPaymentTypes = (all = false) => {
-        return axios.get(`/Reference/GetPaymentTypes?all=${all}`)
+        return axios.get<IPaymentTypes[]>(`/Reference/GetPaymentTypes?all=${all}`)
     }
     const getTrainers = (all = false) => {
-        return axios.get(`/Reference/GetTrainers?all=${all}`)
+        return axios.get<ITrainers[]>(`/Reference/GetTrainers?all=${all}`)
     }
-    const makeOrder = (data:any) => {
+    const makeOrder = (data:IMakeOrder) => {
         return axios.post('/Orders/MakeOrder',data)
     }
     const getClientOrders = (clientId:number) => {
@@ -32,7 +35,7 @@ const DashboardServices = (axios: any): IDashboardServices => {
         return axios.post('/Orders/ConsumeOrder', data)
     }
 
-    const updateOrder = (data:any) => {
+    const updateOrder = (data:IUpdateOrder) => {
         return axios.post('/Orders/UpdateClientOrder', data)
     }
 

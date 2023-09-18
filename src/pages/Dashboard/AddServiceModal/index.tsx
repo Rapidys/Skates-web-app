@@ -36,7 +36,7 @@ const AddServiceModal: FC<IAddService> = ({openModal, setOpenModal,callbackFn}) 
         services:[],
         paymentTypes:{},
     });
-    const [openAlertModal, setOpenAlertModal] = useState<string | undefined>();
+    const [openAlertModal, setOpenAlertModal] = useState(false);
 
 
     const {ClientId} = useAccount()
@@ -45,8 +45,10 @@ const AddServiceModal: FC<IAddService> = ({openModal, setOpenModal,callbackFn}) 
 
     const ArrayToOptions = (data:any[],obj:string) => {
         const arr: any = []
+
         data.forEach((item: IServices) => {
-            arr.push({...item,value: item.displayName, label: item.displayName,})
+            const displayName = obj === 'services' ? `${item.displayName} (ფასი: ${item.price}; რაოდენობა: ${item.serviceQuantity})` : item?.displayName
+            arr.push({...item,value: displayName, label: displayName,})
         })
         setOptions((prevState) => ({
             ...prevState,
@@ -76,6 +78,7 @@ const AddServiceModal: FC<IAddService> = ({openModal, setOpenModal,callbackFn}) 
                 const {config,data} = item
                 const checkType = checkApiCallType(config?.url) || ''
                 ArrayToOptions(data,checkType)
+
             })
         })
     }, []);
@@ -285,7 +288,7 @@ const AddServiceModal: FC<IAddService> = ({openModal, setOpenModal,callbackFn}) 
                 <div className={'flex w-full justify-between items-center'}>
                     <div className={'flex'}>
                         <Button onClick={() => {
-                            setOpenAlertModal('default')
+                            setOpenAlertModal(true)
                         }}
                                 disabled={addDisabled()}
                                 color="secondary"

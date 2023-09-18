@@ -4,7 +4,7 @@ import Button from "../../Button";
 
 
 interface IAlertModal {
-    openModal:string | undefined,
+    openModal:boolean,
     setOpenModal:any,
     title:string,
     description:string,
@@ -12,7 +12,7 @@ interface IAlertModal {
 }
 const AlertModal:FC<IAlertModal> = ({openModal,setOpenModal,onYes,title,description}) => {
     return (
-        <Modal show={openModal === 'default'} onClose={() => setOpenModal(undefined)}>
+        <Modal show={openModal} onClose={() => setOpenModal(false)} dismissible>
             <Modal.Header>
                     <span className={'text-custom_light'}>
                        {title}

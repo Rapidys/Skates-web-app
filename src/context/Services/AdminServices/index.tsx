@@ -1,26 +1,39 @@
+import { AxiosResponse , AxiosInstance } from "axios";
+import {IPaymentTypes, IService} from "../../../types/admin";
+import {IUsers} from "../../../types/auth";
+import {ITrainers} from "../../../types";
+
 export interface IAdminServices {
-    getUsers: () => Promise<any>,
-    updateUsers: (data:any) => Promise<any>,
-    updateService: (data:any) => Promise<any>,
+    getUsers: () => Promise<AxiosResponse>,
+    updateUsers: (data:IUsers) => Promise<AxiosResponse>,
+    updateService: (data:IService) => Promise<AxiosResponse>,
+    updateTrainers: (data:ITrainers) => Promise<AxiosResponse>,
+    updatePaymentTypes: (data:IPaymentTypes) => Promise<AxiosResponse>,
 }
 
+interface MyAxios extends AxiosInstance {}
 
-const AdminServices = (axios: any): IAdminServices => {
+const AdminServices = (axios: MyAxios): IAdminServices => {
 
-    const getUsers = () => {
-        return axios.get('/user/getUsers')
+    const getUsers = (): Promise<AxiosResponse<IUsers[]>> =>  {
+        return axios.get<IUsers[]>('/user/getUsers')
     }
-    const updateUsers = (data:any) => {
+    const updateUsers = (data:IUsers) : Promise<AxiosResponse> => {
         return axios.post('/user/UpdateUser',data)
     }
 
-    const updateService = (data:any) => {
+    const updateService = (data:IService): Promise<AxiosResponse> => {
         return axios.post('/reference/UpdateService',data)
     }
 
+    const updateTrainers = (data:ITrainers): Promise<AxiosResponse> => {
+        return axios.post('/reference/UpdateReference/Trainers',data)
+    }
+    const updatePaymentTypes = (data:IPaymentTypes): Promise<AxiosResponse> => {
+        return axios.post('/reference/UpdateReference/PaymentType',data)
+    }
 
-
-    return { getUsers,updateUsers,updateService }
+    return { getUsers,updateUsers,updateService,updateTrainers,updatePaymentTypes }
 
 }
 
