@@ -14,6 +14,12 @@ const ChooseUser = () => {
         'custom_ocean',
         'custom_danger',
         'custom_disabled',
+        'custom_loading',
+        'custom_light',
+        'custom_button',
+        'custom_ocean',
+        'custom_danger',
+        'custom_disabled',
     ]
 
 
@@ -22,7 +28,7 @@ const ChooseUser = () => {
             {Clients.map((element, index) => {
                 return (
                     <div
-                        className={`flex items-center justify-center border-1 cursor-pointer border-custom_loading w-1/${Clients.length} bg-${colors[index]} h-full hover:opacity-80`}
+                        className={`w-full flex items-center justify-center border-1 cursor-pointer border-custom_loading bg-${colors[index]} h-full hover:opacity-80`}
                         key={element?.clientId}
                         onClick={() => setCurrentUser(element)}
                     >
@@ -30,7 +36,7 @@ const ChooseUser = () => {
                             <div className={'text-center mb-2'}>
                                 <FontAwesomeIcon icon={faUserCircle} className={'text-5xl'}/>
                             </div>
-                            <div className={'font-bold'}>
+                            <div className={'font-bold text-center'}>
                                 {element?.displayName}
                             </div>
                         </div>
