@@ -44,7 +44,9 @@ const MenuModal: FC<IMenuModal> = ({children,items}) => {
                                     <div onClick={(e) => {
                                         menuItem.onClick(e)
                                         setOpen(false)
-                                    }} className={'cursor-pointer px-2 flex py-2 items-center'}>
+                                    }} className={'cursor-pointer px-2 flex py-2 items-center'}
+                                       key = {menuItem.id}
+                                    >
                                         <div className={'mr-2'}>
                                             {menuItem.icon}
                                         </div>

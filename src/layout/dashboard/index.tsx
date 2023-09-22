@@ -1,12 +1,10 @@
 import React, {FC} from 'react';
 import Header from "./header";
-import NavMenu from "../../components/NavMenu";
 import {INavItem} from "../../components/NavMenu/types";
-import {faHistory, faHome, faIdCard, faShoppingCart, faStore} from "@fortawesome/free-solid-svg-icons";
+import {faHome, faIdCard} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {useMediaQuery} from "react-responsive";
 import {useAccount} from "../../context/AccountContext";
-import jwt_decode from "jwt-decode";
 
 
 interface ILayout {

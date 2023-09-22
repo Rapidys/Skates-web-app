@@ -53,9 +53,11 @@ export interface MyAxios extends AxiosInstance {}
 const ServiceContextProvider: FC<IServiceContextProvider> = ({children}) => {
     const {handleSetError} = useErrorHandling()
 
+    const { handleLogout} = useAuth()
+
     const [token,setToken] = useState('')
 
-    const axios = axiosInstance(handleSetError)
+    const axios = axiosInstance(handleSetError,handleLogout)
     axios.defaults.headers.common['Authorization'] = `bearer ${token}`
 
     const Card = CardServices(axios)

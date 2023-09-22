@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const axiosInstance = (handleSetError?:any) => {
+const axiosInstance = (handleSetError?:any,handleLogout?:() => void) => {
     const instance = axios.create({
         baseURL: import.meta.env.VITE_REACT_APP_API_URL,
     });
@@ -22,6 +22,7 @@ const axiosInstance = (handleSetError?:any) => {
             if(status === 401){
                 localStorage.removeItem('token')
                 handleSetError(Message);
+                handleLogout()
                 return Promise.reject(error.response.data);
             }
 

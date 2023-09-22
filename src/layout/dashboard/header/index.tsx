@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import MenuModal from "../../../components/Modals/MenuModal";
 import {
     faDashboard,
-    faHome,
+    faHome, faPersonCirclePlus,
     faQrcode,
     faSignOutAlt,
     faUser,
@@ -21,6 +21,7 @@ import {deepCopy} from "../../../utils/helpers/deepCopy";
 
 const Header = () => {
     const {handleLogout} = useAuth()
+    const { handleClear } = useAccount()
 
     const location = useLocation()
 
@@ -28,7 +29,7 @@ const Header = () => {
 
     const navigate = useNavigate()
 
-    const {DisplayName,Clients} = useAccount()
+    const {DisplayName, Clients} = useAccount()
 
     const clientItems = [
         {
@@ -39,6 +40,13 @@ const Header = () => {
             id: 5, title: 'მთავარი გვერდი', onClick: () => navigate('/dashboard'), icon: <FontAwesomeIcon icon={faHome}
                                                                                                           className={'hover:text-opacity-100'}/>
         },
+        {
+            id: 13, title: 'ახალი კლიენტი', onClick: () => {
+                handleClear()
+                navigate('/findAccount')
+            }, icon: <FontAwesomeIcon
+                icon={faPersonCirclePlus} className={'hover:text-opacity-100'}/>
+        }
     ]
     const itemsForAdminRoute = [
         {
@@ -55,12 +63,12 @@ const Header = () => {
     const checkItems = location.pathname.toLowerCase().includes('admin') ? itemsForAdminRoute : clientItems
 
 
-    const [items,setItems] = useState(checkItems)
+    const [items, setItems] = useState(checkItems)
 
     useEffect(() => {
-        if(Clients?.length > 1){
+        if (Clients?.length > 1) {
             const newItems = [...items]
-            newItems.push( {
+            newItems.push({
                 id: 3, title: 'მომხმარებლის შეცვლა', onClick: () => navigate('/chooseUser'), icon: <FontAwesomeIcon
                     icon={faUsersCog} className={'hover:text-opacity-100'}/>,
             },)
@@ -75,7 +83,6 @@ const Header = () => {
     const handleMouseleave = () => {
         setMouseEntered(false)
     }
-
 
 
     return (

@@ -11,6 +11,7 @@ const AccountContext = React.createContext({
     Clients: [],
     handleCloseNewUserModal:() => {},
     setCurrentUser: (param:any) => {},
+    handleClear: () => {},
     CheckAccount: (accountId: string) => {
     }
 })
@@ -84,6 +85,16 @@ const AccountContextProvider: FC<IAccountContext> = ({children}) => {
         })
     }
 
+    const handleClear = () => {
+        setState({
+            AccountServices: [],
+            Identifier: '',
+            ClientId: -1,
+            DisplayName: '',
+            Clients:[],
+        })
+    }
+
     return (
         <AccountContext.Provider value={{
             AccountServices: state.AccountServices,
@@ -93,7 +104,8 @@ const AccountContextProvider: FC<IAccountContext> = ({children}) => {
             Clients:state?.Clients,
             setCurrentUser,
             CheckAccount,
-            handleCloseNewUserModal
+            handleCloseNewUserModal,
+            handleClear
         }}>
             {children}
         </AccountContext.Provider>

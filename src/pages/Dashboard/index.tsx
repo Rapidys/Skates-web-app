@@ -28,7 +28,7 @@ const Dashboard = () => {
     const [instantData, setInstantData] = useState([])
 
     const navigate = useNavigate()
-    const {ClientId, cardNumber} = useAccount()
+    const {ClientId, cardNumber,handleClear} = useAccount()
     const {services} = useServices()
 
     const recreateRow = (data: any) => {
@@ -159,6 +159,7 @@ const Dashboard = () => {
                 <div>
                     <Button className={'mr-2'}
                             onClick={() => {
+                                handleClear()
                                 navigate('/findAccount')
                             }}
                             color={'danger'}
