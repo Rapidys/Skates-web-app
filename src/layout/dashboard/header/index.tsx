@@ -41,11 +41,11 @@ const Header = () => {
                                                                                                           className={'hover:text-opacity-100'}/>
         },
         {
-            id: 13, title: 'ახალი კლიენტი', onClick: () => {
+            id: 13, title: 'ახალი მომხმარებლის გვერდი', onClick: () => {
                 handleClear()
                 navigate('/findAccount')
             }, icon: <FontAwesomeIcon
-                icon={faPersonCirclePlus} className={'hover:text-opacity-100'}/>
+                icon={faUserSecret} className={'hover:text-opacity-100'}/>
         }
     ]
     const itemsForAdminRoute = [

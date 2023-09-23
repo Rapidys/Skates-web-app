@@ -1,6 +1,6 @@
 export const headData = [
     {id: 1, head: 'სერვისი'},
-    {id: 2, head: 'ტრენერი'},
+    {id: 2, head: 'ტრენერი/ჯგუფი'},
     {id: 3, head: 'დან'},
     {id: 4, head: 'მდე'},
     {id: 5, head: 'რაოდენობა'},
