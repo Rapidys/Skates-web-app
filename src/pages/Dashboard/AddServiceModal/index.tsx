@@ -12,12 +12,12 @@ import Counter from "../../../components/counter";
 import Input from "../../../components/fields/input";
 
 interface IAddService {
-    openModal: string | undefined,
-    setOpenModal: any,
+    openModal: boolean,
+    handleCloseModal: (modalType:string) => void,
     callbackFn: any,
 }
 
-const AddServiceModal: FC<IAddService> = ({openModal, setOpenModal, callbackFn}) => {
+const AddServiceModal: FC<IAddService> = ({openModal, handleCloseModal, callbackFn}) => {
 
     const currentDate = new Date();
     const oneMonthLater = addMonths(currentDate, 1);
@@ -26,10 +26,6 @@ const AddServiceModal: FC<IAddService> = ({openModal, setOpenModal, callbackFn})
         trainers: [],
         services: [],
         paymentTypes: []
-    })
-    const [date, setDate] = useState<any>({
-        StartDate: currentDate,
-        EndDate: oneMonthLater
     })
 
     const [selectedValues, setSelectedValues] = useState<ISelectedValues>({
@@ -143,22 +139,19 @@ const AddServiceModal: FC<IAddService> = ({openModal, setOpenModal, callbackFn})
 
     const addDisabled = () => {
         let disabled = false
-
         disabled = selectedValues.services.some((el) => el.needTrainer && !el?.trainerInfo)
-
         if (!selectedValues.paymentTypes?.id) {
             disabled = true
         }
         if (selectedValues.services?.length === 0) {
             disabled = true
         }
-
         return disabled
     }
 
 
     const ClearInfo = () => {
-        setOpenModal(undefined)
+        handleCloseModal('addServiceModal')
         setSelectedValues({
             trainers: [],
             services: [],
@@ -169,7 +162,7 @@ const AddServiceModal: FC<IAddService> = ({openModal, setOpenModal, callbackFn})
     const numberReg = /^\d+$/
 
     return (
-        <Modal show={openModal === 'default'} onClose={ClearInfo} size={'4xl'}>
+        <Modal show={openModal} onClose={ClearInfo} size={'4xl'}>
             <Modal.Header>სერვისის დამატება</Modal.Header>
             <Modal.Body style={{minHeight: '400px'}}>
                 <div className={'h-auto'}>

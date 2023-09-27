@@ -12,24 +12,29 @@ import InstantModal from "./InstantModal";
 import {useNavigate} from "react-router-dom";
 import {deepCopy} from "../../utils/helpers/deepCopy";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faArrowLeft, faUserSecret} from "@fortawesome/free-solid-svg-icons";
+import {faArrowLeft} from "@fortawesome/free-solid-svg-icons";
+import CommentsModal from "../../components/Modals/CommentsModal";
 
 const Dashboard = () => {
 
     const copiedHeadData = deepCopy(headData)
 
-    const [state, setState] = useState<{ head: IHeadData[], row: ServiceData[] }>({head: copiedHeadData, row: []})
-    const [openModal, setOpenModal] = useState<string | undefined>(undefined)
-    const [openMoreModal, setOpenMoreModal] = useState<string | undefined>(undefined)
-    const [openConsumeAlert, setOpenConsumeAlert] = useState(false)
-    const [openInstantModal, setOpenInstantModal] = useState<string | undefined>(undefined)
-    const [myServiceItems, setMyServiceItem] = useState({})
-
-    const [instantData, setInstantData] = useState([])
-
     const navigate = useNavigate()
     const {ClientId, cardNumber,handleClear} = useAccount()
     const {services} = useServices()
+
+    const [state, setState] = useState<{ head: IHeadData[], row: ServiceData[] }>({head: copiedHeadData, row: []})
+    const [modals,setModals] = useState({
+        addServiceModal:false,
+        moreModal:false,
+        commentsModal:false,
+        instantModal:false,
+    })
+    const [openConsumeAlert, setOpenConsumeAlert] = useState(false)
+    const [myServiceItems, setMyServiceItem] = useState<ServiceData>({})
+    const [instantData, setInstantData] = useState([])
+
+
 
     const recreateRow = (data: any) => {
         const newArr = data?.data.map((element: any) => {
@@ -70,11 +75,6 @@ const Dashboard = () => {
     }, []);
 
 
-    const handleAddServiceModal = () => {
-        setOpenModal('default')
-    }
-
-
     const handleConsumeOrder = (type: string,paymentType?:any) => {
         const ordersArr: any = []
         state?.row.forEach(element => {
@@ -110,20 +110,30 @@ const Dashboard = () => {
 
     }
 
-    const handleOpenMore = (item: ServiceData) => {
-        setOpenMoreModal('default')
-        // @ts-ignore
-        setMyServiceItem({...item, startDate: new Date(item.startDate), endDate: new Date(item.endDate), orderId: item.orderId})
+    const deleteOrder = () => {
+        try{
+            services.Dashboard.deleteOrder(myServiceItems.orderId).then(res => {
+               setModals({...modals,moreModal:false})
+               getClientOrders()
+            })
+        }catch (e){
+            console.log(e)
+        }
     }
 
+    const handleComment = (com:string,callback:() => void) => {
+         const comment = {
+             Orderid:myServiceItems.orderId,
+             Content:com
+         }
+         services.Dashboard.comment(comment).then(res => {
+             callback()
+         })
+    }
+
+
     const checkBtnDis = () => {
-        let isDis = false
-        state?.row?.forEach(element => {
-            if (element.checked) {
-                isDis = true
-            }
-        })
-        return isDis
+        return state.row?.some(el => el.checked)
     }
 
     const handleInstantChange = (item: any) => {
@@ -139,6 +149,17 @@ const Dashboard = () => {
         })
     }
 
+    const handleCloseModal = (modalType:string) => {
+        setModals({...modals,[modalType]:false})
+    }
+
+    const handleOpenModal = (modalType:string,item?:ServiceData) => {
+        setModals({...modals,[modalType]:true})
+        if(modalType === 'moreModal' || modalType === 'commentsModal'){
+            setMyServiceItem({...item, startDate: new Date(item.startDate), endDate: new Date(item.endDate), orderId: item.orderId})
+            return
+        }
+    }
 
     return (
         <div className={'w-full h-full px-2'}>
@@ -151,7 +172,7 @@ const Dashboard = () => {
             <ServiceTable
                 state={state}
                 setState={setState}
-                handleOpenMore={handleOpenMore}
+                handleOpenModal={handleOpenModal}
             />
             <div style={{height:60,width:'100%'}}/>
 
@@ -162,7 +183,6 @@ const Dashboard = () => {
                                 handleClear()
                                 navigate('/findAccount')
                             }}
-                            color={'danger'}
                     >
                         <FontAwesomeIcon icon={faArrowLeft} className = {`mr-2`}/>
                         <span>უკან</span>
@@ -172,7 +192,7 @@ const Dashboard = () => {
                     <Button className={'mr-2'}
                             disabled={!checkBtnDis()}
                             onClick={() => {
-                                setOpenInstantModal('default')
+                                handleOpenModal('instantModal')
                             }}
                     >გამოყენება & დამატება</Button>
                     <Button className={'mr-2'}
@@ -180,7 +200,7 @@ const Dashboard = () => {
                             disabled={!checkBtnDis()}
                     >გამოყენება</Button>
                     <Button
-                        onClick={handleAddServiceModal}
+                        onClick={() => handleOpenModal('addServiceModal')}
                         color={'secondary'}
                     >დამატება</Button>
                 </div>
@@ -200,14 +220,27 @@ const Dashboard = () => {
                 onYes={ handleConsumeOrder}
                 handleInstantChange={handleInstantChange}
                 instantData={instantData}
-                openModal={openInstantModal}
-                setOpenModal={setOpenInstantModal}
+                openModal={modals.instantModal}
+                handleCloseModal={handleCloseModal}
                 title={'სწრაფი სერვისები'}
                 instantDataBase={instantDataBase}
             />
-            <MoreModal openModal={openMoreModal} handleUpdateOrder={handleUpdateOrder} setOpenModal={setOpenMoreModal}
-                       data={myServiceItems} setData={setMyServiceItem}/>
-            <AddServiceModal openModal={openModal} setOpenModal={setOpenModal} callbackFn = {getClientOrders}/>
+            <MoreModal
+                openModal={modals.moreModal}
+                handleUpdateOrder={handleUpdateOrder}
+                handleCloseModal={handleCloseModal}
+                data={myServiceItems}
+                setData={setMyServiceItem}
+                deleteOrder = {deleteOrder}
+            />
+            <AddServiceModal openModal={modals.addServiceModal} handleCloseModal={handleCloseModal} callbackFn = {getClientOrders}/>
+            <CommentsModal
+                openModal={modals.commentsModal}
+                handleCloseModal={handleCloseModal}
+                title={'კომენტარები'}
+                onSend = {handleComment}
+                orderId = {myServiceItems.orderId}
+            />
         </div>
     );
 };

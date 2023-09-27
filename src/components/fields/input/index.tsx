@@ -42,7 +42,7 @@ const Input: FC<IInputProps> = React.forwardRef(({label,maxLength,withPercent,te
 
             <div className = {'relative'}>
                 <input
-                    className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${!isValid ? 'border-2 border-r-custom_light' : ''}`}
+                    className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${!isValid ? 'border-2 border-custom_light' : ''} ${isValid ? 'border-blue-900' : ''} rounded-lg`}
                     ref = {ref}
                     type = {toggleEye ? 'password' : 'text'}
                     onKeyDown={handleKeyDown}

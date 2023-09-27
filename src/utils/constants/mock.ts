@@ -6,4 +6,5 @@ export const headData = [
     {id: 5, head: 'რაოდენობა'},
     {id: 6, head: 'checkbox',checked:false},
     {id: 7, head: ''},
+    {id: 8, head: ''},
 ]

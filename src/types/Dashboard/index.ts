@@ -65,3 +65,8 @@ export interface IUpdateOrder {
    startDate:string,
    endDate:string
 }
+
+export interface ICommentData {
+    Orderid:number,
+    Content:string,
+}

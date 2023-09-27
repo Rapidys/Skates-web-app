@@ -37,13 +37,13 @@ const CreateUser: FC<ICreateUser> = ({modals, setOpenModal,getUsers,currentUserI
     }
 
     return (
-        <Modal show={modals.createUserModal} dismissible onClose={handleCloseModal} className={'bg-custom_dark'}>
-            <Modal.Header className={'bg-custom_dark'}>
+        <Modal show={modals.createUserModal} dismissible onClose={handleCloseModal} className={''}>
+            <Modal.Header className={''}>
                     <span className={'text-custom_light'}>
                        მომხმარებლის შექმნა
                     </span>
             </Modal.Header>
-            <Modal.Body className={'bg-custom_dark'}>
+            <Modal.Body className={''}>
                 <Formik
                     initialValues={{
                         displayName: currentUserItem?.displayName ? currentUserItem.displayName : '',
@@ -90,6 +90,7 @@ const CreateUser: FC<ICreateUser> = ({modals, setOpenModal,getUsers,currentUserI
                                 isValid={!(errors.displayName && touched.displayName)}
                                 error={(errors?.displayName as any)}
                                 label={'მომხმარებლის სახელი'}
+                                textColor = {'bg-gray-500'}
                             />
 
                             <Input
@@ -100,6 +101,8 @@ const CreateUser: FC<ICreateUser> = ({modals, setOpenModal,getUsers,currentUserI
                                 isValid={!(errors.username && touched.username)}
                                 error={(errors?.username as any)}
                                 label={'ელ-ფოსტა'}
+                                textColor = {'bg-gray-500'}
+
                             />
 
 
@@ -112,6 +115,8 @@ const CreateUser: FC<ICreateUser> = ({modals, setOpenModal,getUsers,currentUserI
                                 isValid={!(errors.password && touched.password)}
                                 error={(errors?.password as any)}
                                 label={'პაროლი'}
+                                textColor = {'bg-gray-500'}
+
                             />
 
                             <Input
@@ -123,6 +128,8 @@ const CreateUser: FC<ICreateUser> = ({modals, setOpenModal,getUsers,currentUserI
                                 isValid={!(errors.repeatPassword && touched.repeatPassword)}
                                 error={(errors?.repeatPassword as any)}
                                 label={'გაიმეორეთ პაროლი'}
+                                textColor = {'bg-gray-500'}
+
                             />
 
                             <div className={'mt-2'}>

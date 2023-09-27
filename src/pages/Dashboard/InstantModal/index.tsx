@@ -8,8 +8,8 @@ import { useNavigate } from 'react-router-dom';
 
 
 interface IInstantModal {
-    openModal: string | undefined,
-    setOpenModal: any,
+    openModal: boolean,
+    handleCloseModal: (modalType:string) => void,
     title: string,
     onYes?: (type:string,chosenType:any) => void,
     instantData: any[],
@@ -17,7 +17,7 @@ interface IInstantModal {
     instantDataBase: any,
 }
 
-const InstantModal: FC<IInstantModal> = ({openModal, setOpenModal, onYes, instantDataBase, handleInstantChange, instantData, title}) => {
+const InstantModal: FC<IInstantModal> = ({openModal, handleCloseModal, onYes, instantDataBase, handleInstantChange, instantData, title}) => {
 
 
     const {services} = useServices()
@@ -84,14 +84,14 @@ const InstantModal: FC<IInstantModal> = ({openModal, setOpenModal, onYes, instan
 
 
     const ClearData = () => {
-        setOpenModal(undefined)
+        handleCloseModal('instantModal')
         setChosenType({})
         instantDataBase(instantData)
     }
 
 
     return (
-        <Modal show={openModal === 'default'} onClose={() => {
+        <Modal show={openModal} onClose={() => {
             ClearData()
         }} >
             <Modal.Header>

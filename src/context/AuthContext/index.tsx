@@ -5,60 +5,76 @@ import jwt_decode from "jwt-decode";
 
 
 const AuthContext = React.createContext({
-   isLoggedIn:false,
-   handleLogin:(data:any) => {},
-   handleLogout:() => {},
-   isAdmin:false,
+    isLoggedIn: false,
+    handleLogin: (data: any) => {
+    },
+    handleLogout: () => {
+    },
+    isAdmin: false,
+    userId: null,
+    displayName: ""
 })
 
 interface IUserInfo {
-  children:React.ReactNode
+    children: React.ReactNode
 }
-const AuthContextProvider:FC<IUserInfo> = ({children}) => {
+
+interface IUser {
+    DisplayName: string,
+    UserId: number
+}
+
+const AuthContextProvider: FC<IUserInfo> = ({children}) => {
 
 
-    const [state,setState] = useState({
-        isLoggedIn:false,
-        isAdmin:false,
-        token:''
+    const [state, setState] = useState({
+        isLoggedIn: false,
+        isAdmin: false,
+        displayName: '',
+        userId: null,
+        token: ''
     })
 
-    const { services,setToken } = useServices()
+    const {services, setToken} = useServices()
 
 
     useEffect(() => {
         const token = localStorage.getItem('token')
-        const decodedToken = token ? jwt_decode(token) : false;
+        const decodedToken: IUser = token ? jwt_decode(token) : null;
         const isAdmin = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] === 'Admin'
-        if(token){
+        if (token) {
             setState({
                 ...state,
                 isLoggedIn: true,
-                token:token,
+                displayName: decodedToken.DisplayName,
+                userId: decodedToken.UserId,
+                token: token,
                 isAdmin
             })
             setToken(token)
         }
     }, []);
 
-    const handleLogin = (data:any) => {
+    const handleLogin = (data: any) => {
         try {
-            services.Auth.login(data).then((res:any) => {
+            services.Auth.login(data).then((res: any) => {
                 const {token} = res?.data
-                const decodedToken = token ? jwt_decode(token) : false;
+                const decodedToken: IUser = token ? jwt_decode(token) : null;
                 const isAdmin = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] === 'Admin'
-                if(token){
+                if (token) {
                     setState({
                         ...state,
                         isLoggedIn: true,
-                        token:token,
+                        displayName: decodedToken.DisplayName,
+                        userId: decodedToken.UserId,
+                        token: token,
                         isAdmin
                     })
                     setToken(token)
-                    localStorage.setItem('token',token)
+                    localStorage.setItem('token', token)
                 }
             })
-        }catch (e){
+        } catch (e) {
             console.log(e)
         }
     }
@@ -70,18 +86,22 @@ const AuthContextProvider:FC<IUserInfo> = ({children}) => {
         setState({
             ...state,
             isLoggedIn: false,
-            isAdmin:false,
-            token:''
+            isAdmin: false,
+            displayName: '',
+            userId: null,
+            token: ''
         })
     }
 
 
     return (
         <AuthContext.Provider value={{
-            isLoggedIn:state.isLoggedIn,
+            isLoggedIn: state.isLoggedIn,
             handleLogin,
             handleLogout,
-            isAdmin:state?.isAdmin,
+            isAdmin: state?.isAdmin,
+            userId: state.userId,
+            displayName: state.displayName
         }}>
             {children}
         </AuthContext.Provider>

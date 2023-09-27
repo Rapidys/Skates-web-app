@@ -57,7 +57,7 @@ const Profile: FC<IProfile> = ({open, setOpen}) => {
     }
 
     return (
-        <div className={'flex justify-center bg-custom_dark h-full'}>
+        <div className={'flex justify-center h-full'}>
 
             <div className={'w-1/2 mt-4'}>
                 <div className={'mb-2'}>
@@ -71,6 +71,7 @@ const Profile: FC<IProfile> = ({open, setOpen}) => {
                     onSubmit={onSubmit}
                     isReadOnly={false}
                     cardNumber={state?.cardNumber}
+                    labelClassNames = {'bg-gray-500'}
                 />
 
             </div>

@@ -8,27 +8,26 @@ import {useServices} from "../../../context/Services/ServiceContextProvider";
 import {format} from "date-fns";
 
 interface IMoreModal {
-    openModal: string | undefined,
-    setOpenModal: any,
+    openModal: boolean,
+    handleCloseModal: (modalType: string) => void,
     data?: any,
     setData?: any,
-    handleUpdateOrder?:any,
+    handleUpdateOrder?: any,
+    deleteOrder:() => void,
 }
 
-const MoreModal: FC<IMoreModal> = ({openModal,handleUpdateOrder, setOpenModal, data,setData}) => {
+const MoreModal: FC<IMoreModal> = ({openModal, handleUpdateOrder, handleCloseModal, data, setData,deleteOrder}) => {
 
 
-
-    const handleChangeDate = (value:any,type:string) => {
+    const handleChangeDate = (value: any, type: string) => {
         setData({
             ...data,
-            [type]:value,
+            [type]: value,
         })
     }
 
-
     return (
-        <Modal show={openModal === 'default'} onClose={() => setOpenModal(undefined)} size={'xl'}>
+        <Modal show={openModal} onClose={() => handleCloseModal('moreModal')} size={'xl'} dismissible>
             <Modal.Header>დეტალები</Modal.Header>
             <Modal.Body>
                 <div>
@@ -64,21 +63,29 @@ const MoreModal: FC<IMoreModal> = ({openModal,handleUpdateOrder, setOpenModal, d
                     </div>
                 </div>
             </Modal.Body>
-            <Modal.Footer>
-                <Button onClick={() => {
-                    setOpenModal(undefined)
-                    const obj = {
-                        orderId:data.orderId,
-                        startDate:format(data.startDate, 'yyyy-MM-dd'),
-                        endDate:format(data.endDate, 'yyyy-MM-dd')
-                    }
-                    handleUpdateOrder(obj)
-                }}
-                        color="secondary"
-                >შეცვლა</Button>
-                <Button onClick={() => setOpenModal(undefined)}>
-                    დახურვა
-                </Button>
+            <Modal.Footer className={'flex justify-between'}>
+                <div className={'flex'}>
+                    <Button onClick={() => {
+                        handleCloseModal('moreModal')
+                        const obj = {
+                            orderId: data.orderId,
+                            startDate: format(data.startDate, 'yyyy-MM-dd'),
+                            endDate: format(data.endDate, 'yyyy-MM-dd')
+                        }
+                        handleUpdateOrder(obj)
+                    }}
+                            color="secondary"
+                    >შეცვლა</Button>
+                    <Button className = {'ml-2'} onClick={() => handleCloseModal('moreModal')}>
+                        დახურვა
+                    </Button>
+                </div>
+                <div>
+                    <Button onClick={deleteOrder} color={'danger'}>
+                        წაშლა
+                    </Button>
+                </div>
+
             </Modal.Footer>
         </Modal>
     );

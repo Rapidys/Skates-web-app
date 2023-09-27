@@ -18,9 +18,10 @@ interface ICreateAccount {
     isReadOnly?: boolean,
     onSubmit: (data: any) => void,
     cardNumber?: string,
+    labelClassNames?:string,
 }
 
-const ClientForm: FC<ICreateAccount> = ({ClientInfo, loading = false, onSubmit, isReadOnly, cardNumber}) => {
+const ClientForm: FC<ICreateAccount> = ({ClientInfo, loading = false, onSubmit, isReadOnly, cardNumber,labelClassNames}) => {
 
     const [date, setDate] = useState<any>(format(new Date(), 'yyyy-MM-dd'))
 
@@ -97,6 +98,7 @@ const ClientForm: FC<ICreateAccount> = ({ClientInfo, loading = false, onSubmit, 
                                 onChange={handleChange}
                                 name={'clientInfoCardNumber'}
                                 type={'text'}
+                                textColor = {labelClassNames}
                             />
                         </div>
                     ) : (
@@ -107,6 +109,7 @@ const ClientForm: FC<ICreateAccount> = ({ClientInfo, loading = false, onSubmit, 
                                 readOnly={true}
                                 name={'firstName'}
                                 type={'text'}
+                                textColor = {labelClassNames}
                             />
                         </div>
                     )}
@@ -121,6 +124,7 @@ const ClientForm: FC<ICreateAccount> = ({ClientInfo, loading = false, onSubmit, 
                             isValid={!(errors.firstName && touched.firstName)}
                             error={errors?.firstName}
                             type={'text'}
+                            textColor = {labelClassNames}
                         />
                     </div>
                     <div className={'mb-2'}>
@@ -133,6 +137,7 @@ const ClientForm: FC<ICreateAccount> = ({ClientInfo, loading = false, onSubmit, 
                             isValid={!(errors.lastName && touched.lastName)}
                             error={errors.lastName}
                             type={'text'}
+                            textColor = {labelClassNames}
                         />
                     </div>
                     <div className={'mb-2'}>
@@ -151,6 +156,7 @@ const ClientForm: FC<ICreateAccount> = ({ClientInfo, loading = false, onSubmit, 
                             name={'phoneNumber'}
                             isValid={!(errors.phoneNumber && touched.phoneNumber)}
                             error={errors.phoneNumber}
+                            textColor = {labelClassNames}
                             type={'text'}
                         />
                     </div>
@@ -164,6 +170,7 @@ const ClientForm: FC<ICreateAccount> = ({ClientInfo, loading = false, onSubmit, 
                             isValid={!(errors.documentNumber && touched.documentNumber)}
                             error={errors.documentNumber}
                             type={'text'}
+                            textColor = {labelClassNames}
                         />
                     </div>
                     <div className={'mt-4'}>

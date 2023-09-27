@@ -86,7 +86,7 @@ const Header = () => {
 
 
     return (
-        <div className={'w-full h-20 border-b-2 border-b-custom_dark '} onMouseEnter={handleMouseEnter}
+        <div className={'w-full h-20 border-b-2 shadow-lg'} onMouseEnter={handleMouseEnter}
              onMouseLeave={handleMouseleave}>
             <div className={"flex justify-between items-center h-full px-4"}>
                 <div className={'text-custom_ocean'}>
@@ -100,7 +100,7 @@ const Header = () => {
                     <MenuModal items={items}>
                         <div
                             className={'w-10 h-10 rounded-full bg-custom_dark cursor-pointer flex items-center justify-center'}>
-                            <FontAwesomeIcon icon={faUser} className={`text-custom_secondary`}/>
+                            <FontAwesomeIcon icon={faUser} className={`text-white`}/>
                         </div>
                     </MenuModal>
 

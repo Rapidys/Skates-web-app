@@ -24,6 +24,7 @@ module.exports = {
         custom_ocean:'#213555',
         custom_danger:'#8a1d36',
         custom_disabled:'#8a8a8a',
+        gray_white:'#f6f6f6',
         // Add more custom colors here
       },
     },
