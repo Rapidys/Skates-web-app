@@ -102,28 +102,36 @@ const CreateService:FC<ICreateService> = ({modals, setOpenModals,getServices,cur
                     textColor = {'black'}
                 />
                 <div className={'mt-3 flex justify-between'}>
-                    <div>
-                        <Checkbox id="isInstant"
-                                  className={'mr-2 mb-2 mt-2'}
-                                  onChange = {handleChange}
-                                  checked = {(values.isInstant as any)}
-                                  name = {'isInstant'}
-                                  onBlur = {handleBlur}
-                        />
-                        <Label htmlFor="isInstant" className={'text-black mr-4'}>
-                            დამატებითი სერვისები
-                        </Label>
+                    <div className={'flex flex-col md:flex-row'}>
+                        <div className={'flex items-center'}>
+                            <Checkbox id="isInstant"
+                                      className={'mr-2 mb-2 mt-2'}
+                                      onChange = {handleChange}
+                                      checked = {(values.isInstant as any)}
+                                      name = {'isInstant'}
+                                      onBlur = {handleBlur}
+                                      disabled={values.needTrainer}
+                            />
+                            <Label htmlFor="isInstant" className={'text-black mr-4'}>
+                                დამატებითი სერვისები
+                            </Label>
+                        </div>
 
-                        <Checkbox id="needTrainer"
-                                  className={'mr-2 mb-2 mt-2'}
-                                  onChange = {handleChange}
-                                  checked = {(values.needTrainer as any)}
-                                  name = {'needTrainer'}
-                                  onBlur = {handleBlur}
-                        />
-                        <Label htmlFor="needTrainer" className={'text-black'}>
-                            ტრენერი
-                        </Label>
+
+                        <div className={'flex items-center'}>
+                            <Checkbox id="needTrainer"
+                                      className={'mr-2 mb-2 mt-2'}
+                                      onChange = {handleChange}
+                                      checked = {(values.needTrainer as any)}
+                                      name = {'needTrainer'}
+                                      onBlur = {handleBlur}
+                                      disabled={values.isInstant}
+                            />
+                            <Label htmlFor="needTrainer" className={'text-black'}>
+                                ტრენერი
+                            </Label>
+                        </div>
+
                     </div>
 
                     <div>

@@ -13,10 +13,10 @@ interface IMoreModal {
     data?: any,
     setData?: any,
     handleUpdateOrder?: any,
-    deleteOrder:() => void,
+    deleteOrder: () => void,
 }
 
-const MoreModal: FC<IMoreModal> = ({openModal, handleUpdateOrder, handleCloseModal, data, setData,deleteOrder}) => {
+const MoreModal: FC<IMoreModal> = ({openModal, handleUpdateOrder, handleCloseModal, data, setData, deleteOrder}) => {
 
 
     const handleChangeDate = (value: any, type: string) => {
@@ -39,7 +39,7 @@ const MoreModal: FC<IMoreModal> = ({openModal, handleUpdateOrder, handleCloseMod
                             ვალიდურია :
                         </h6>
                     </div>
-                    <div className={'flex justify-between mt-3'}>
+                    <div className={'flex flex-col sm:flex-row justify-between mt-3'}>
                         {data?.startDate && data?.endDate && (
                             <>
                                 <div>
@@ -63,8 +63,8 @@ const MoreModal: FC<IMoreModal> = ({openModal, handleUpdateOrder, handleCloseMod
                     </div>
                 </div>
             </Modal.Body>
-            <Modal.Footer className={'flex justify-between'}>
-                <div className={'flex'}>
+            <Modal.Footer className={'flex flex-col sm:flex-row justify-between'}>
+                <div className={'flex w-full sm:w-auto'}>
                     <Button onClick={() => {
                         handleCloseModal('moreModal')
                         const obj = {
@@ -75,13 +75,16 @@ const MoreModal: FC<IMoreModal> = ({openModal, handleUpdateOrder, handleCloseMod
                         handleUpdateOrder(obj)
                     }}
                             color="secondary"
+                            className={'w-full sm:w-auto'}
                     >შეცვლა</Button>
-                    <Button className = {'ml-2'} onClick={() => handleCloseModal('moreModal')}>
+                    <Button
+                        className={'ml-2 w-full sm:w-auto'}
+                        onClick={() => handleCloseModal('moreModal')}>
                         დახურვა
                     </Button>
                 </div>
-                <div>
-                    <Button onClick={deleteOrder} color={'danger'}>
+                <div className={'mt-2 w-full sm:mt-0 sm:w-auto'}>
+                    <Button onClick={deleteOrder} color={'danger'} className={'w-full sm:w-auto'}>
                         წაშლა
                     </Button>
                 </div>

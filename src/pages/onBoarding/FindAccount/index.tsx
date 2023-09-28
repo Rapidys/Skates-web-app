@@ -25,7 +25,7 @@ const FindAccount = () => {
     }, [isLoggedIn])
 
     return (
-        <div className={'w-1/3'}>
+        <div className={'w-full sm:w-1/2 md:w-1/3'}>
             <Card className={'px-4'}>
 
                 <div className={'mt-2 text-custom_light'}>

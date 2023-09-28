@@ -15,13 +15,12 @@ interface IOnBoarding {
 const OnBoardingLayout: FC<IOnBoarding> = ({children}) => {
 
     const {handleLogout} = useAuth()
-    const {token} = useServices()
     const location = useLocation()
     const navigate = useNavigate()
+    const {isAdmin} = useAuth()
 
+    const {displayName} = useAuth()
 
-    const decodedToken = token ? jwt_decode(token) : false;
-    const isAdmin = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] === 'Admin'
 
 
     return (
@@ -44,14 +43,23 @@ const OnBoardingLayout: FC<IOnBoarding> = ({children}) => {
 
             )}
             {isAdmin && location.pathname.includes('/findAccount') && (
-                <div className={'absolute top-5 right-5'} onClick={() => navigate('/admin')}>
-                    <Tooltip content="ადმინისტრირება"
-                             placement="bottom"
+                <div className={'absolute top-5 right-5'} >
+                    <div className={'flex items-center'}>
+                        <div className={'text-white mr-4'}>
+                            {displayName}
+                        </div>
+                        <div onClick={() => navigate('/admin')}>
+                            <Tooltip content="ადმინისტრირება"
+                                     placement="bottom"
 
-                    >
-                        <FontAwesomeIcon icon={faUserEdit}
-                                         className={'text-2xl cursor-pointer text-white hover:text-opacity-100 hover:text-custom_loading'}/>
-                    </Tooltip>
+                            >
+                                <FontAwesomeIcon icon={faUserEdit}
+                                                 className={'text-2xl cursor-pointer text-white hover:text-opacity-100 hover:text-custom_loading'}/>
+                            </Tooltip>
+                        </div>
+
+                    </div>
+
                 </div>
 
             )}

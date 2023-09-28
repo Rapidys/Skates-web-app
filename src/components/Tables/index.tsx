@@ -18,47 +18,50 @@ const FakeDate = () => {
 const MyTable: FC<IMyTable> = ({columnData, rowData,...props}) => {
 
     return (
-        <Table className={'table mb-0 p-5'} hoverable>
-            <Table.Head>
-                {
-                    columnData ? (
-                        columnData.map((item,index) => {
-                            return (
-                                <Table.HeadCell key={index}>
-                                    {item.head}
-                                    {item.renderTitle && item.renderTitle()}
-                                </Table.HeadCell>
+        <div className={'overflow-x-scroll'}>
+            <Table className={'table mb-0 p-5'} hoverable>
+                <Table.Head>
+                    {
+                        columnData ? (
+                            columnData.map((item,index) => {
+                                return (
+                                    <Table.HeadCell key={index}>
+                                        {item.head}
+                                        {item.renderTitle && item.renderTitle()}
+                                    </Table.HeadCell>
 
-                            )
-                        })
-                   ) : (
-                       <FakeDate />
-                    )
+                                )
+                            })
+                        ) : (
+                            <FakeDate />
+                        )
 
-                }
-            </Table.Head>
-            <Table.Body className="divide-y">
-                {rowData && rowData.map((item, index) => {
-                    return <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800" key={item?.id}>
-                        {columnData.map((title, i) => {
-                            return (
-                                <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white"
-                                 key = {item.id + title.id}
-                                >
-                                    {title.type === 'bool' ?
-                                        item[title.dataKey] === true ? 'კი' : 'არა' : (
-                                        item[title.dataKey]
-                                    )}
-                                    {title.render && title.render(item, props)}
-                                </Table.Cell>
-                            )
-                        })}
-                    </Table.Row>
+                    }
+                </Table.Head>
+                <Table.Body className="divide-y">
+                    {rowData && rowData.map((item, index) => {
+                        return <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800" key={item?.id}>
+                            {columnData.map((title, i) => {
+                                return (
+                                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white"
+                                                key = {item.id + title.id}
+                                    >
+                                        {title.type === 'bool' ?
+                                            item[title.dataKey] === true ? 'კი' : 'არა' : (
+                                                item[title.dataKey]
+                                            )}
+                                        {title.render && title.render(item, props)}
+                                    </Table.Cell>
+                                )
+                            })}
+                        </Table.Row>
 
-                })}
-            </Table.Body>
+                    })}
+                </Table.Body>
 
-        </Table>
+            </Table>
+        </div>
+
     );
 };
 

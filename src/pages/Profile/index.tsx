@@ -1,10 +1,11 @@
 import React, {FC, useEffect, useState} from 'react';
-import {Button, Card, Modal} from "flowbite-react";
-import CreateAccount from "../onBoarding/CreateAccount";
 import {useServices} from "../../context/Services/ServiceContextProvider";
 import {useAccount} from "../../context/AccountContext";
 import ClientForm from "../../context/_common/ClientForm";
-import {useFormikContext} from "formik";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faArrowLeft} from "@fortawesome/free-solid-svg-icons";
+import {useNavigate} from "react-router-dom";
+import Button from '../../components/Button'
 
 
 export interface IClientInfo {
@@ -27,6 +28,7 @@ const Profile: FC<IProfile> = ({open, setOpen}) => {
 
     const [state, setState] = useState<IClientInfo>()
 
+    const navigate = useNavigate()
 
     const [loading, setLoading] = useState(false)
     const {ClientId} = useAccount()
@@ -59,7 +61,7 @@ const Profile: FC<IProfile> = ({open, setOpen}) => {
     return (
         <div className={'flex justify-center h-full'}>
 
-            <div className={'w-1/2 mt-4'}>
+            <div className={'w-full md:w-1/2 mt-4'}>
                 <div className={'mb-2'}>
                     <h2 className={'text-lg text-white font-bold'}>
                         პროფილი
@@ -74,6 +76,16 @@ const Profile: FC<IProfile> = ({open, setOpen}) => {
                     labelClassNames = {'bg-gray-500'}
                 />
 
+            </div>
+            <div className={'fixed bottom-0 right-0 p2 w-full shadow  flex justify-between items-center px-3 py-2 z-10'}>
+                    <Button className={'mr-2'}
+                            onClick={() => {
+                                navigate('/dashboard')
+                            }}
+                    >
+                        <FontAwesomeIcon icon={faArrowLeft} className = {`mr-2`}/>
+                        <span>უკან</span>
+                    </Button>
             </div>
         </div>
 

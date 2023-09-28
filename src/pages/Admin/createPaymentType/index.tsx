@@ -49,12 +49,12 @@ const CreatePaymentType: FC<ICreate> = ({modals, setModals, currentReferenceItem
         <Modal show={modals.createPaymentType} onClose={handleClear} dismissible>
 
             <Modal.Header>
-                სერვისის შექმნა
+                {!currentReferenceItem ? 'გადახდის მეთოდის დამატება' : 'გადახდის მეთოდის ცვლილება'}
             </Modal.Header>
 
             <Modal.Body>
                 <Input
-                    label={'სერვისის სახელი'}
+                    label={'გადახდის მეთოდის სახელი'}
                     value={values.displayName}
                     onChange={handleChange}
                     isValid={!(errors.displayName && touched.displayName)}

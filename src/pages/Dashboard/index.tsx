@@ -188,14 +188,14 @@ const Dashboard = () => {
                         <span>უკან</span>
                     </Button>
                 </div>
-                <div className={'flex'}>
-                    <Button className={'mr-2'}
+                <div className={'flex flex-col md:flex-row'}>
+                    <Button className={'mb-2 md:mb-0 md:mr-2'}
                             disabled={!checkBtnDis()}
                             onClick={() => {
                                 handleOpenModal('instantModal')
                             }}
                     >გამოყენება & დამატება</Button>
-                    <Button className={'mr-2'}
+                    <Button className={'mb-2 md:mb-0 md:mr-2'}
                             onClick={() => setOpenConsumeAlert(true)}
                             disabled={!checkBtnDis()}
                     >გამოყენება</Button>

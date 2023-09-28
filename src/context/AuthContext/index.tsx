@@ -41,7 +41,7 @@ const AuthContextProvider: FC<IUserInfo> = ({children}) => {
     useEffect(() => {
         const token = localStorage.getItem('token')
         const decodedToken: IUser = token ? jwt_decode(token) : null;
-        const isAdmin = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] === 'Admin'
+        const isAdmin = decodedToken ? decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] === 'Admin' : false
         if (token) {
             setState({
                 ...state,

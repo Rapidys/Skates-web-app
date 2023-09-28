@@ -1,10 +1,11 @@
 import React, {FC, useCallback, useEffect, useState} from 'react';
-import {Checkbox, Modal} from "flowbite-react";
+import {Checkbox, Label, Modal} from "flowbite-react";
 import Button from "../../../components/Button";
 import {useServices} from "../../../context/Services/ServiceContextProvider";
 import Select from "react-select";
 import {IServices} from "../../../types/Dashboard";
 import { useNavigate } from 'react-router-dom';
+import Input from "../../../components/fields/input";
 
 
 interface IInstantModal {
@@ -19,12 +20,15 @@ interface IInstantModal {
 
 const InstantModal: FC<IInstantModal> = ({openModal, handleCloseModal, onYes, instantDataBase, handleInstantChange, instantData, title}) => {
 
+    const numberReg = /^\d+$/
 
     const {services} = useServices()
 
     const [paymentTypes, setPaymentTypes] = useState([])
 
     const [chosenType, setChosenType] = useState<any>({})
+    const [hasDiscount,setHasDiscount] = useState(false)
+    const [discount,setDiscount] = useState('')
 
     const navigate = useNavigate()
 
@@ -59,10 +63,14 @@ const InstantModal: FC<IInstantModal> = ({openModal, handleCloseModal, onYes, in
     }
 
     const GenPrice = useCallback(() => {
+        let price = genPrice()
+        let priceWithDiscount = price * +discount / 100
+        price -= priceWithDiscount
+
         return (
-            <div className={'p-2 border border-custom_loading rounded-lg'}>
+            <div className={'p-2 border border-custom_loading rounded-lg w-full md:w-auto'}>
                 <span>
-                  {genPrice()}
+                  {price.toFixed(2)}
                     {' '}
                 </span>
                 <span>
@@ -70,7 +78,7 @@ const InstantModal: FC<IInstantModal> = ({openModal, handleCloseModal, onYes, in
                 </span>
             </div>
         )
-    },[instantData])
+    },[instantData,discount])
 
     const checkBtnDisabled = () => {
         let isDisabled = false
@@ -132,27 +140,52 @@ const InstantModal: FC<IInstantModal> = ({openModal, handleCloseModal, onYes, in
                 </div>
             </Modal.Body>
             <Modal.Footer>
-                <div className={'flex justify-between w-full'}>
-                    <div className={'flex'}>
-                        <Button
-                            onClick={() => {
-                            if (onYes) {
-                                onYes('addWithInstant',chosenType)
-                            }
-                            ClearData()
-                            navigate('/findAccount')
-                        }} color={'danger'} className={'mr-2'}
-                         disabled = {checkBtnDisabled()}
+                <div className={'flex flex-col-reverse md:flex-row justify-between w-full'}>
+                    <div className={'flex flex-col-reverse md:flex-row md:items-center mt-2 md:mt-0'}>
+                        <div className={'flex mt-6 md:mt-0'}>
+                            <Button
+                                onClick={() => {
+                                    if (onYes) {
+                                        onYes('addWithInstant',chosenType)
+                                    }
+                                    ClearData()
+                                    navigate('/findAccount')
+                                }} color={'danger'} className={'mr-2'}
+                                disabled = {checkBtnDisabled()}
 
-                        >დასრულება</Button>
-                        <Button color={'secondary'} onClick={() => {
-                            ClearData()
-                        }}>
-                            დახურვა
-                        </Button>
+                            >დასრულება</Button>
+                            <Button color={'secondary'} onClick={() => {
+                                ClearData()
+                            }}>
+                                დახურვა
+                            </Button>
+                        </div>
+
+                        <div>
+                            <Checkbox id="promotion" className={'md:ml-2'} checked={hasDiscount}
+                                      onChange={() => setHasDiscount(!hasDiscount)}/>
+                            <Label htmlFor="promotion" className={'ml-2'}>
+                                ფასდაკლება
+                            </Label>
+                        </div>
                     </div>
 
-                    <div>
+                    <div className={'flex flex-col md:flex-row items-center'}>
+                        {hasDiscount && (
+                            <div className={'mb-2 md:mb-0 mr-0 md:mr-2 w-full md:w-20'}>
+                                <Input
+                                    value={discount}
+                                    maxLength={3}
+                                    onChange={(e) => {
+                                        if (e.target.value === '' || numberReg.test(e.target.value)) {
+                                            setDiscount(e.target.value)
+                                        }
+                                    }}
+                                    className={'border border-custom_loading rounded-lg w-full'}
+                                    withPercent
+                                />
+                            </div>
+                        )}
                         <GenPrice/>
                     </div>
 

@@ -138,7 +138,7 @@ const CreateUser: FC<ICreateUser> = ({modals, setOpenModal,getUsers,currentUserI
                                           onChange = {handleChange}
                                           value = {values.isAdmin}
                                 />
-                                <Label htmlFor="isAdmin" className={'text-white'}>
+                                <Label htmlFor="isAdmin" className={'text-black'}>
                                     ადმინი
                                 </Label>
                             </div>

@@ -2,7 +2,6 @@ import React from 'react';
 import {Navigate, Route, Routes} from 'react-router-dom'
 import {PrivateRoutes, PublicRoutes} from './routing/routs'
 import {IRoute} from "./routing/types";
-import {useAuth} from "./context/AuthContext";
 import {useServices} from "./context/Services/ServiceContextProvider";
 import PrivateRoute from "./components/PrivateRoute";
 

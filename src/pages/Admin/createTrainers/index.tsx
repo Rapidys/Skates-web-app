@@ -55,12 +55,13 @@ const CreateTrainers:FC<ICreateTrainers> = ({modals,setModals,setCurrentTrainers
         <Modal show={modals.createTrainers} onClose={handleClear} dismissible>
 
             <Modal.Header>
-                სერვისის შექმნა
+
+                {currentTrainerItem ? 'ცვლილება' : 'ტრენერის დამატება'}
             </Modal.Header>
 
             <Modal.Body>
                 <Input
-                    label={'სერვისის სახელი'}
+                    label={'ტრენერის სახელი'}
                     value={values.displayName}
                     onChange={handleChange}
                     isValid={!(errors.displayName && touched.displayName)}
