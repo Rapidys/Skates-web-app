@@ -12,15 +12,15 @@ const root = ReactDOM.createRoot(
     document.getElementById('root') as HTMLElement
 );
 root.render(
-    <Router>
-        <ErrorHandlingContextProvider>
-            <ServiceContextProvider>
-                <AuthContextProvider>
-                    <AccountContextProvider>
-                        <App/>
-                    </AccountContextProvider>
-                </AuthContextProvider>
-            </ServiceContextProvider>
-        </ErrorHandlingContextProvider>
-    </Router>
+        <Router>
+            <ErrorHandlingContextProvider>
+                <ServiceContextProvider>
+                    <AuthContextProvider>
+                        <AccountContextProvider>
+                            <App/>
+                        </AccountContextProvider>
+                    </AuthContextProvider>
+                </ServiceContextProvider>
+            </ErrorHandlingContextProvider>
+        </Router>
 );

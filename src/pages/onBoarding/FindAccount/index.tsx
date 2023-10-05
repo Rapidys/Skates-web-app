@@ -40,7 +40,7 @@ const FindAccount = () => {
                             onChange={(e) => setAccountId(e.target.value)}
                             onBlur={() => AccountIdRef.current?.focus()}
                             withEye = {true}
-                            onEnterPress = {() => CheckAccount(AccountId)}
+                            onEnterPress = {() => AccountId && CheckAccount(AccountId)}
                         />
                         <Button
                             onClick={() => CheckAccount(AccountId)}

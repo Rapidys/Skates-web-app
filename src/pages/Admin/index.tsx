@@ -32,8 +32,12 @@ const Admin = () => {
         createPaymentType: false,
         createTrainers: false,
     })
-    const [currentState,setCurrentState] = useState<any>(null)
-    const [currentReference, setCurrentReference] = useState<any>({id: 1, label: 'მომხმარებლების ადმინისტრირება', value: 'მომხმარებლების ადმინისტრირება'})
+    const [currentState, setCurrentState] = useState<any>(null)
+    const [currentReference, setCurrentReference] = useState<any>({
+        id: 1,
+        label: 'მომხმარებლების ადმინისტრირება',
+        value: 'users'
+    })
     const [currentReferenceItem, setCurrentReferenceItem] = useState<IServiceItem>(null)
 
     const {services} = useServices()
@@ -52,7 +56,7 @@ const Admin = () => {
             services.Admin.getUsers().then(res => {
                 setValues([res])
             })
-        }catch (e){
+        } catch (e) {
             console.log(e)
         }
     }
@@ -62,7 +66,7 @@ const Admin = () => {
             services.Dashboard.getServices(true).then(res => {
                 setValues([res])
             })
-        }catch (e){
+        } catch (e) {
             console.log(e)
         }
     }
@@ -71,7 +75,7 @@ const Admin = () => {
             services.Dashboard.getPaymentTypes(true).then(res => {
                 setValues([res])
             })
-        }catch (e){
+        } catch (e) {
             console.log(e)
         }
     }
@@ -80,7 +84,7 @@ const Admin = () => {
             services.Dashboard.getTrainers(true).then(res => {
                 setValues([res])
             })
-        }catch (e){
+        } catch (e) {
             console.log(e)
         }
     }
@@ -98,34 +102,35 @@ const Admin = () => {
     }, [])
 
 
-    const setValues = (response:any[]) => {
-        // const copiedUsersHead = deepCopy(adminheadDataUsers)
-
-        // console.log(response)
-         type responseProps = Record<'data',IService[] | IUsers | IPaymentTypes>
-         let newObj:any = {}
-         response?.forEach(({data,config}:responseProps | any) => {
+    const setValues = (response: any[]) => {
+        type responseProps = Record<'data', IService[] | IUsers | IPaymentTypes>
+        let newObj: any = {}
+        response?.forEach(({data, config}: responseProps | any) => {
             const value = checkStateType(config?.url)
-            newObj = {...newObj,[(value.stateType as any)]: {row:data, head: value.head,type:value.stateType} }
+            newObj = {...newObj, [(value.stateType as any)]: {row: data, head: value.head, type: value.stateType}}
         })
         setState({
             ...state,
             ...newObj
         })
-        if(!currentState){
+        if (!currentState) {
             setCurrentState({...newObj?.users})
         }
-        if(currentState){
+        if (currentState) {
             setCurrentState({...newObj[currentState.type]})
         }
     }
 
-    const checkStateType = (url:string) => {
-        switch (true){
-            case url.toLowerCase().includes('getservices') : return {stateType:'services',head:servicesCols(handleEdit)}
-            case url.toLowerCase().includes('getusers') : return {stateType:'users',head:usersCols(handleEdit)}
-            case url.toLowerCase().includes('getpaymenttypes') : return {stateType:'paymentTypes',head:paymentTypeCols(handleEdit)}
-            case url.toLowerCase().includes('trainers') : return {stateType:'trainers',head:trainersCols(handleEdit)}
+    const checkStateType = (url: string) => {
+        switch (true) {
+            case url.toLowerCase().includes('getservices') :
+                return {stateType: 'services', head: servicesCols}
+            case url.toLowerCase().includes('getusers') :
+                return {stateType: 'users', head: usersCols}
+            case url.toLowerCase().includes('getpaymenttypes') :
+                return {stateType: 'paymentTypes', head: paymentTypeCols}
+            case url.toLowerCase().includes('trainers') :
+                return {stateType: 'trainers', head: trainersCols}
         }
     }
 
@@ -164,7 +169,7 @@ const Admin = () => {
                 getUsers()
                 setOpenModals({
                     ...modals,
-                    alertModal:false
+                    alertModal: false
                 })
             })
         }
@@ -173,7 +178,7 @@ const Admin = () => {
                 getServices()
                 setOpenModals({
                     ...modals,
-                    alertModal:false
+                    alertModal: false
                 })
             })
         }
@@ -182,7 +187,7 @@ const Admin = () => {
                 getPaymentTypes()
                 setOpenModals({
                     ...modals,
-                    alertModal:false
+                    alertModal: false
                 })
             })
         }
@@ -191,14 +196,14 @@ const Admin = () => {
                 getTrainers()
                 setOpenModals({
                     ...modals,
-                    alertModal:false
+                    alertModal: false
                 })
             })
         }
         setCurrentReferenceItem(null)
     }
 
-    const handleEdit = ({item, remove,modalType}) => {
+    const handleEdit = ({item, remove, modalType}: any) => {
         if (remove) {
             setCurrentReferenceItem(item)
             //remove modal
@@ -215,13 +220,51 @@ const Admin = () => {
         })
     }
 
+    const onRowClick = (item, title) => {
+        if(title.type === 'actions'){
+            if (item?.isActive) {
+                handleEdit({item, remove: 'undo'})
+                return
+            }
+            if (!item?.isActive) {
+                handleEdit({item, remove: 'remove'})
+                return
+            }
+
+        }
+        if(title.type === 'more'){
+            switch (currentReference.value) {
+                case 'users':{
+                    handleEdit({item, modalType: 'createUserModal'})
+                    break;
+                }
+                case 'services':{
+                    handleEdit({item, modalType: 'createServiceModal'})
+                    break;
+                }
+                case 'paymentTypes': {
+                    handleEdit({item, modalType: 'createPaymentType'})
+                    break;
+                }
+                case 'trainers':{
+                    handleEdit({item, modalType: 'createTrainers'})
+                }
+            }
+        }
+
+    }
+
 
     return (
         <div className={'px-2 py-2'}>
             <Select options={referenceOptions} onChange={handleReferenceChange} value={currentReference}/>
 
             <div className={'mb-12'}>
-                <MyTable columnData={currentState?.head} rowData={currentState?.row}/>
+                <MyTable
+                    columnData={currentState?.head}
+                    rowData={currentState?.row}
+                    onCellClick={onRowClick}
+                />
             </div>
 
             <div className={'fixed bottom-0 right-0 p2 w-full shadow  flex justify-end items-center px-3 py-2 z-10'}>
@@ -236,7 +279,7 @@ const Admin = () => {
                 title={'ყურადღება !'}
                 description={currentReferenceItem?.isActive ? 'ნამდვილად გსურთ არჩეული სერვისის წაშლა ?' : 'ნამდვილად გსურთ არჩეული სერვისის გააქტიურება ?'}
                 openModal={modals.alertModal}
-                setOpenModal={(bool:any) => setOpenModals({...modals,alertModal: false})}
+                setOpenModal={(bool: any) => setOpenModals({...modals, alertModal: false})}
                 onYes={handleDeleteUndoService}
             />
 
@@ -254,13 +297,13 @@ const Admin = () => {
                 setCurrentTrainersItem={setCurrentReferenceItem}
                 currentTrainerItem={currentReferenceItem}
                 getTrainers={getTrainers}
-             />
+            />
 
             <CreateUser
                 modals={modals}
                 setOpenModal={setOpenModals}
                 getUsers={getUsers}
-                currentUserItem = {currentReferenceItem}
+                currentUserItem={currentReferenceItem}
                 setCurrentUserItem={setCurrentReferenceItem}
             />
 

@@ -42,9 +42,9 @@ const OrderLogs = () => {
     return (
         <div className={'w-full h-full'}>
             <div className={'w-full flex flex-wrap mx-3 my-4 justify-center'}>
-                {[...serviceConsumes,...serviceConsumes,...serviceConsumes,...serviceConsumes,...serviceConsumes,...serviceConsumes,...serviceConsumes,...serviceConsumes,...serviceConsumes,...serviceConsumes,...serviceConsumes,...serviceConsumes,...serviceConsumes,...serviceConsumes,...serviceConsumes,...serviceConsumes,...serviceConsumes,...serviceConsumes,...serviceConsumes,...serviceConsumes,...serviceConsumes,...serviceConsumes].map((item) => {
+                {serviceConsumes.map((item,index) => {
                     return (
-                        <div className={'fcard shadow-md w-auto h-40 rounded-lg bg-white ml-4 mt-4 px-4 py-4 transition hover:bg-gray_white last:mb-20'}>
+                        <div className={'fcard shadow-md w-auto h-40 rounded-lg bg-white ml-4 mt-4 px-4 py-4 transition hover:bg-gray_white last:mb-20'} key = {index}>
                             <div className={'mt-3 text-sm'}>
                                 ოპერატორი: {item.operatorConsumed}
                             </div>

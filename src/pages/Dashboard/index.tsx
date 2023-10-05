@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import ServiceTable from "../../components/Tables/ServiceTable";
 import {IHeadData, ServiceData} from "../../types/Dashboard";
 import {headData} from "../../utils/constants/mock";
 import AddServiceModal from "./AddServiceModal";
@@ -10,20 +9,19 @@ import {useAccount} from "../../context/AccountContext";
 import AlertModal from "../../components/Modals/AlertModal";
 import InstantModal from "./InstantModal";
 import {useNavigate} from "react-router-dom";
-import {deepCopy} from "../../utils/helpers/deepCopy";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeft} from "@fortawesome/free-solid-svg-icons";
 import CommentsModal from "../../components/Modals/CommentsModal";
+import MyTable from "../../components/Tables";
+import dashboardCols from "./dashboardCols";
 
 const Dashboard = () => {
-
-    const copiedHeadData = deepCopy(headData)
 
     const navigate = useNavigate()
     const {ClientId, cardNumber,handleClear} = useAccount()
     const {services} = useServices()
 
-    const [state, setState] = useState<{ head: IHeadData[], row: ServiceData[] }>({head: copiedHeadData, row: []})
+    const [state, setState] = useState<{ row: ServiceData[] }>({row: []})
     const [modals,setModals] = useState({
         addServiceModal:false,
         moreModal:false,
@@ -53,26 +51,67 @@ const Dashboard = () => {
         setInstantData(arr)
     }
 
-    const getClientOrders = () => {
-        services.Dashboard.getClientOrders(ClientId).then(res => {
-            const newArr = recreateRow(res)
+    const handleCheckbox  = (item: ServiceData)  => {
+        const copiedState = {...state}
+        const newRow = [...copiedState.row]
+        const checkedItem = newRow.find(el => el.orderId === item.orderId)
+
+        if (checkedItem) {
+            checkedItem.checked = !checkedItem.checked
             setState({
                 ...state,
-                row: newArr,
+                row: newRow,
             })
+        }
+    }
+
+    const handleHeadCheckboxChange = (item:IHeadData) => {
+        const newState = {...state}
+        const newRow = [ ...newState.row]
+
+        const checkRowIndex = dashboardCols.findIndex(el => el.id === item.id)
+        dashboardCols[checkRowIndex].checked = !dashboardCols[checkRowIndex].checked
+        const arr:ServiceData[] = []
+        newRow.forEach((element) => {
+            arr.push({...element,checked:dashboardCols[checkRowIndex].checked})
+        })
+        setState({
+            ...newState,
+            row:arr
         })
     }
 
+
+    const getClientOrders = () => {
+        try{
+            services.Dashboard.getClientOrders(ClientId).then(res => {
+                const newArr = recreateRow(res)
+                setState({
+                    ...state,
+                    row: newArr,
+                })
+            })
+        }catch (e){
+            console.log(e)
+        }
+    }
+
     const getServices = () => {
-        services.Dashboard.getServices().then(res => {
-           instantDataBase(res?.data)
-        })
+        try {
+            services.Dashboard.getServices().then(res => {
+                instantDataBase(res?.data)
+            })
+        }catch (e){
+            console.log(e)
+        }
+
     }
 
     useEffect(() => {
         getClientOrders()
         getServices()
     }, []);
+
 
 
     const handleConsumeOrder = (type: string,paymentType?:any) => {
@@ -103,7 +142,6 @@ const Dashboard = () => {
                 setState({
                     ...state,
                     row: newArr,
-                    head: copiedHeadData,
                 })
             })
         })
@@ -161,6 +199,14 @@ const Dashboard = () => {
         }
     }
 
+    const onCellAction = (item,title,props) => {
+        switch (title.type){
+            default:{
+                handleOpenModal(title.type,item)
+            }
+        }
+    }
+
     return (
         <div className={'w-full h-full px-2'}>
 
@@ -169,11 +215,16 @@ const Dashboard = () => {
                     არსებული სერვისები
                 </h3>
             </div>
-            <ServiceTable
-                state={state}
-                setState={setState}
-                handleOpenModal={handleOpenModal}
+            <MyTable
+                columnData={dashboardCols}
+                rowData={state.row}
+                onCellClick={onCellAction}
+                iterationKey={'orderId'}
+                onChange={handleCheckbox}
+                onChangeHead = {handleHeadCheckboxChange}
+                onRowClick = {(item) => navigate(`${item.orderId}`)}
             />
+
             <div style={{height:60,width:'100%'}}/>
 
             <div className={'fixed bottom-0 right-0 p2 w-full shadow  flex justify-between items-center px-3 py-2 z-10'}>

@@ -3,7 +3,6 @@ import {Modal, Textarea} from "flowbite-react";
 import Button from "../../Button";
 import Comments from "../../comments";
 import {useServices} from "../../../context/Services/ServiceContextProvider";
-import Loader from "../../Loader";
 
 
 interface ICommentsModal {
@@ -21,8 +20,8 @@ const CommentsModal: FC<ICommentsModal> = ({openModal, handleCloseModal, title, 
     const [loading, setLoading] = useState(false)
 
 
-    const refTextArea = useRef();
-
+    const refTextArea = useRef<HTMLTextAreaElement | null>();
+    const bodyRef = useRef<HTMLDivElement | null>();
     const {services} = useServices()
 
 
@@ -33,10 +32,24 @@ const CommentsModal: FC<ICommentsModal> = ({openModal, handleCloseModal, title, 
         })
     }
 
+    const scrollToBottom = () => {
+        setTimeout(() => {
+            if (bodyRef.current) {
+                bodyRef.current.scrollTo({
+                    top: bodyRef.current.scrollHeight,
+                    left: 0,
+                    behavior: "smooth",
+                })
+            }
+        },300)
+
+    }
+
     useEffect(() => {
         if (openModal) {
             setLoading(true)
             getComments()
+            scrollToBottom()
         }
     }, [openModal]);
 
@@ -47,11 +60,10 @@ const CommentsModal: FC<ICommentsModal> = ({openModal, handleCloseModal, title, 
                        {title}
                     </span>
             </Modal.Header>
-            <Modal.Body>
-                {loading
-                    ? <Loader/>
-                    : <Comments comments={comments}/>
-                }
+            <Modal.Body >
+                <div className={'overflow-y-scroll h-64'} ref = {bodyRef}>
+                    <Comments comments={comments} isLoading = {loading}/>
+                </div>
             </Modal.Body>
             <Modal.Footer>
                 <div className={'w-full flex-col'}>
@@ -59,18 +71,21 @@ const CommentsModal: FC<ICommentsModal> = ({openModal, handleCloseModal, title, 
                         <Textarea
                             id="comment"
                             placeholder="კომენტარი..."
-                            ref = {refTextArea}
+                            ref={refTextArea}
                             value={comment}
                             onChange={(e) => setComment(e.target.value)}
                             onKeyDown={(e) => {
-                                if (e.key === 'Enter') {
-                                    onSend(comment,getComments)
+                                if (e.key === 'Enter' && comment) {
+                                    onSend(comment, getComments)
                                     setComment('')
-                                    if(refTextArea.current){
+                                    if (refTextArea.current) {
                                         // @ts-ignore
                                         refTextArea.current.blur()
-
+                                        setTimeout(() => {
+                                            refTextArea.current.focus()
+                                        },300)
                                     }
+                                    scrollToBottom()
                                 }
                             }}
                             rows={4}
@@ -81,6 +96,7 @@ const CommentsModal: FC<ICommentsModal> = ({openModal, handleCloseModal, title, 
                         <Button onClick={() => {
                             onSend(comment, getComments)
                             setComment('')
+                            scrollToBottom()
                         }}
                                 disabled={!comment}
                         >

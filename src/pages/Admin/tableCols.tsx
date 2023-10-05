@@ -1,39 +1,37 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEllipsisV, faTrash, faUndo} from "@fortawesome/free-solid-svg-icons";
 import React from "react";
+import {TableColumn} from "../../types";
 
-const usersCols = (handleEdit: any) => [
+const usersCols:TableColumn[] = [
     {id: 1, head: 'Id', dataKey: 'id'},
     {id: 2, head: 'სახელი', dataKey: 'displayName'},
     {id: 3, head: 'ელ-ფოსტა', dataKey: 'username'},
     {id: 4, head: 'აქტიური', dataKey: 'isActive', type: 'bool'},
     {id: 5, head: 'ადმინი', dataKey: 'isAdmin', type: 'bool'},
     {
-        id: 6, head: '', render: (item: any) => (
+        id: 6, head: '',type: 'actions', render: (item: any) => (
             item.isActive ? (
                 <FontAwesomeIcon icon={faTrash}
                                  className={'cursor-pointer'}
-                                 onClick={() => handleEdit({item, remove: 'undo'})}
                 />
             ) : (
                 <FontAwesomeIcon icon={faUndo}
                                  className={'cursor-pointer'}
-                                 onClick={() => handleEdit({item, remove: 'remove'})}
                 />
             )
         )
     },
     {
-        id: 7, head: '', render: (item) => (
+        id: 7, head: '',type: 'more', render: () => (
             <FontAwesomeIcon icon={faEllipsisV}
                              className={'cursor-pointer'}
-                             onClick={() => handleEdit({item, modalType: 'createUserModal'})}
             />
         )
     },
 ]
 
-const servicesCols = (handleEdit: any) => [
+const servicesCols:TableColumn[] = [
     {id: 1, head: 'Id', dataKey: 'id'},
     {id: 2, head: 'სახელი', dataKey: 'displayName'},
     {id: 3, head: 'ფასი', dataKey: 'price'},
@@ -41,83 +39,56 @@ const servicesCols = (handleEdit: any) => [
     {id: 4, head: 'ტრენერი', dataKey: 'needTrainer', type: 'bool'},
     {id: 5, head: 'აქტიური', dataKey: 'isActive', type: 'bool'},
     {
-        id: 6, head: '', render: ((item) => (
+        id: 6, head: '',type: 'actions', render: ((item) => (
             item.isActive ? (
-                <FontAwesomeIcon icon={faTrash}
-                                 className={'cursor-pointer'}
-                                 onClick={() => handleEdit({item, remove: 'undo'})}
-                />
+                <FontAwesomeIcon icon={faTrash}/>
             ) : (
-                <FontAwesomeIcon icon={faUndo}
-                                 className={'cursor-pointer'}
-                                 onClick={() => handleEdit({item, remove: 'remove'})}
-                />
+                <FontAwesomeIcon icon={faUndo}/>
             )
         ))
     },
     {
-        id: 8, head: '', render: (item) => (
-            <FontAwesomeIcon icon={faEllipsisV} className={'cursor-pointer'}
-                             onClick={() => {
-                                 handleEdit({item, modalType: 'createServiceModal'})
-                             }}/>
+        id: 8, head: '', type: 'more', render: () => (
+            <FontAwesomeIcon icon={faEllipsisV} />
         )
     },
 ]
-const paymentTypeCols = (handleEdit) => [
+const paymentTypeCols:TableColumn[] = [
     {id: 1, head: 'Id', dataKey: 'id'},
     {id: 2, head: 'სახელი', dataKey: 'displayName'},
     {id: 3, head: 'აქტიური', dataKey: 'isActive', type: 'bool'},
     {
-        id: 6, head: '', render: ((item) => (
+        id: 6, head: '', type: 'actions', render: ((item) => (
             item.isActive ? (
-                <FontAwesomeIcon icon={faTrash}
-                                 className={'cursor-pointer'}
-                                 onClick={() => handleEdit({item, remove: 'undo'})}
-                />
+                <FontAwesomeIcon icon={faTrash}/>
             ) : (
-                <FontAwesomeIcon icon={faUndo}
-                                 className={'cursor-pointer'}
-                                 onClick={() => handleEdit({item, remove: 'remove'})}
-                />
+                <FontAwesomeIcon icon={faUndo}/>
             )
         ))
     },
     {
-        id: 8, head: '', render: (item) => (
-            <FontAwesomeIcon icon={faEllipsisV} className={'cursor-pointer'}
-                             onClick={() => {
-                                 handleEdit({item, modalType: 'createPaymentType'})
-                             }}/>
+        id: 8, head: '', type: 'more', render: () => (
+            <FontAwesomeIcon icon={faEllipsisV} />
         )
     },
 ]
 
-const trainersCols = (handleEdit) => [
+const trainersCols:TableColumn[] = [
     {id: 1, head: 'Id', dataKey: 'id'},
     {id: 2, head: 'სახელი', dataKey: 'displayName'},
     {id: 3, head: 'აქტიური', dataKey: 'isActive', type: 'bool'},
     {
-        id: 6, head: '', render: ((item) => (
+        id: 6, head: '', type: 'actions',render: ((item) => (
             item.isActive ? (
-                <FontAwesomeIcon icon={faTrash}
-                                 className={'cursor-pointer'}
-                                 onClick={() => handleEdit({item, remove: 'undo'})}
-                />
+                <FontAwesomeIcon icon={faTrash}/>
             ) : (
-                <FontAwesomeIcon icon={faUndo}
-                                 className={'cursor-pointer'}
-                                 onClick={() => handleEdit({item, remove: 'remove'})}
-                />
+                <FontAwesomeIcon icon={faUndo}/>
             )
         ))
     },
     {
-        id: 8, head: '', render: (item) => (
-            <FontAwesomeIcon icon={faEllipsisV} className={'cursor-pointer'}
-                             onClick={() => {
-                                 handleEdit({item, modalType: 'createTrainers'})
-                             }}/>
+        id: 8, head: '',type: 'more', render: () => (
+            <FontAwesomeIcon icon={faEllipsisV}/>
         )
     },
 ]
