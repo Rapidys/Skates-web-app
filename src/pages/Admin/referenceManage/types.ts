@@ -1,4 +1,4 @@
-import {IServiceItem} from "../Dashboard/types";
+import {IServiceItem} from "../../Dashboard/types";
 import React from "react";
 type SetStateFunction<T> = React.Dispatch<React.SetStateAction<T>>;
 

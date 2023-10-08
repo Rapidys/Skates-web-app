@@ -1,10 +1,10 @@
 import React, {FC, useState} from 'react';
 import {Checkbox, Label, Modal} from "flowbite-react";
-import Button from "../../../components/Button";
-import Input from '../../../components/fields/input'
+import Button from "../../../../components/Button";
+import Input from '../../../../components/fields/input'
 import {Formik} from "formik";
 import * as yup from "yup";
-import {useServices} from "../../../context/Services/ServiceContextProvider";
+import {useServices} from "../../../../context/Services/ServiceContextProvider";
 
 
 interface ICreateUser {

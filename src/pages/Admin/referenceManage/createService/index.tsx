@@ -1,12 +1,12 @@
 import React, {FC, useState} from 'react';
 import { Checkbox, Label, Modal} from "flowbite-react";
-import Input from '../../../components/fields/input'
-import Counter from "../../../components/counter";
-import {useServices} from "../../../context/Services/ServiceContextProvider";
+import Input from '../../../../components/fields/input'
+import Counter from "../../../../components/counter";
+import {useServices} from "../../../../context/Services/ServiceContextProvider";
 import {useFormik} from "formik";
-import Button from '../../../components/Button'
+import Button from '../../../../components/Button'
 import * as yup from "yup";
-import {IServiceItem} from "../../Dashboard/types";
+import {IServiceItem} from "../../../Dashboard/types";
 
 
 interface ICreateService {

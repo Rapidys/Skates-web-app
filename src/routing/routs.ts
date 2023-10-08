@@ -1,6 +1,6 @@
 import Login from "../pages/onBoarding/Login";
 import {IRoute} from "./types";
-import Admin from "../pages/Admin";
+import Admin from "../pages/Admin/referenceManage";
 import FindAccount from "../pages/onBoarding/FindAccount";
 import CreateAccount from "../pages/onBoarding/CreateAccount";
 import OnBoardingLayout from "../layout/onBoarding";

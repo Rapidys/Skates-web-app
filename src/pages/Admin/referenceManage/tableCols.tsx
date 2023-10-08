@@ -1,7 +1,7 @@
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEllipsisV, faTrash, faUndo} from "@fortawesome/free-solid-svg-icons";
 import React from "react";
-import {TableColumn} from "../../types";
+import {TableColumn} from "../../../types";
 
 const usersCols:TableColumn[] = [
     {id: 1, head: 'Id', dataKey: 'id'},

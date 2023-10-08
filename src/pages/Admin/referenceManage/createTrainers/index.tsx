@@ -1,15 +1,20 @@
 import React, {FC} from 'react';
 import {Modal} from "flowbite-react";
-import Input from "../../../components/fields/input";
-import Button from "../../../components/Button";
+import Input from "../../../../components/fields/input";
+import Button from "../../../../components/Button";
+import {useServices} from "../../../../context/Services/ServiceContextProvider";
 import * as yup from "yup";
 import {useFormik} from "formik";
-import {useServices} from "../../../context/Services/ServiceContextProvider";
-import {ICreate, IModal} from "../types";
-import {IServiceItem} from "../../Dashboard/types";
 
 
-const CreatePaymentType: FC<ICreate> = ({modals, setModals, currentReferenceItem, getCall, setCurrentServiceItem}) => {
+interface ICreateTrainers {
+    modals:any,
+    setModals:any,
+    setCurrentTrainersItem:any,
+    currentTrainerItem:any,
+    getTrainers:any,
+}
+const CreateTrainers:FC<ICreateTrainers> = ({modals,setModals,setCurrentTrainersItem,currentTrainerItem,getTrainers}) => {
 
 
     const {services} = useServices()
@@ -18,15 +23,12 @@ const CreatePaymentType: FC<ICreate> = ({modals, setModals, currentReferenceItem
             displayName: yup.string().required('აუცილებელი ველი'),
         });
     };
-    const handleClear = () => {
-        setModals({...modals, createPaymentType: false})
-        setCurrentServiceItem(null)
-    }
 
-    const {values, touched, setFieldValue, handleChange, handleSubmit, errors, isValid, handleBlur, dirty, resetForm} = useFormik({
+
+    const {values, touched, handleChange, handleSubmit, errors, isValid, handleBlur, dirty, resetForm} = useFormik({
         initialValues: {
-            id: currentReferenceItem?.id ? currentReferenceItem.id : -1000,
-            displayName: currentReferenceItem?.displayName ? currentReferenceItem?.displayName : '',
+            id: currentTrainerItem?.id ? currentTrainerItem.id : -1000,
+            displayName: currentTrainerItem?.displayName ? currentTrainerItem?.displayName : '',
         },
         validationSchema: validSchema,
         validateOnBlur: true,
@@ -36,25 +38,30 @@ const CreatePaymentType: FC<ICreate> = ({modals, setModals, currentReferenceItem
                 DisplayName: values.displayName,
                 IsActive: true
             }
-            services.Admin.updatePaymentTypes(data).then(res => {
-                getCall()
+            services.Admin.updateTrainers(data).then(res => {
+                getTrainers()
                 handleClear()
             })
         }),
         enableReinitialize: true
     })
 
+    const handleClear = () => {
+        setModals({...modals,createTrainers:false})
+        setCurrentTrainersItem(null)
+    }
 
     return (
-        <Modal show={modals.createPaymentType} onClose={handleClear} dismissible>
+        <Modal show={modals.createTrainers} onClose={handleClear} dismissible>
 
             <Modal.Header>
-                {!currentReferenceItem ? 'გადახდის მეთოდის დამატება' : 'გადახდის მეთოდის ცვლილება'}
+
+                {currentTrainerItem ? 'ცვლილება' : 'ტრენერის დამატება'}
             </Modal.Header>
 
             <Modal.Body>
                 <Input
-                    label={'გადახდის მეთოდის სახელი'}
+                    label={'ტრენერის სახელი'}
                     value={values.displayName}
                     onChange={handleChange}
                     isValid={!(errors.displayName && touched.displayName)}
@@ -63,7 +70,6 @@ const CreatePaymentType: FC<ICreate> = ({modals, setModals, currentReferenceItem
                     onBlur={handleBlur}
                     textColor={'black'}
                 />
-
             </Modal.Body>
 
             <Modal.Footer>
@@ -79,4 +85,4 @@ const CreatePaymentType: FC<ICreate> = ({modals, setModals, currentReferenceItem
     );
 };
 
-export default CreatePaymentType;
+export default CreateTrainers;

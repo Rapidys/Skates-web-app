@@ -27,7 +27,7 @@ const AdminServices = (axios: MyAxios): IAdminServices => {
     }
 
     const updateTrainers = (data:ITrainers): Promise<AxiosResponse> => {
-        return axios.post('/reference/UpdateReference/Trainers',data)
+        return axios.post('/reference/UpdateReference/Trainer',data)
     }
     const updatePaymentTypes = (data:IPaymentTypes): Promise<AxiosResponse> => {
         return axios.post('/reference/UpdateReference/PaymentType',data)
