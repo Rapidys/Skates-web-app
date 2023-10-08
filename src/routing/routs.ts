@@ -10,6 +10,7 @@ import Profile from "../pages/Profile";
 import ChooseUser from "../pages/onBoarding/ChooseUser";
 import AdminLayout from "../layout/admin/index";
 import OrderLogs from "../pages/Dashboard/OrderLogs";
+import Orders from "../pages/Admin/orders";
 
 
 export const PublicRoutes: IRoute[] = [
@@ -24,5 +25,6 @@ export const PrivateRoutes : IRoute[] = [
     {id:5,name:'dashboard/id', path:'/dashboard/:id',component:OrderLogs,layout:Layout},
     {id:6,name:'profile', path:'/profile',component:Profile,layout:Layout},
     {id:7,name:'admin', path:'/admin',component:Admin,layout:AdminLayout},
+    {id:7,name:'orders', path:'/admin/orders',component:Orders,layout:AdminLayout},
 ]
 

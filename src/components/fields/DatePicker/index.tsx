@@ -8,16 +8,17 @@ import {faCalendar} from "@fortawesome/free-solid-svg-icons";
 
 
 interface IDatePicker {
-    date:Date | number,
+    date:Date | number | null,
     setDate?:any,
     onFocus?:() => void,
     label :string,
     labelClassName? :string,
     className? :string,
-    onChange?:(day:Date) => void
+    onChange?:(day:Date) => void,
+    textColor?:string,
 }
 
-const DatePicker:FC<IDatePicker> = ({date,setDate,label,onChange,labelClassName,...props}) => {
+const DatePicker:FC<IDatePicker> = ({date,setDate,label,textColor,onChange,labelClassName,...props}) => {
     const [open, setOpen] = useState(false)
     const ref = useRef<any>()
 
@@ -35,13 +36,13 @@ const DatePicker:FC<IDatePicker> = ({date,setDate,label,onChange,labelClassName,
         }
     }
 
-
     return (
         <>
             <Input
                 label={label ? label : 'თარიღი'}
-                value={format(date, 'yyyy-MM-dd')}
+                value={date ? format(date, 'yyyy-MM-dd') : 'აირჩიეთ თარიღი'}
                 onChange={() => null}
+                inputClassName = {'p-0'}
                 renderIcon={() => {
                     return (
                         <span className={'absolute right-5 cursor-pointer'} style={{transform: 'translateY(-50%)', top: '50%'}}
@@ -58,12 +59,13 @@ const DatePicker:FC<IDatePicker> = ({date,setDate,label,onChange,labelClassName,
                     }
                 }}
                 labelClassName = {labelClassName}
+                textColor={textColor}
                 {...props}
             />
 
             <Calendar
                 onChange={handleDateChange}
-                value={date}
+                value={date ? date : new Date()}
                 open={open}
                 ref={ref}
                 disableOldDates = {false}

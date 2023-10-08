@@ -2,6 +2,7 @@ import { AxiosResponse , AxiosInstance } from "axios";
 import {IPaymentTypes, IService} from "../../../types/admin";
 import {IUsers} from "../../../types/auth";
 import {ITrainers} from "../../../types";
+import {IOrderPayload} from "../../../pages/Admin/orders/types";
 
 export interface IAdminServices {
     getUsers: () => Promise<AxiosResponse>,
@@ -9,6 +10,7 @@ export interface IAdminServices {
     updateService: (data:IService) => Promise<AxiosResponse>,
     updateTrainers: (data:ITrainers) => Promise<AxiosResponse>,
     updatePaymentTypes: (data:IPaymentTypes) => Promise<AxiosResponse>,
+    getOrders: (data:IOrderPayload) => Promise<AxiosResponse>,
 }
 
 interface MyAxios extends AxiosInstance {}
@@ -33,7 +35,11 @@ const AdminServices = (axios: MyAxios): IAdminServices => {
         return axios.post('/reference/UpdateReference/PaymentType',data)
     }
 
-    return { getUsers,updateUsers,updateService,updateTrainers,updatePaymentTypes }
+    const getOrders = (data:IOrderPayload): Promise<AxiosResponse> => {
+        return axios.post('/admin/getOrders',data)
+    }
+
+    return { getUsers,updateUsers,updateService,updateTrainers,updatePaymentTypes,getOrders }
 
 }
 

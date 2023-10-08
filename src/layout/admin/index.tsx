@@ -18,7 +18,7 @@ const AdminLayout:FC<ILayout> = ({children}) => {
     const iconColor = 'text-white'
      const MenuItems:INavItem[] = [
         {id:2,title:'ადმინისტრირება' , path: '/admin',icon:<FontAwesomeIcon icon={faHome} className={iconColor} />,},
-        {id:1,title:'ლოგები',path:'/admin',icon:<FontAwesomeIcon icon={faIdCard} className={iconColor}/>},
+        {id:1,title:'ლოგები',path:'/admin/orders',icon:<FontAwesomeIcon icon={faIdCard} className={iconColor}/>},
     ]
 
 

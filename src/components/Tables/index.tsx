@@ -7,7 +7,7 @@ interface IMyTable {
     columnData: TableColumn[],
     rowData: any[],
     iterationKey?: string,
-    onCellClick: (item: any, title: any, props: any) => void,
+    onCellClick?: (item: any, title: any, props: any) => void,
     onChange?: (e: any) => void
     onChangeHead?: (e: any) => void,
     onRowClick?: (item: any) => void,

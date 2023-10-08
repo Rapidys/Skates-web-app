@@ -15,9 +15,10 @@ interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
     textColor?:string,
     maxLength?:number,
     withPercent?:boolean,
+    inputClassName?:string,
 }
 
-const Input: FC<IInputProps> = React.forwardRef(({label,maxLength,withPercent,textColor,isValid= true,withEye,error,labelClassName,onEnterPress ,renderIcon,...props},ref) => {
+const Input: FC<IInputProps> = React.forwardRef(({label,maxLength,withPercent,textColor,isValid= true,withEye,error,labelClassName,onEnterPress ,renderIcon,inputClassName,...props},ref) => {
 
     const [toggleEye,setToggleEye] = useState(withEye)
 
@@ -35,14 +36,14 @@ const Input: FC<IInputProps> = React.forwardRef(({label,maxLength,withPercent,te
     return (
         <>
             {label && (
-                <label className={`block text-${textColor ? textColor : 'white'} text-sm font-bold mb-2 ${labelClassName}`} htmlFor="username">
+                <label className={`block text-${textColor ? textColor : 'white'} text-sm font-light mb-2 ${labelClassName}`} htmlFor="username">
                     {label}  {!isValid && <span className = {'text-custom_light'}> / {error}</span>}
                 </label>
             )}
 
             <div className = {'relative'}>
                 <input
-                    className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${!isValid ? 'border-2 border-custom_light' : ''} ${isValid ? 'border-blue-900' : ''} rounded-lg`}
+                    className={`block w-full disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 text-gray-900 focus:border-cyan-500 focus:ring-cyan-500 text-sm ${!isValid ? 'border-2 border-custom_light' : ''} ${isValid ? 'border-gray-300' : ''} rounded-md`}
                     ref = {ref}
                     type = {toggleEye ? 'password' : 'text'}
                     onKeyDown={handleKeyDown}

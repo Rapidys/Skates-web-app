@@ -10,6 +10,7 @@ import AlertModal from "../../../components/Modals/AlertModal";
 import {useAccount} from "../../../context/AccountContext";
 import Counter from "../../../components/counter";
 import Input from "../../../components/fields/input";
+import {ArrayToOptions} from "../../../utils/helpers/arrayToOptions";
 
 interface IAddService {
     openModal: boolean,
@@ -42,18 +43,6 @@ const AddServiceModal: FC<IAddService> = ({openModal, handleCloseModal, callback
 
     const {services} = useServices()
 
-    const ArrayToOptions = (data: any[], obj: string) => {
-        const arr: any = []
-
-        data.forEach((item: IServices) => {
-            const displayName = obj === 'services' ? `${item.displayName} (ფასი: ${item.price}; რაოდენობა: ${item.serviceQuantity})` : item?.displayName
-            arr.push({...item, value: displayName, label: displayName,})
-        })
-        setOptions((prevState) => ({
-            ...prevState,
-            [obj]: arr
-        }))
-    }
 
     const checkApiCallType = (url: string) => {
         if (url.toLowerCase().includes('trainers')) {
@@ -76,8 +65,11 @@ const AddServiceModal: FC<IAddService> = ({openModal, handleCloseModal, callback
             res.forEach((item, i) => {
                 const {config, data} = item
                 const checkType = checkApiCallType(config?.url) || ''
-                ArrayToOptions(data, checkType)
-
+                const newArr = ArrayToOptions(data, checkType)
+                setOptions((prevState) => ({
+                    ...prevState,
+                    [checkType]:newArr
+                }))
             })
         })
     }, []);
