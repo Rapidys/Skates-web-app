@@ -22,6 +22,6 @@ export interface TableColumn {
     dataKey?: string;
     type?: string; // Optional type property
     render?: (item: any,props:any,onChange?:any) => JSX.Element;
-    renderTitle?: (item:any,props:any,onChange?:any) => JSX.Element;
+    renderTitle?: (item:any,props:any,onChange?:any,headCheckboxValue?:boolean) => JSX.Element;
     checked?:boolean
 }

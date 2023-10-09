@@ -9,6 +9,7 @@ import {ArrayToOptions} from "../../../utils/helpers/arrayToOptions";
 import {useDebounce} from "../../../utils/hooks/useDebouncedValue";
 import MyPagination from "../../../components/Pagination";
 import { startOfYear, endOfYear, format } from 'date-fns';
+import {ca} from "date-fns/locale";
 
 
 const Orders = () => {
@@ -16,6 +17,7 @@ const Orders = () => {
     const {services} = useServices()
     const [orders, setOrders] = useState<IOrder[]>([])
     const [loading, setLoading] = useState(false)
+    const [sumValues,setSumValues] = useState({})
     const [pageInfo, setPageInfo] = useState<IPageInfo>({
         pageNumber: 1,
         pageSize: {id: 2, label: '25', value: '25'},
@@ -41,22 +43,32 @@ const Orders = () => {
     const start = startOfYear(currentDate)
     const end = endOfYear(currentDate)
 
-    const getOrders = () => {
+    const getOrders = ({pageNumber,pageSize}:{pageNumber?:number,pageSize?:IOptions}) => {
         const data = {
             StartDate: state.startDate ? state.startDate : format(start, 'yyyy-MM-dd'),
             EndDate: state.endDate ? state.endDate : format(end, 'yyyy-MM-dd'),
             ServiceId: selectedOptions.services?.id ? selectedOptions.services.id : null,
             UserId: selectedOptions.users?.id ? selectedOptions.users.id : null,
             ClientIdentifier: state.clientIdentifier || '',
-            PageSize: pageInfo.pageSize?.value ? +pageInfo.pageSize?.value : 25,
-            PageNumber: pageInfo.pageNumber
+            PageSize:pageSize ? +pageSize.value : +pageInfo.pageSize?.value,
+            PageNumber:pageNumber ? pageNumber: pageInfo.pageNumber
         }
         setLoading(true)
-        services.Admin.getOrders(data).then(res => {
-            setOrders(res.data.orders)
-            setPageInfo({...pageInfo, totalCount: res.data.pageInfo?.totalCount})
-            setLoading(false)
-        })
+        try{
+            services.Admin.getOrders(data).then(res => {
+                setOrders(res.data.orders)
+                setSumValues(res.data?.sumValues)
+                setPageInfo({
+                    ...pageInfo,
+                    totalCount: res.data.pageInfo?.totalCount,
+                    pageSize: {id: 2, label: `${res.data.pageInfo?.pageSize}`, value: `${res.data.pageInfo?.pageSize}`},
+                    pageNumber: res.data.pageInfo?.pageNumber,
+                })
+                setLoading(false)
+            })
+        }catch (e){
+            console.log(e)
+        }
     }
 
     const checkApiCallType = (url: string) => {
@@ -87,24 +99,28 @@ const Orders = () => {
     }
 
     useEffect(() => {
-        Promise.all([services.Dashboard.getServices(true), services.Admin.getUsers(true)]).then(res => {
-            res.forEach(item => {
-                const {config, data} = item
-                const checkType = checkApiCallType(config?.url) || ''
-                const newArr = ArrayToOptions(data, checkType)
-                setOptions((prevState) => ({
-                    ...prevState,
-                    [checkType]: newArr
-                }))
+        try{
+            Promise.all([services.Dashboard.getServices(true), services.Admin.getUsers(true)]).then(res => {
+                res.forEach(item => {
+                    const {config, data} = item
+                    const checkType = checkApiCallType(config?.url) || ''
+                    const newArr = ArrayToOptions(data, checkType)
+                    setOptions((prevState) => ({
+                        ...prevState,
+                        [checkType]: newArr
+                    }))
+                })
             })
-        })
+        }catch (e){
+            console.log(e)
+        }
     }, [])
 
     useEffect(() => {
         if (debouncedValue === state.clientIdentifier) {
-            getOrders()
+            getOrders({})
         }
-    }, [state, debouncedValue, selectedOptions, pageInfo.pageNumber, pageInfo.pageSize])
+    }, [state, debouncedValue, selectedOptions])
 
     const handleOptionChange = (options, type) => {
         setSelectedOptions({
@@ -132,6 +148,7 @@ const Orders = () => {
                 handleChange={handleChange}
                 state={state}
                 handleClearFilters = {handleClearFilters}
+                sumValues = {sumValues}
             />
 
 
@@ -143,8 +160,14 @@ const Orders = () => {
                     loading={loading}
                 />
                 <MyPagination
-                    onPageChange={(page) => setPageInfo({...pageInfo, pageNumber: page})}
-                    onPageSizeChange={(item: IOptions) => setPageInfo({...pageInfo, pageSize: item})}
+                    onPageChange={(page) => {
+                        setPageInfo({...pageInfo, pageNumber: page})
+                        getOrders({pageNumber:page})
+                    }}
+                    onPageSizeChange={(item: IOptions) => {
+                        setPageInfo({...pageInfo, pageSize: item})
+                        getOrders({pageSize:item})
+                    }}
                     pageNumber={pageInfo.pageNumber}
                     pageSize={pageInfo.pageSize}
                     total={pageInfo.totalCount}

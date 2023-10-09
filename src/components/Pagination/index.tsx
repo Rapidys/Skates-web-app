@@ -11,7 +11,8 @@ interface IPagination {
     onPageSizeChange:(pageSize:IOptions) => void
 }
 const pageSizeOptions: IOptions[] = [
-    {id: 1, label: '10', value: '10'},
+    {id: 1, label: '5', value: '5'},
+    {id: 6, label: '10', value: '10'},
     {id: 2, label: '25', value: '25'},
     {id: 3, label: '50', value: '50'},
     {id: 4, label: '100', value: '100'}

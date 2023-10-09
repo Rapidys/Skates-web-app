@@ -7,12 +7,13 @@ import {IState} from "./types";
 import useDebounceCallback from "../../../utils/hooks/useDebounceCallback";
 import MyPagination from "../../../components/Pagination";
 import {endOfYear, format, startOfYear} from "date-fns";
+import {IOptions} from "../orders/types";
 
 const Clients = () => {
 
 
-    const [mount,setMount] = useState(false)
-    const [loading,setLoading] = useState(false)
+    const [mount, setMount] = useState(false)
+    const [loading, setLoading] = useState(false)
     const [state, setState] = useState<IState>({
         firstName: '',
         lastName: '',
@@ -25,14 +26,14 @@ const Clients = () => {
         dateCreatedTo: '',
         pageSize: {id: 1, label: '10', value: '10'},
         pageNumber: 1,
-        total:0,
+        total: 0,
     })
     const [clients, setClients] = useState([])
     const {services} = useServices()
     const currentDate = new Date()
     const start = startOfYear(currentDate)
     const end = endOfYear(currentDate)
-    const getClients = () => {
+    const getClients = ({pageNumber,pageSize}:{pageNumber?:number,pageSize?:IOptions}) => {
         const data = {
             RegisteredFrom: state.dateCreatedFrom ? state.dateCreatedFrom : format(start, 'yyyy-MM-dd'),
             RegisteredTo: state.dateCreatedTo ? state.dateCreatedTo : format(end, 'yyyy-MM-dd'),
@@ -43,27 +44,29 @@ const Clients = () => {
             CardNumber: state.cardNumber,
             Mobile: state.mobile,
             IdentificationNumber: state.identificationNumber,
-            PageSize: +state.pageSize?.value,
-            PageNumber: state.pageNumber
+            PageSize: pageSize ? +pageSize.value : +state.pageSize?.value,
+            PageNumber: pageNumber ? pageNumber : state.pageNumber
         }
-        setLoading(true)
-        services.Admin.getClients(data).then(res => {
-            setClients(res.data?.clients)
-            setLoading(false)
-            if(!mount){
-                setState({
-                    ...state,
-                    total:res.data.pageInfo?.totalCount,
-                })
-            }
-        })
+        try {
+            setLoading(true)
+            services.Admin.getClients(data).then(res => {
+                setClients(res.data?.clients)
+                setLoading(false)
+                setState(prevState => ({
+                    ...prevState,
+                    total: res.data.pageInfo?.totalCount,
+                }))
+            })
+        }catch (e){
+            console.log(e)
+        }
     }
 
     const debouncedGetClients = useDebounceCallback(getClients, 1000)
 
     useEffect(() => {
         setMount(true)
-        getClients()
+        getClients({})
         return () => {
             setMount(false)
         }
@@ -72,15 +75,13 @@ const Clients = () => {
         state.birthDateFrom,
         state.dateCreatedTo,
         state.dateCreatedFrom,
-        state.pageSize,
-        state.pageNumber
     ])
 
     useEffect(() => {
-        if(mount){
-            debouncedGetClients()
+        if (mount) {
+            debouncedGetClients({})
         }
-    },[
+    }, [
         state.firstName,
         state.lastName,
         state.cardNumber,
@@ -109,7 +110,7 @@ const Clients = () => {
             dateCreatedTo: '',
             pageSize: {id: 1, label: '10', value: '10'},
             pageNumber: 1,
-            total:0,
+            total: 0,
         })
     }
 
@@ -119,7 +120,7 @@ const Clients = () => {
             <Filter
                 handleChange={handleChange}
                 state={state}
-                handleClearFilters = {handleClearFilters}
+                handleClearFilters={handleClearFilters}
             />
 
             <div>
@@ -133,8 +134,14 @@ const Clients = () => {
                     total={state?.total}
                     pageNumber={state.pageNumber}
                     pageSize={state.pageSize}
-                    onPageChange={(page) => setState({...state,pageNumber:page})}
-                    onPageSizeChange={(pageSize) => setState({...state,pageSize:pageSize})}
+                    onPageChange={(page) => {
+                        setState(prevState => ({...prevState, pageNumber: page}))
+                        getClients({pageNumber:page})
+                    }}
+                    onPageSizeChange={(pageSize) => {
+                        setState(prevState => ({...prevState, pageSize: pageSize}))
+                        getClients({pageSize:pageSize})
+                    }}
                 />
             </div>
         </div>

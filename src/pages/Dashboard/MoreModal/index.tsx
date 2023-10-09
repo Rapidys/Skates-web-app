@@ -1,11 +1,12 @@
-import React, {FC, useCallback, useEffect, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {Modal} from "flowbite-react";
 import DatePicker from "../../../components/fields/DatePicker";
 import Button from '../../../components/Button'
-import {ServiceData} from "../../../types/Dashboard";
 import ServiceDetails from "../../../components/Tables/ServiceDetailTable";
 import {useServices} from "../../../context/Services/ServiceContextProvider";
 import {format} from "date-fns";
+import {ArrayToOptions} from "../../../utils/helpers/arrayToOptions";
+import {IOptions} from "../../Admin/orders/types";
 
 interface IMoreModal {
     openModal: boolean,
@@ -19,6 +20,9 @@ interface IMoreModal {
 const MoreModal: FC<IMoreModal> = ({openModal, handleUpdateOrder, handleCloseModal, data, setData, deleteOrder}) => {
 
 
+    const {services} = useServices()
+    const [trainers, setTrainers] = useState<IOptions[]>([])
+    const [currentTrainer,setCurrentTrainer] = useState<any>({})
     const handleChangeDate = (value: any, type: string) => {
         setData({
             ...data,
@@ -26,13 +30,33 @@ const MoreModal: FC<IMoreModal> = ({openModal, handleUpdateOrder, handleCloseMod
         })
     }
 
+
+    useEffect(() => {
+        try {
+            services.Dashboard.getTrainers().then(res => {
+                const toOptions = ArrayToOptions(res?.data, '')
+                const trainerInfo = toOptions.find(el => el.displayName === data.trainer)
+                setTrainers(toOptions)
+                setCurrentTrainer(trainerInfo)
+            })
+        } catch (e) {
+            console.log(e)
+        }
+
+    }, [data])
+
+    const handleChangeTrainer = (option) => {
+         setCurrentTrainer(option)
+    }
+
+
     return (
         <Modal show={openModal} onClose={() => handleCloseModal('moreModal')} size={'xl'} dismissible>
             <Modal.Header>დეტალები</Modal.Header>
             <Modal.Body>
                 <div>
                     <div className={'mb-3 flex-col py-2'}>
-                        <ServiceDetails data={data}/>
+                        <ServiceDetails data={data} trainers={trainers} value = {currentTrainer} handleChangeTrainer = {handleChangeTrainer}/>
                     </div>
                     <div>
                         <h6 className={'text-sm text-custom_light font-bold'}>
@@ -70,7 +94,8 @@ const MoreModal: FC<IMoreModal> = ({openModal, handleUpdateOrder, handleCloseMod
                         const obj = {
                             orderId: data.orderId,
                             startDate: format(data.startDate, 'yyyy-MM-dd'),
-                            endDate: format(data.endDate, 'yyyy-MM-dd')
+                            endDate: format(data.endDate, 'yyyy-MM-dd'),
+                            TrainerId:currentTrainer?.id
                         }
                         handleUpdateOrder(obj)
                     }}

@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import {IHeadData, ServiceData} from "../../types/Dashboard";
-import {headData} from "../../utils/constants/mock";
 import AddServiceModal from "./AddServiceModal";
 import Button from "../../components/Button";
 import MoreModal from "./MoreModal";
@@ -21,6 +20,8 @@ const Dashboard = () => {
     const {ClientId, cardNumber,handleClear} = useAccount()
     const {services} = useServices()
 
+    const [headCheckboxValue,setHeadCheckBoxValue] = useState(false)
+    const [loading,setLoading] = useState(false)
     const [state, setState] = useState<{ row: ServiceData[] }>({row: []})
     const [modals,setModals] = useState({
         addServiceModal:false,
@@ -79,13 +80,16 @@ const Dashboard = () => {
             ...newState,
             row:arr
         })
+        setHeadCheckBoxValue(dashboardCols[checkRowIndex].checked)
     }
 
 
     const getClientOrders = () => {
         try{
+            setLoading(true)
             services.Dashboard.getClientOrders(ClientId).then(res => {
                 const newArr = recreateRow(res)
+                setLoading(false)
                 setState({
                     ...state,
                     row: newArr,
@@ -115,6 +119,7 @@ const Dashboard = () => {
 
 
     const handleConsumeOrder = (type: string,paymentType?:any) => {
+
         const ordersArr: any = []
         state?.row.forEach(element => {
             if (element?.checked) {
@@ -223,6 +228,8 @@ const Dashboard = () => {
                 onChange={handleCheckbox}
                 onChangeHead = {handleHeadCheckboxChange}
                 onRowClick = {(item) => navigate(`${item.orderId}`)}
+                loading={loading}
+                headCheckboxValue = {headCheckboxValue}
             />
 
             <div style={{height:60,width:'100%'}}/>

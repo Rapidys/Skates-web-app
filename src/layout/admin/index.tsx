@@ -1,12 +1,9 @@
 import React, {FC} from 'react';
 import {INavItem} from "../../components/NavMenu/types";
-import {faHome, faIdCard, faUserFriends} from "@fortawesome/free-solid-svg-icons";
+import {faMoneyBill1Wave, faNetworkWired, faUserFriends} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {useMediaQuery} from "react-responsive";
-import {useAccount} from "../../context/AccountContext";
 import NavMenu from "../../components/NavMenu";
 import Header from "../dashboard/header";
-import {useAuth} from "../../context/AuthContext";
 
 
 interface ILayout {
@@ -16,9 +13,9 @@ const AdminLayout:FC<ILayout> = ({children}) => {
 
     const iconColor = 'text-white'
      const MenuItems:INavItem[] = [
-        {id:1,title:'ლოგები',path:'/admin/orders',icon:<FontAwesomeIcon icon={faIdCard} className={iconColor}/>},
+        {id:1,title:'ბუღალტერია',path:'/admin/orders',icon:<FontAwesomeIcon icon={faMoneyBill1Wave} className={iconColor}/>},
         {id:3,title:'კლიენტები',path:'/admin/clients',icon:<FontAwesomeIcon icon={faUserFriends} className={iconColor}/>},
-        {id:2,title:'ადმინისტრირება' , path: '/admin/referenceManage',icon:<FontAwesomeIcon icon={faHome} className={iconColor} />,},
+        {id:2,title:'ადმინისტრირება' , path: '/admin/referenceManage',icon:<FontAwesomeIcon icon={faNetworkWired} className={iconColor} />,},
     ]
 
 

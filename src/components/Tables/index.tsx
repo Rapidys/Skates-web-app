@@ -12,6 +12,7 @@ interface IMyTable {
     onChangeHead?: (e: any) => void,
     onRowClick?: (item: any) => void,
     loading?:boolean
+    headCheckboxValue?:boolean
 }
 
 const FakeDate = () => {
@@ -41,7 +42,7 @@ const FakeCell = ({columnData}) => {
 }
 
 
-const MyTable: FC<IMyTable> = ({columnData, rowData, onCellClick, iterationKey,onRowClick, onChange,loading, onChangeHead, ...props}) => {
+const MyTable: FC<IMyTable> = ({columnData, rowData, onCellClick, iterationKey,onRowClick, onChange,loading, onChangeHead, headCheckboxValue,...props}) => {
 
     return (
         <div className={'overflow-x-scroll'}>
@@ -53,7 +54,7 @@ const MyTable: FC<IMyTable> = ({columnData, rowData, onCellClick, iterationKey,o
                                 return (
                                     <Table.HeadCell key={index}>
                                         {item.head}
-                                        {item.renderTitle && item.renderTitle(item, props, onChangeHead)}
+                                        {item.renderTitle && item.renderTitle(item, props, onChangeHead,headCheckboxValue)}
                                     </Table.HeadCell>
 
                                 )
