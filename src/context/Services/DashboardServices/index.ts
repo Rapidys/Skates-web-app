@@ -8,7 +8,7 @@ export interface IDashboardServices {
     getPaymentTypes: (all: boolean) => Promise<AxiosResponse>,
     getTrainers: () => Promise<AxiosResponse>,
     makeOrder: (data: IMakeOrder) => Promise<AxiosResponse>,
-    getClientOrders: (clientId: number) => Promise<AxiosResponse>,
+    getClientOrders: (clientId: number,onlyActive:boolean) => Promise<AxiosResponse>,
     consumeOrder: (data: IConsumeOrder) => Promise<AxiosResponse>,
     updateOrder: (data: IUpdateOrder) => Promise<AxiosResponse>,
     comment: (data: ICommentData) => Promise<AxiosResponse>,
@@ -32,8 +32,8 @@ const DashboardServices = (axios: MyAxios): IDashboardServices => {
     const makeOrder = (data: IMakeOrder) => {
         return axios.post('/Orders/MakeOrder', data)
     }
-    const getClientOrders = (clientId: number) => {
-        return axios.post('/Orders/GetClientOrders', {ClientId: clientId, OnlyActive: true})
+    const getClientOrders = (clientId: number,onlyActive ) => {
+        return axios.post('/Orders/GetClientOrders', {ClientId: clientId, OnlyActive: onlyActive})
     }
     const consumeOrder = (data: IConsumeOrder) => {
         return axios.post('/Orders/ConsumeOrder', data)

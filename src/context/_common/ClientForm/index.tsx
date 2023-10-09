@@ -143,6 +143,7 @@ const ClientForm: FC<ICreateAccount> = ({ClientInfo, loading = false, onSubmit, 
                             label={'დაბ.თარიღი'}
                             date={new Date(date)}
                             setDate={setDate}
+                            textColor={labelClassNames}
                         />
                     </div>
                     <div className={'mb-2'}>

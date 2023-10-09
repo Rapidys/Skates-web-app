@@ -52,12 +52,12 @@ const ErrorHandlingContextProvider: FC<IErrorHandlingContextProvider> = ({childr
             {
                 error?.message && (
                     <Toast
-                        className={`fixed top-10 z-30 ${error?.type === 'error' ? 'bg-custom_danger' : 'bg-custom_button'}`}
-                        style={{transform: 'translateX(-50%)', left: '50%'}}>
+                        className={`fixed top-10 z-30 transition ${error?.type === 'error' ? 'bg-custom_danger' : 'bg-custom_button'}`}
+                        style={{transform: 'translateX(-50%)', left: '50%',zIndex:99999}}>
                         <div className="ml-3 text-sm font-normal text-white">
                             {error?.message}
                         </div>
-                        <Toast.Toggle className={`${error?.type === 'error' ? 'bg-custom_danger' : 'bg-custom_button'}\`}`}
+                        <Toast.Toggle className={`${error?.type === 'error' ? 'bg-custom_danger' : 'bg-custom_button'} hover:bg-custom_danger hover:text-white`}
                                       onClick={handleHide}/>
                     </Toast>
                 )

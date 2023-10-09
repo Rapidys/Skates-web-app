@@ -12,7 +12,7 @@ const dashboardCols:TableColumn[] = [
     {id: 4, head: 'მდე', render:(item) => <span>{format(new Date(item?.endDate), 'yyyy-MM-dd')}</span> },
     {id: 5, head: 'რაოდენობა', render:(item) => <span>{item.quantity} / {item.usedQuantity}</span>},
     {
-        id: 6,checked:false, renderTitle: (item,props,onChange,headCheckboxValue) => {
+        id: 6,renderTitle: (item,props,onChange,headCheckboxValue) => {
             return (
                 <Checkbox checked = {headCheckboxValue} onChange={(e) => {
                     onChange(item)

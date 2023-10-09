@@ -73,13 +73,16 @@ const Filter: FC<IFilter> = ({
                                     })}
                                 </Table.Head>
                                 <Table.Body className="divide-y">
-                                    {Object.keys(sumValues)?.map(element => {
-                                        return (
-                                            <Table.Cell key={element}>
-                                                {sumValues[element]} GEL
-                                            </Table.Cell>
-                                        )
-                                    })}
+                                    <Table.Row>
+                                        {Object.keys(sumValues)?.map(element => {
+                                            return (
+                                                <Table.Cell key={element}>
+                                                    {sumValues[element]} GEL
+                                                </Table.Cell>
+                                            )
+                                        })}
+                                    </Table.Row>
+
                                 </Table.Body>
                             </Table>
                         )

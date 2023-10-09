@@ -13,26 +13,27 @@ import {faArrowLeft} from "@fortawesome/free-solid-svg-icons";
 import CommentsModal from "../../components/Modals/CommentsModal";
 import MyTable from "../../components/Tables";
 import dashboardCols from "./dashboardCols";
+import {Checkbox} from "flowbite-react";
 
 const Dashboard = () => {
 
     const navigate = useNavigate()
-    const {ClientId, cardNumber,handleClear} = useAccount()
+    const {ClientId, cardNumber, handleClear} = useAccount()
     const {services} = useServices()
 
-    const [headCheckboxValue,setHeadCheckBoxValue] = useState(false)
-    const [loading,setLoading] = useState(false)
+    const [onlyActive, setOnlyActive] = useState(true)
+    const [headCheckboxValue, setHeadCheckBoxValue] = useState(false)
+    const [loading, setLoading] = useState(false)
     const [state, setState] = useState<{ row: ServiceData[] }>({row: []})
-    const [modals,setModals] = useState({
-        addServiceModal:false,
-        moreModal:false,
-        commentsModal:false,
-        instantModal:false,
+    const [modals, setModals] = useState({
+        addServiceModal: false,
+        moreModal: false,
+        commentsModal: false,
+        instantModal: false,
     })
     const [openConsumeAlert, setOpenConsumeAlert] = useState(false)
     const [myServiceItems, setMyServiceItem] = useState<ServiceData>({})
     const [instantData, setInstantData] = useState([])
-
 
 
     const recreateRow = (data: any) => {
@@ -42,7 +43,7 @@ const Dashboard = () => {
         return newArr
     }
 
-    const instantDataBase = (data:any) =>{
+    const instantDataBase = (data: any) => {
         const arr: any = []
         data.forEach((element: any) => {
             if (element?.isInstant) {
@@ -52,7 +53,7 @@ const Dashboard = () => {
         setInstantData(arr)
     }
 
-    const handleCheckbox  = (item: ServiceData)  => {
+    const handleCheckbox = (item: ServiceData) => {
         const copiedState = {...state}
         const newRow = [...copiedState.row]
         const checkedItem = newRow.find(el => el.orderId === item.orderId)
@@ -66,28 +67,26 @@ const Dashboard = () => {
         }
     }
 
-    const handleHeadCheckboxChange = (item:IHeadData) => {
+    const handleHeadCheckboxChange = () => {
         const newState = {...state}
-        const newRow = [ ...newState.row]
+        const newRow = [...newState.row]
 
-        const checkRowIndex = dashboardCols.findIndex(el => el.id === item.id)
-        dashboardCols[checkRowIndex].checked = !dashboardCols[checkRowIndex].checked
-        const arr:ServiceData[] = []
+        const arr: ServiceData[] = []
         newRow.forEach((element) => {
-            arr.push({...element,checked:dashboardCols[checkRowIndex].checked})
+            arr.push({...element, checked: !headCheckboxValue})
         })
         setState({
             ...newState,
-            row:arr
+            row: arr
         })
-        setHeadCheckBoxValue(dashboardCols[checkRowIndex].checked)
+        setHeadCheckBoxValue(!headCheckboxValue)
     }
 
 
-    const getClientOrders = () => {
-        try{
+    const getClientOrders = (active?) => {
+        try {
             setLoading(true)
-            services.Dashboard.getClientOrders(ClientId).then(res => {
+            services.Dashboard.getClientOrders(ClientId, active !== undefined ? active : onlyActive).then(res => {
                 const newArr = recreateRow(res)
                 setLoading(false)
                 setState({
@@ -95,7 +94,7 @@ const Dashboard = () => {
                     row: newArr,
                 })
             })
-        }catch (e){
+        } catch (e) {
             console.log(e)
         }
     }
@@ -105,7 +104,7 @@ const Dashboard = () => {
             services.Dashboard.getServices().then(res => {
                 instantDataBase(res?.data)
             })
-        }catch (e){
+        } catch (e) {
             console.log(e)
         }
 
@@ -117,8 +116,7 @@ const Dashboard = () => {
     }, []);
 
 
-
-    const handleConsumeOrder = (type: string,paymentType?:any) => {
+    const handleConsumeOrder = (type: string, paymentType?: any) => {
 
         const ordersArr: any = []
         state?.row.forEach(element => {
@@ -139,11 +137,12 @@ const Dashboard = () => {
             identifier: cardNumber,
             orders: ordersArr,
             instantOrders: instantOrd,
-            paymentType:paymentType?.id
+            paymentType: paymentType?.id
         }
         services.Dashboard.consumeOrder(data).then(res => {
             services.Dashboard.getClientOrders(ClientId).then(serv => {
                 const newArr = recreateRow(serv)
+                navigate('/findAccount')
                 setState({
                     ...state,
                     row: newArr,
@@ -154,24 +153,24 @@ const Dashboard = () => {
     }
 
     const deleteOrder = () => {
-        try{
+        try {
             services.Dashboard.deleteOrder(myServiceItems.orderId).then(res => {
-               setModals({...modals,moreModal:false})
-               getClientOrders()
+                setModals({...modals, moreModal: false})
+                getClientOrders()
             })
-        }catch (e){
+        } catch (e) {
             console.log(e)
         }
     }
 
-    const handleComment = (com:string,callback:() => void) => {
-         const comment = {
-             Orderid:myServiceItems.orderId,
-             Content:com
-         }
-         services.Dashboard.comment(comment).then(res => {
-             callback()
-         })
+    const handleComment = (com: string, callback: () => void) => {
+        const comment = {
+            Orderid: myServiceItems.orderId,
+            Content: com
+        }
+        services.Dashboard.comment(comment).then(res => {
+            callback()
+        })
     }
 
 
@@ -186,28 +185,33 @@ const Dashboard = () => {
         setInstantData(copiedInstants)
     }
 
-    const handleUpdateOrder = (data:any) => {
+    const handleUpdateOrder = (data: any) => {
         services.Dashboard.updateOrder(data).then(res => {
             getClientOrders()
         })
     }
 
-    const handleCloseModal = (modalType:string) => {
-        setModals({...modals,[modalType]:false})
+    const handleCloseModal = (modalType: string) => {
+        setModals({...modals, [modalType]: false})
     }
 
-    const handleOpenModal = (modalType:string,item?:ServiceData) => {
-        setModals({...modals,[modalType]:true})
-        if(modalType === 'moreModal' || modalType === 'commentsModal'){
-            setMyServiceItem({...item, startDate: new Date(item.startDate), endDate: new Date(item.endDate), orderId: item.orderId})
+    const handleOpenModal = (modalType: string, item?: ServiceData) => {
+        setModals({...modals, [modalType]: true})
+        if (modalType === 'moreModal' || modalType === 'commentsModal') {
+            setMyServiceItem({
+                ...item,
+                startDate: new Date(item.startDate),
+                endDate: new Date(item.endDate),
+                orderId: item.orderId
+            })
             return
         }
     }
 
-    const onCellAction = (item,title,props) => {
-        switch (title.type){
-            default:{
-                handleOpenModal(title.type,item)
+    const onCellAction = (item, title, props) => {
+        switch (title.type) {
+            default: {
+                handleOpenModal(title.type, item)
             }
         }
     }
@@ -215,10 +219,25 @@ const Dashboard = () => {
     return (
         <div className={'w-full h-full px-2'}>
 
-            <div>
-                <h3 className={'text-lg text-custom_light py-2'}>
-                    არსებული სერვისები
-                </h3>
+            <div className={'flex justify-between items-center'}>
+                <div>
+                    <h3 className={'text-lg text-custom_light py-2'}>
+                        არსებული სერვისები
+                    </h3>
+                </div>
+
+                <div className={'mr-2'}>
+                    <Checkbox
+                        id={'onlyActive'}
+                        checked={onlyActive}
+                        className={'mr-2'}
+                        onChange={() => {
+                            setOnlyActive(!onlyActive)
+                            setHeadCheckBoxValue(false)
+                            getClientOrders(!onlyActive)
+                        }}/>
+                    <label htmlFor="onlyActive" className={'font-light text-sm'}>მხოლოდ აქტიური სერვისები</label>
+                </div>
             </div>
             <MyTable
                 columnData={dashboardCols}
@@ -226,15 +245,16 @@ const Dashboard = () => {
                 onCellClick={onCellAction}
                 iterationKey={'orderId'}
                 onChange={handleCheckbox}
-                onChangeHead = {handleHeadCheckboxChange}
-                onRowClick = {(item) => navigate(`${item.orderId}`)}
+                onChangeHead={handleHeadCheckboxChange}
+                onRowClick={(item) => navigate(`${item.orderId}`)}
                 loading={loading}
-                headCheckboxValue = {headCheckboxValue}
+                headCheckboxValue={headCheckboxValue}
             />
 
-            <div style={{height:60,width:'100%'}}/>
+            <div style={{height: 60, width: '100%'}}/>
 
-            <div className={'fixed bottom-0 right-0 p2 w-full shadow  flex justify-between items-center px-3 py-2 z-10'}>
+            <div
+                className={'fixed bottom-0 right-0 p2 w-full shadow  flex justify-between items-center px-3 py-2 z-10'}>
                 <div>
                     <Button className={'mr-2'}
                             onClick={() => {
@@ -242,7 +262,7 @@ const Dashboard = () => {
                                 navigate('/findAccount')
                             }}
                     >
-                        <FontAwesomeIcon icon={faArrowLeft} className = {`mr-2`}/>
+                        <FontAwesomeIcon icon={faArrowLeft} className={`mr-2`}/>
                         <span>უკან</span>
                     </Button>
                 </div>
@@ -270,12 +290,11 @@ const Dashboard = () => {
                 title={'ყურადღებით !'}
                 onYes={() => {
                     handleConsumeOrder('add')
-                    navigate('/findAccount')
                 }}
                 description={'ნამდვილად გსურთ სერვისის გამოყენება ?'}
             />
             <InstantModal
-                onYes={ handleConsumeOrder}
+                onYes={handleConsumeOrder}
                 handleInstantChange={handleInstantChange}
                 instantData={instantData}
                 openModal={modals.instantModal}
@@ -289,15 +308,16 @@ const Dashboard = () => {
                 handleCloseModal={handleCloseModal}
                 data={myServiceItems}
                 setData={setMyServiceItem}
-                deleteOrder = {deleteOrder}
+                deleteOrder={deleteOrder}
             />
-            <AddServiceModal openModal={modals.addServiceModal} handleCloseModal={handleCloseModal} callbackFn = {getClientOrders}/>
+            <AddServiceModal openModal={modals.addServiceModal} handleCloseModal={handleCloseModal}
+                             callbackFn={getClientOrders}/>
             <CommentsModal
                 openModal={modals.commentsModal}
                 handleCloseModal={handleCloseModal}
                 title={'კომენტარები'}
-                onSend = {handleComment}
-                orderId = {myServiceItems.orderId}
+                onSend={handleComment}
+                orderId={myServiceItems.orderId}
             />
         </div>
     );
