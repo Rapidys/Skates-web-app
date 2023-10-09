@@ -3,22 +3,19 @@ import {useServices} from "../../../context/Services/ServiceContextProvider";
 import {IOptions, IOrder, IPageInfo, IState} from "./types";
 import MyTable from "../../../components/Tables";
 import {OrderCols} from "./tableCols";
-import Filter from "../../../components/filter";
+import Filter from "../../../components/filter/orders";
 import {IService, IUsers} from "../../../types/admin";
 import {ArrayToOptions} from "../../../utils/helpers/arrayToOptions";
-import {Pagination} from 'flowbite-react';
-import Select from "react-select";
+import {useDebounce} from "../../../utils/hooks/useDebouncedValue";
+import MyPagination from "../../../components/Pagination";
+import { startOfYear, endOfYear, format } from 'date-fns';
 
-const pageSizeOptions: IOptions[] = [
-    {id: 1, label: '10', value: '10'},
-    {id: 2, label: '25', value: '25'},
-    {id: 3, label: '50', value: '50'},
-    {id: 4, label: '100', value: '100'}
-];
+
 const Orders = () => {
 
     const {services} = useServices()
     const [orders, setOrders] = useState<IOrder[]>([])
+    const [loading, setLoading] = useState(false)
     const [pageInfo, setPageInfo] = useState<IPageInfo>({
         pageNumber: 1,
         pageSize: {id: 2, label: '25', value: '25'},
@@ -37,22 +34,28 @@ const Orders = () => {
         dateCreated: '',
         startDate: '',
         endDate: '',
-        clientIdentifier: null,
+        clientIdentifier: '',
     })
+    const debouncedValue = useDebounce(state.clientIdentifier, 1000)
+    const currentDate = new Date()
+    const start = startOfYear(currentDate)
+    const end = endOfYear(currentDate)
 
     const getOrders = () => {
         const data = {
-            StartDate: state.startDate ? state.startDate : "2023-01-01",
-            EndDate: state.endDate ? state.endDate : "2023-12-31",
+            StartDate: state.startDate ? state.startDate : format(start, 'yyyy-MM-dd'),
+            EndDate: state.endDate ? state.endDate : format(end, 'yyyy-MM-dd'),
             ServiceId: selectedOptions.services?.id ? selectedOptions.services.id : null,
             UserId: selectedOptions.users?.id ? selectedOptions.users.id : null,
             ClientIdentifier: state.clientIdentifier || '',
             PageSize: pageInfo.pageSize?.value ? +pageInfo.pageSize?.value : 25,
             PageNumber: pageInfo.pageNumber
         }
+        setLoading(true)
         services.Admin.getOrders(data).then(res => {
             setOrders(res.data.orders)
             setPageInfo({...pageInfo, totalCount: res.data.pageInfo?.totalCount})
+            setLoading(false)
         })
     }
 
@@ -63,6 +66,24 @@ const Orders = () => {
         if (url.toLowerCase().includes('users')) {
             return 'users'
         }
+    }
+
+    const handleClearFilters = () => {
+        setState({
+            dateCreated: '',
+            startDate: '',
+            endDate: '',
+            clientIdentifier: '',
+        })
+        setSelectedOptions({
+            services: null,
+            users: null
+        })
+        setPageInfo({
+            pageNumber: 1,
+            pageSize: {id: 2, label: '25', value: '25'},
+            totalCount: 0
+        })
     }
 
     useEffect(() => {
@@ -80,8 +101,10 @@ const Orders = () => {
     }, [])
 
     useEffect(() => {
-        getOrders()
-    }, [state, selectedOptions, pageInfo.pageNumber, pageInfo.pageSize])
+        if (debouncedValue === state.clientIdentifier) {
+            getOrders()
+        }
+    }, [state, debouncedValue, selectedOptions, pageInfo.pageNumber, pageInfo.pageSize])
 
     const handleOptionChange = (options, type) => {
         setSelectedOptions({
@@ -96,10 +119,9 @@ const Orders = () => {
             [type]: value
         })
     }
-    const totalCount = pageInfo.pageSize?.value ? pageInfo.totalCount / +pageInfo.pageSize?.value : 0
 
     return (
-        <div>
+        <div className={'py-4'}>
 
             <Filter
                 handleOptionChange={handleOptionChange}
@@ -109,41 +131,25 @@ const Orders = () => {
                 selectedUser={selectedOptions.users}
                 handleChange={handleChange}
                 state={state}
+                handleClearFilters = {handleClearFilters}
             />
 
 
             <div className={'px-2 my-3'}>
-                <MyTable columnData={OrderCols} rowData={orders} iterationKey={'dateCreated'}/>
-                {
-                    totalCount > 1 && (
-                        <div className={'flex items-center'}>
-                            <Pagination
-                                currentPage={pageInfo.pageNumber}
-                                onPageChange={(page) => setPageInfo({...pageInfo, pageNumber: page})}
-                                totalPages={totalCount}
-                            />
-                            <Select
-                                menuPortalTarget={document.body}
-                                value={pageInfo.pageSize}
-                                options={pageSizeOptions}
-                                onChange={(item: IOptions) => setPageInfo({...pageInfo, pageSize: item})}
-                                styles={{
-                                    menuPortal: base => (
-                                        {...base, zIndex: 9999}
-                                    ),
-                                    control: (baseStyles, state) => ({
-                                        ...baseStyles,
-                                        borderColor: state.isFocused ? '#14b8a6' : '#cbd5e1',
-                                        backgroundColor: '#f8fafc',
-                                        color: '#0f172a',
-                                        marginTop: '0.5rem',
-                                        marginLeft: 5
-                                    })
-                                }}
-                            />
-                        </div>
-                    )
-                }
+                <MyTable
+                    columnData={OrderCols}
+                    rowData={orders}
+                    iterationKey={'dateCreated'}
+                    loading={loading}
+                />
+                <MyPagination
+                    onPageChange={(page) => setPageInfo({...pageInfo, pageNumber: page})}
+                    onPageSizeChange={(item: IOptions) => setPageInfo({...pageInfo, pageSize: item})}
+                    pageNumber={pageInfo.pageNumber}
+                    pageSize={pageInfo.pageSize}
+                    total={pageInfo.totalCount}
+                />
+
             </div>
         </div>
     );

@@ -11,6 +11,7 @@ interface IMyTable {
     onChange?: (e: any) => void
     onChangeHead?: (e: any) => void,
     onRowClick?: (item: any) => void,
+    loading?:boolean
 }
 
 const FakeDate = () => {
@@ -40,7 +41,7 @@ const FakeCell = ({columnData}) => {
 }
 
 
-const MyTable: FC<IMyTable> = ({columnData, rowData, onCellClick, iterationKey,onRowClick, onChange, onChangeHead, ...props}) => {
+const MyTable: FC<IMyTable> = ({columnData, rowData, onCellClick, iterationKey,onRowClick, onChange,loading, onChangeHead, ...props}) => {
 
     return (
         <div className={'overflow-x-scroll'}>
@@ -64,12 +65,12 @@ const MyTable: FC<IMyTable> = ({columnData, rowData, onCellClick, iterationKey,o
                     }
                 </Table.Head>
                 <Table.Body className="divide-y">
-                    {rowData ? (
+                    {!loading ? (
                         rowData && rowData.map((item, index) => {
                             const keyRow = iterationKey ? item[iterationKey] : item?.id
                             return <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800"
                                               key={keyRow}
-                                              onClick={() => onRowClick(item)}
+                                              onClick={() => onRowClick && onRowClick(item)}
                             >
                                 {columnData.map((title, i) => {
                                     return (

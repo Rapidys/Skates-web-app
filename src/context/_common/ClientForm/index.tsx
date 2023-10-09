@@ -1,16 +1,14 @@
 import React, {FC, useEffect, useState} from 'react';
 import Card from "../../../components/Cards/Card";
 import * as yup from "yup";
-import {Formik, useFormik} from "formik";
+import {Formik} from "formik";
 import Button from "../../../components/Button";
 import DatePicker from "../../../components/fields/DatePicker";
-import {useNavigate} from "react-router-dom";
 import Loader from "../../../components/Loader";
 import {format} from "date-fns";
 import {IClientInfo} from "../../../pages/Profile";
 import {useAccount} from "../../AccountContext";
 import Input from '../../../components/fields/input'
-import {Modal} from "flowbite-react";
 
 interface ICreateAccount {
     ClientInfo?: IClientInfo,

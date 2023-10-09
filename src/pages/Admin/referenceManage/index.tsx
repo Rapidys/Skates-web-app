@@ -18,6 +18,7 @@ import {IModal} from "./types";
 const Admin = () => {
 
 
+    const [loading,setLoading] = useState(false)
     const [state, setState] = useState<IAdminReferenceOptions>({
         services: {head: [], row: []},
         paymentTypes: {head: [], row: []},
@@ -90,6 +91,7 @@ const Admin = () => {
     }
 
     useEffect(() => {
+        setLoading(true)
         Promise.all([
                 services.Admin.getUsers(),
                 services.Dashboard.getServices(true),
@@ -98,6 +100,7 @@ const Admin = () => {
             ]
         ).then((res) => {
             setValues(res)
+            setLoading(false)
         })
     }, [])
 
@@ -264,6 +267,7 @@ const Admin = () => {
                     columnData={currentState?.head}
                     rowData={currentState?.row}
                     onCellClick={onRowClick}
+                    loading = {loading}
                 />
             </div>
 

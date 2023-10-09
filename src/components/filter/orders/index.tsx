@@ -1,11 +1,13 @@
 import React, {FC} from 'react';
-import DatePicker from "../fields/DatePicker";
+import DatePicker from "../../fields/DatePicker";
 import Select from "react-select";
-import {IService, IUsers} from "../../types/admin";
-import {Card} from "flowbite-react";
-import Input from "../fields/input";
-import {IState} from "../../pages/Admin/orders/types";
+import {IService, IUsers} from "../../../types/admin";
+import {Card, Tooltip} from "flowbite-react";
+import Input from "../../fields/input";
+import {IState} from "../../../pages/Admin/orders/types";
 import {format} from "date-fns";
+import {faTrash} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 interface IFilter {
     handleOptionChange: (options: IService, type: string) => void,
@@ -14,7 +16,8 @@ interface IFilter {
     selectedUser: IUsers,
     users: IUsers[],
     handleChange: (value: string, type) => void,
-    state: IState
+    state: IState,
+    handleClearFilters:() => void,
 
 }
 
@@ -25,13 +28,22 @@ const Filter: FC<IFilter> = ({
                                  handleChange,
                                  selectedUser,
                                  handleOptionChange,
-                                 state
+                                 state,
+                                 handleClearFilters
                              }) => {
     return (
         <Card className={'shadow-lg mx-2 my-2'}>
-            <div>ფილტრაცია</div>
-            <div className={'flex gap-2'}>
-                <div className={'w-1/2 flex-col'}>
+            <div className={'flex justify-between'}>
+                <div>ფილტრაცია</div>
+                <div>
+                    <Tooltip content={'ფილტრის გასუფთავება'} >
+                        <FontAwesomeIcon icon={faTrash} className={'hover:text-gray-700 cursor-pointer'} onClick = {handleClearFilters}/>
+                    </Tooltip>
+                </div>
+            </div>
+
+            <div className={'flex flex-col md:flex-row gap-2'}>
+                <div className={'w-full md:w-1/2 flex-col'}>
                     <div className={'w-full'}>
                         <h2 className={'text-gray-500 mb-2 text-sm font-light'}>მომხმარებლის იდენტიფიკატორი</h2>
                         <Input
@@ -89,7 +101,7 @@ const Filter: FC<IFilter> = ({
                     </div>
 
                 </div>
-                <div className={'flex-col gap-2 w-1/2'}>
+                <div className={'flex-col gap-2 w-full md:w-1/2'}>
                     <div>
                         <DatePicker
                             date={state.dateCreated ? new Date(state.dateCreated) : null}

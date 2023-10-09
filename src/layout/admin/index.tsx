@@ -1,6 +1,6 @@
 import React, {FC} from 'react';
 import {INavItem} from "../../components/NavMenu/types";
-import {faHome, faIdCard} from "@fortawesome/free-solid-svg-icons";
+import {faHome, faIdCard, faUserFriends} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {useMediaQuery} from "react-responsive";
 import {useAccount} from "../../context/AccountContext";
@@ -13,12 +13,12 @@ interface ILayout {
     children:React.ReactNode,
 }
 const AdminLayout:FC<ILayout> = ({children}) => {
-    const isTabletOrMobile = useMediaQuery({ query: '(max-width: 991px)' })
 
     const iconColor = 'text-white'
      const MenuItems:INavItem[] = [
-        {id:2,title:'ადმინისტრირება' , path: '/admin',icon:<FontAwesomeIcon icon={faHome} className={iconColor} />,},
         {id:1,title:'ლოგები',path:'/admin/orders',icon:<FontAwesomeIcon icon={faIdCard} className={iconColor}/>},
+        {id:3,title:'კლიენტები',path:'/admin/clients',icon:<FontAwesomeIcon icon={faUserFriends} className={iconColor}/>},
+        {id:2,title:'ადმინისტრირება' , path: '/admin/referenceManage',icon:<FontAwesomeIcon icon={faHome} className={iconColor} />,},
     ]
 
 

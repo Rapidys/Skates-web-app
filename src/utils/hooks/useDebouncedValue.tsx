@@ -11,7 +11,5 @@ export function useDebounce<T>(value: T, delay?: number): T {
         }
     }, [value, delay])
 
-    if(debouncedValue !== value){
-        return
-    }
+    return debouncedValue
 }

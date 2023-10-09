@@ -42,7 +42,7 @@ const Layout:FC<ILayout> = ({children}) => {
 
                 {/*<div className={`${isTabletOrMobile ? 'w-full' : 'w-11/12'}`}>*/}
                 <div className={'w-full'}>
-                    <Header />
+                    <Header  MenuItems={MenuItems}/>
                     {children}
                 </div>
 

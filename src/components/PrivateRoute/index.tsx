@@ -12,7 +12,7 @@ const PrivateRoute:FC<IPrivateRoute> = ({children,isPrivate,path,...props}):any 
 
     const {isAdmin} = useAuth()
 
-    const adminRoutes = ['/admin']
+    const adminRoutes = ['/admin/referenceManage','/admin/orders','/admin/clients']
 
     if(adminRoutes.includes(path) && !isAdmin){
         return <Navigate to="/findAccount"/>

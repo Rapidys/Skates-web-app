@@ -48,7 +48,7 @@ const OnBoardingLayout: FC<IOnBoarding> = ({children}) => {
                         <div className={'text-white mr-4'}>
                             {displayName}
                         </div>
-                        <div onClick={() => navigate('/admin')}>
+                        <div onClick={() => navigate('/admin/orders')}>
                             <Tooltip content="ადმინისტრირება"
                                      placement="bottom"
 

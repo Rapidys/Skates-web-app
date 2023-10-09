@@ -3,6 +3,7 @@ import {IPaymentTypes, IService} from "../../../types/admin";
 import {IUsers} from "../../../types/auth";
 import {ITrainers} from "../../../types";
 import {IOrderPayload} from "../../../pages/Admin/orders/types";
+import {IClientsPayload} from "../../../pages/Admin/clients/types";
 
 export interface IAdminServices {
     getUsers: () => Promise<AxiosResponse>,
@@ -11,6 +12,7 @@ export interface IAdminServices {
     updateTrainers: (data:ITrainers) => Promise<AxiosResponse>,
     updatePaymentTypes: (data:IPaymentTypes) => Promise<AxiosResponse>,
     getOrders: (data:IOrderPayload) => Promise<AxiosResponse>,
+    getClients: (data:IClientsPayload) => Promise<AxiosResponse>,
 }
 
 interface MyAxios extends AxiosInstance {}
@@ -38,8 +40,11 @@ const AdminServices = (axios: MyAxios): IAdminServices => {
     const getOrders = (data:IOrderPayload): Promise<AxiosResponse> => {
         return axios.post('/admin/getOrders',data)
     }
+    const getClients = (data:IClientsPayload): Promise<AxiosResponse> => {
+        return axios.post('/admin/GetClients',data)
+    }
 
-    return { getUsers,updateUsers,updateService,updateTrainers,updatePaymentTypes,getOrders }
+    return { getUsers,updateUsers,updateService,updateTrainers,updatePaymentTypes,getOrders,getClients }
 
 }
 
