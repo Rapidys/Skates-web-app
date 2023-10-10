@@ -49,7 +49,12 @@ const Item: FC<IItem> = ({text, title, withEditMode, options, value,handleChange
                     </>
                 ) : (
                     <>
-                        <Select value={value} options={options} onChange={handleChange}/>
+                        <Select
+                            value={value}
+                            options={options} onChange={handleChange}
+                            styles={{menuPortal: base => ({...base, zIndex: 9999})}}
+                            menuPortalTarget={document.body}
+                        />
                     </>
                 )}
             </div>
