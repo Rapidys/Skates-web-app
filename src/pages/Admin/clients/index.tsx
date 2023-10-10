@@ -6,12 +6,15 @@ import Filter from "../../../components/filter/clients";
 import {IState} from "./types";
 import useDebounceCallback from "../../../utils/hooks/useDebounceCallback";
 import MyPagination from "../../../components/Pagination";
-import {endOfYear, format, startOfYear} from "date-fns";
+import {endOfDay, endOfYear, format, startOfDay, startOfYear} from "date-fns";
 import {IOptions} from "../orders/types";
+import {DateRangeType} from "react-tailwindcss-datepicker";
 
 const Clients = () => {
 
-
+    const currentDate = new Date()
+    const start = startOfDay(currentDate)
+    const end = endOfDay(currentDate)
     const [mount, setMount] = useState(false)
     const [loading, setLoading] = useState(false)
     const [state, setState] = useState<IState>({
@@ -22,21 +25,18 @@ const Clients = () => {
         identificationNumber: '',
         birthDateFrom: null,
         birthDateTo: null,
-        dateCreatedFrom: '',
-        dateCreatedTo: '',
+        dateCreatedFrom: format(start, 'yyyy-MM-dd'),
+        dateCreatedTo: format(end, 'yyyy-MM-dd'),
         pageSize: {id: 1, label: '10', value: '10'},
         pageNumber: 1,
         total: 0,
     })
     const [clients, setClients] = useState([])
     const {services} = useServices()
-    const currentDate = new Date()
-    const start = startOfYear(currentDate)
-    const end = endOfYear(currentDate)
-    const getClients = ({pageNumber,pageSize}:{pageNumber?:number,pageSize?:IOptions}) => {
+    const getClients = ({pageNumber, pageSize}: { pageNumber?: number, pageSize?: IOptions }) => {
         const data = {
-            RegisteredFrom: state.dateCreatedFrom ? state.dateCreatedFrom : format(start, 'yyyy-MM-dd'),
-            RegisteredTo: state.dateCreatedTo ? state.dateCreatedTo : format(end, 'yyyy-MM-dd'),
+            RegisteredFrom: state.dateCreatedFrom,
+            RegisteredTo: state.dateCreatedTo,
             FirstName: state.firstName,
             LastName: state.lastName,
             BirthDayFrom: state.birthDateFrom,
@@ -57,7 +57,7 @@ const Clients = () => {
                     total: res.data.pageInfo?.totalCount,
                 }))
             })
-        }catch (e){
+        } catch (e) {
             console.log(e)
         }
     }
@@ -90,7 +90,23 @@ const Clients = () => {
     ])
 
 
-    const handleChange = (value: string, type: string) => {
+    const handleChange = (value: string | DateRangeType, type: string) => {
+        if (typeof value !== "string") {
+            if(type === 'register'){
+                setState({
+                    ...state,
+                    dateCreatedFrom: value.startDate?.toString(),
+                    dateCreatedTo: value.endDate?.toString()
+                })
+                return
+            }
+            setState({
+                ...state,
+                birthDateFrom: value.startDate.toString(),
+                birthDateTo: value.endDate.toString()
+            })
+            return
+        }
         setState({
             ...state,
             [type]: value
@@ -106,8 +122,8 @@ const Clients = () => {
             identificationNumber: '',
             birthDateFrom: null,
             birthDateTo: null,
-            dateCreatedFrom: '',
-            dateCreatedTo: '',
+            dateCreatedFrom: format(start, 'yyyy-MM-dd'),
+            dateCreatedTo: format(end, 'yyyy-MM-dd'),
             pageSize: {id: 1, label: '10', value: '10'},
             pageNumber: 1,
             total: 0,
@@ -136,11 +152,11 @@ const Clients = () => {
                     pageSize={state.pageSize}
                     onPageChange={(page) => {
                         setState(prevState => ({...prevState, pageNumber: page}))
-                        getClients({pageNumber:page})
+                        getClients({pageNumber: page})
                     }}
                     onPageSizeChange={(pageSize) => {
                         setState(prevState => ({...prevState, pageSize: pageSize}))
-                        getClients({pageSize:pageSize})
+                        getClients({pageSize: pageSize})
                     }}
                 />
             </div>

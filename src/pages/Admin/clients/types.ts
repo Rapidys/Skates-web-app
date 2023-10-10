@@ -28,3 +28,11 @@ export interface IClientsPayload {
     "PageSize": number,
     "PageNumber":number
 }
+
+export interface IGroupOrders {
+    "TrainerId": number,
+    "OrderDateFrom": string,
+    "OrderDateTo": string,
+    "PageSize": number,
+    "PageNumber":number
+}

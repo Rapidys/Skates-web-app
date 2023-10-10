@@ -60,6 +60,8 @@ const CreateUser: FC<ICreateUser> = ({modals, setOpenModal,getUsers,currentUserI
                             username: values.username,
                             isAdmin: values?.isAdmin,
                             password: values.password,
+                            id:currentUserItem?.id ? currentUserItem?.id : -1000,
+                            isActive:currentUserItem?.isActive
                         }
                         try {
                             services.Admin.updateUsers(data).then(res => {

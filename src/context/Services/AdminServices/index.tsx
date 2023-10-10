@@ -3,7 +3,7 @@ import {IPaymentTypes, IService} from "../../../types/admin";
 import {IUsers} from "../../../types/auth";
 import {ITrainers} from "../../../types";
 import {IOrderPayload} from "../../../pages/Admin/orders/types";
-import {IClientsPayload} from "../../../pages/Admin/clients/types";
+import {IClientsPayload, IGroupOrders} from "../../../pages/Admin/clients/types";
 
 export interface IAdminServices {
     getUsers: () => Promise<AxiosResponse>,
@@ -13,6 +13,7 @@ export interface IAdminServices {
     updatePaymentTypes: (data:IPaymentTypes) => Promise<AxiosResponse>,
     getOrders: (data:IOrderPayload) => Promise<AxiosResponse>,
     getClients: (data:IClientsPayload) => Promise<AxiosResponse>,
+    getGroupOrders: (data:IGroupOrders) => Promise<AxiosResponse>,
 }
 
 interface MyAxios extends AxiosInstance {}
@@ -44,7 +45,11 @@ const AdminServices = (axios: MyAxios): IAdminServices => {
         return axios.post('/admin/GetClients',data)
     }
 
-    return { getUsers,updateUsers,updateService,updateTrainers,updatePaymentTypes,getOrders,getClients }
+    const getGroupOrders = (data:IGroupOrders): Promise<AxiosResponse> => {
+        return axios.post('/admin/GetGroupOrders',data)
+    }
+
+    return { getUsers,updateUsers,updateService,updateTrainers,updatePaymentTypes,getOrders,getClients ,getGroupOrders }
 
 }
 

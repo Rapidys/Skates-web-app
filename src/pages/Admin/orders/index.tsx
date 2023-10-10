@@ -8,12 +8,15 @@ import {IService, IUsers} from "../../../types/admin";
 import {ArrayToOptions} from "../../../utils/helpers/arrayToOptions";
 import {useDebounce} from "../../../utils/hooks/useDebouncedValue";
 import MyPagination from "../../../components/Pagination";
-import { startOfYear, endOfYear, format } from 'date-fns';
+import {startOfYear, endOfYear, format, startOfDay, endOfDay} from 'date-fns';
 import {ca} from "date-fns/locale";
 
 
 const Orders = () => {
 
+    const currentDate = new Date()
+    const start = startOfDay(currentDate)
+    const end = endOfDay(currentDate)
     const {services} = useServices()
     const [orders, setOrders] = useState<IOrder[]>([])
     const [loading, setLoading] = useState(false)
@@ -34,19 +37,17 @@ const Orders = () => {
 
     const [state, setState] = useState<IState>({
         dateCreated: '',
-        startDate: '',
-        endDate: '',
+        startDate: format(start, 'yyyy-MM-dd'),
+        endDate: format(end, 'yyyy-MM-dd'),
         clientIdentifier: '',
     })
     const debouncedValue = useDebounce(state.clientIdentifier, 1000)
-    const currentDate = new Date()
-    const start = startOfYear(currentDate)
-    const end = endOfYear(currentDate)
+
 
     const getOrders = ({pageNumber,pageSize}:{pageNumber?:number,pageSize?:IOptions}) => {
         const data = {
-            StartDate: state.startDate ? state.startDate : format(start, 'yyyy-MM-dd'),
-            EndDate: state.endDate ? state.endDate : format(end, 'yyyy-MM-dd'),
+            StartDate: state.startDate ,
+            EndDate: state.endDate,
             ServiceId: selectedOptions.services?.id ? selectedOptions.services.id : null,
             UserId: selectedOptions.users?.id ? selectedOptions.users.id : null,
             ClientIdentifier: state.clientIdentifier || '',
@@ -83,8 +84,8 @@ const Orders = () => {
     const handleClearFilters = () => {
         setState({
             dateCreated: '',
-            startDate: '',
-            endDate: '',
+            startDate: format(start, 'yyyy-MM-dd'),
+            endDate: format(end, 'yyyy-MM-dd'),
             clientIdentifier: '',
         })
         setSelectedOptions({
@@ -130,6 +131,15 @@ const Orders = () => {
     }
 
     const handleChange = (value, type) => {
+        if (typeof value !== "string") {
+            setState({
+                ...state,
+                startDate: value.startDate,
+                endDate: value.endDate
+            })
+            return
+        }
+
         setState({
             ...state,
             [type]: value

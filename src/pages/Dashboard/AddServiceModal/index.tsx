@@ -258,6 +258,7 @@ const AddServiceModal: FC<IAddService> = ({openModal, handleCloseModal, callback
                         ClientId,
                         Services: selectedValues.services,
                         PaymentType: selectedValues.paymentTypes?.id,
+                        discount:+discount
                     }
                     services.Dashboard.makeOrder(data).then(res => {
                         ClearInfo()

@@ -8,6 +8,7 @@ module.exports = {
         '{src,pages,components,app}/**/*!(*.stories|*.spec).{ts,tsx,html}'
     ),
     'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}',
+    './node_modules/react-tailwindcss-datepicker/dist/index.esm.js',
     ...createGlobPatternsForDependencies(__dirname),
   ],
   theme: {

@@ -1,6 +1,8 @@
 import React, {FC} from 'react';
 import {Table} from "flowbite-react";
 import {TableColumn} from "../../types";
+import {faFrown, faSmileBeam} from "@fortawesome/free-solid-svg-icons";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 
 
 interface IMyTable {
@@ -11,8 +13,8 @@ interface IMyTable {
     onChange?: (e: any) => void
     onChangeHead?: (e: any) => void,
     onRowClick?: (item: any) => void,
-    loading?:boolean
-    headCheckboxValue?:boolean
+    loading?: boolean
+    headCheckboxValue?: boolean
 }
 
 const FakeDate = () => {
@@ -42,60 +44,85 @@ const FakeCell = ({columnData}) => {
 }
 
 
-const MyTable: FC<IMyTable> = ({columnData, rowData, onCellClick, iterationKey,onRowClick, onChange,loading, onChangeHead, headCheckboxValue,...props}) => {
+const MyTable: FC<IMyTable> = ({
+                                   columnData,
+                                   rowData,
+                                   onCellClick,
+                                   iterationKey,
+                                   onRowClick,
+                                   onChange,
+                                   loading,
+                                   onChangeHead,
+                                   headCheckboxValue,
+                                   ...props
+                               }) => {
 
     return (
         <div className={'overflow-x-scroll'}>
             <Table className={'table mb-0 p-5'} hoverable>
-                <Table.Head>
-                    {
-                        columnData ? (
-                            columnData.map((item, index) => {
-                                return (
-                                    <Table.HeadCell key={index}>
-                                        {item.head}
-                                        {item.renderTitle && item.renderTitle(item, props, onChangeHead,headCheckboxValue)}
-                                    </Table.HeadCell>
+                {!loading && rowData?.length !== 0 && (
+                    <Table.Head>
+                        {
+                            columnData ? (
+                                columnData.map((item, index) => {
+                                    return (
+                                        <Table.HeadCell key={index}>
+                                            {item.head}
+                                            {item.renderTitle && item.renderTitle(item, props, onChangeHead, headCheckboxValue)}
+                                        </Table.HeadCell>
 
-                                )
-                            })
-                        ) : (
-                            <FakeDate/>
-                        )
+                                    )
+                                })
+                            ) : (
+                                <FakeDate/>
+                            )
 
-                    }
-                </Table.Head>
+                        }
+                    </Table.Head>
+                )}
+
                 <Table.Body className="divide-y">
                     {!loading ? (
-                        rowData && rowData.map((item, index) => {
-                            const keyRow = iterationKey ? item[iterationKey] : item?.id
-                            return <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800"
-                                              key={keyRow}
-                                              onClick={() => onRowClick && onRowClick(item)}
-                            >
-                                {columnData.map((title, i) => {
-                                    return (
-                                        <Table.Cell
-                                            className="whitespace-nowrap font-medium text-gray-900 dark:text-white cursor-pointer"
-                                            key={keyRow + title.id}
-                                            onClick={(e) => {
-                                                if (title.type) {
-                                                    e.stopPropagation()
-                                                    onCellClick(item, title, props)
-                                                }
-                                            }}
-                                        >
-                                            {title.type === 'bool' ?
-                                                item[title.dataKey] === true ? 'კი' : 'არა' : (
-                                                    item[title.dataKey]
-                                                )}
-                                            {title.render && title.render(item, props, onChange)}
-                                        </Table.Cell>
-                                    )
-                                })}
-                            </Table.Row>
+                        rowData?.length === 0 ? (
+                            <div className={'flex-col justify-center text-center mt-6'}>
+                                <div className={'mb-4'}>
+                                    <FontAwesomeIcon icon={faFrown} className={'text-6xl text-gray-600'}/>
+                                </div>
+                                <div className={'text-2xl text-center font-light italic'}>
+                                    მონაცემები ვერ მოიძებნა...
+                                </div>
+                            </div>
+                        ) : (
+                            rowData && rowData.map((item, index) => {
+                                // const keyRow = iterationKey ? item[iterationKey] : item?.id
+                                return <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800"
+                                                  key={index}
+                                                  onClick={() => onRowClick && onRowClick(item)}
+                                >
+                                    {columnData.map((title, i) => {
+                                        return (
+                                            <Table.Cell
+                                                className="whitespace-nowrap font-medium text-gray-900 dark:text-white cursor-pointer"
+                                                key={index + title.id}
+                                                onClick={(e) => {
+                                                    if (title.type) {
+                                                        e.stopPropagation()
+                                                        onCellClick(item, title, props)
+                                                    }
+                                                }}
+                                            >
+                                                {title.type === 'bool' ?
+                                                    item[title.dataKey] === true ? 'კი' : 'არა' : (
+                                                        item[title.dataKey]
+                                                    )}
+                                                {title.render && title.render(item, props, onChange)}
+                                            </Table.Cell>
+                                        )
+                                    })}
+                                </Table.Row>
+                            })
+                        )
 
-                        })
                     ) : (
                         <FakeCell columnData={columnData}/>
                     )}

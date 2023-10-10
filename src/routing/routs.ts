@@ -12,6 +12,7 @@ import AdminLayout from "../layout/admin/index";
 import OrderLogs from "../pages/Dashboard/OrderLogs";
 import Orders from "../pages/Admin/orders";
 import Clients from "../pages/Admin/clients";
+import Groups from "../pages/Admin/groups";
 
 
 export const PublicRoutes: IRoute[] = [
@@ -28,5 +29,6 @@ export const PrivateRoutes : IRoute[] = [
     {id:8,name:'referenceManage', path:'/admin/referenceManage',component:Admin,layout:AdminLayout},
     {id:9,name:'orders', path:'/admin/orders',component:Orders,layout:AdminLayout},
     {id:10,name:'clients', path:'/admin/clients',component:Clients,layout:AdminLayout},
+    {id:11,name:'groups', path:'/admin/groups',component:Groups,layout:AdminLayout},
 ]
 
