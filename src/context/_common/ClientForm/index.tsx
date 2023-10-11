@@ -1,14 +1,13 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC} from 'react';
 import Card from "../../../components/Cards/Card";
 import * as yup from "yup";
 import {Formik} from "formik";
 import Button from "../../../components/Button";
-import DatePicker from "../../../components/fields/DatePicker";
 import Loader from "../../../components/Loader";
-import {format} from "date-fns";
-import {IClientInfo} from "../../../pages/Profile";
+import {IClientInfo} from "../../../pages/Dashboard/Profile";
 import {useAccount} from "../../AccountContext";
 import Input from '../../../components/fields/input'
+import MyDatePicker from "../../../components/fields/DatePickerV2";
 
 interface ICreateAccount {
     ClientInfo?: IClientInfo,
@@ -16,12 +15,17 @@ interface ICreateAccount {
     isReadOnly?: boolean,
     onSubmit: (data: any) => void,
     cardNumber?: string,
-    labelClassNames?:string,
+    labelClassNames?: string,
 }
 
-const ClientForm: FC<ICreateAccount> = ({ClientInfo, loading = false, onSubmit, isReadOnly, cardNumber,labelClassNames}) => {
-
-    const [date, setDate] = useState<any>(format(new Date(), 'yyyy-MM-dd'))
+const ClientForm: FC<ICreateAccount> = ({
+                                            ClientInfo,
+                                            loading = false,
+                                            onSubmit,
+                                            isReadOnly,
+                                            cardNumber,
+                                            labelClassNames
+                                        }) => {
 
 
     const validSchema = () => {
@@ -29,6 +33,7 @@ const ClientForm: FC<ICreateAccount> = ({ClientInfo, loading = false, onSubmit, 
             firstName: yup.string().required('აუცილებელი ველი'),
             lastName: yup.string().required('აუცილებელი ველი'),
             documentNumber: yup.string(),
+            startDate: yup.string().required('აუცილებელი ველი'),
             phoneNumber: yup
                 .number()
                 .typeError('არავალიდური ნომერი')
@@ -38,14 +43,6 @@ const ClientForm: FC<ICreateAccount> = ({ClientInfo, loading = false, onSubmit, 
 
 
     const {ClientId, CheckAccount, Clients} = useAccount()
-
-
-    useEffect(() => {
-        if (ClientInfo) {
-            setDate(ClientInfo?.birthDate)
-        }
-    }, [ClientInfo]);
-
 
     if (loading) {
         return <Loader/>
@@ -60,6 +57,8 @@ const ClientForm: FC<ICreateAccount> = ({ClientInfo, loading = false, onSubmit, 
                 phoneNumber: ClientInfo?.mobile || '',
                 documentNumber: ClientInfo?.identificationNumber || '',
                 clientInfoCardNumber: cardNumber || '',
+                startDate: ClientInfo?.birthDate || null,
+                endDate: ClientInfo?.birthDate || null
             }}
             validationSchema={validSchema}
             onSubmit={(values => {
@@ -70,7 +69,7 @@ const ClientForm: FC<ICreateAccount> = ({ClientInfo, loading = false, onSubmit, 
                     LastName: values.lastName,
                     Mobile: values.phoneNumber,
                     IdentificationNumber: values.documentNumber,
-                    BirthDate: date,
+                    BirthDate: values.startDate,
                 }
                 onSubmit(data)
             })}
@@ -85,7 +84,8 @@ const ClientForm: FC<ICreateAccount> = ({ClientInfo, loading = false, onSubmit, 
                     handleBlur,
                     handleSubmit,
                     isValid,
-                    dirty
+                    dirty,
+                    setFieldValue
                 }) => {
                 return <Card className={'px-4'}>
                     {!isReadOnly ? (
@@ -96,7 +96,7 @@ const ClientForm: FC<ICreateAccount> = ({ClientInfo, loading = false, onSubmit, 
                                 onChange={handleChange}
                                 name={'clientInfoCardNumber'}
                                 type={'text'}
-                                textColor = {labelClassNames}
+                                textColor={labelClassNames}
                             />
                         </div>
                     ) : (
@@ -107,7 +107,7 @@ const ClientForm: FC<ICreateAccount> = ({ClientInfo, loading = false, onSubmit, 
                                 readOnly={true}
                                 name={'firstName'}
                                 type={'text'}
-                                textColor = {labelClassNames}
+                                textColor={labelClassNames}
                             />
                         </div>
                     )}
@@ -122,7 +122,7 @@ const ClientForm: FC<ICreateAccount> = ({ClientInfo, loading = false, onSubmit, 
                             isValid={!(errors.firstName && touched.firstName)}
                             error={errors?.firstName}
                             type={'text'}
-                            textColor = {labelClassNames}
+                            textColor={labelClassNames}
                         />
                     </div>
                     <div className={'mb-2'}>
@@ -135,15 +135,19 @@ const ClientForm: FC<ICreateAccount> = ({ClientInfo, loading = false, onSubmit, 
                             isValid={!(errors.lastName && touched.lastName)}
                             error={errors.lastName}
                             type={'text'}
-                            textColor = {labelClassNames}
+                            textColor={labelClassNames}
                         />
                     </div>
                     <div className={'mb-2'}>
-                        <DatePicker
+                        <MyDatePicker
+                            value={({startDate:values.startDate,endDate:values.endDate}) as any}
+                            handleChange={(newDate) => {
+                                setFieldValue("startDate", newDate.startDate)
+                                setFieldValue("endDate", newDate.endDate)
+                            }}
                             label={'დაბ.თარიღი'}
-                            date={new Date(date)}
-                            setDate={setDate}
-                            textColor={labelClassNames}
+                            isValid = {isValid}
+                            error={errors.startDate as string}
                         />
                     </div>
                     <div className={'mb-2'}>
@@ -155,7 +159,7 @@ const ClientForm: FC<ICreateAccount> = ({ClientInfo, loading = false, onSubmit, 
                             name={'phoneNumber'}
                             isValid={!(errors.phoneNumber && touched.phoneNumber)}
                             error={errors.phoneNumber}
-                            textColor = {labelClassNames}
+                            textColor={labelClassNames}
                             type={'text'}
                         />
                     </div>
@@ -169,7 +173,7 @@ const ClientForm: FC<ICreateAccount> = ({ClientInfo, loading = false, onSubmit, 
                             isValid={!(errors.documentNumber && touched.documentNumber)}
                             error={errors.documentNumber}
                             type={'text'}
-                            textColor = {labelClassNames}
+                            textColor={labelClassNames}
                         />
                     </div>
                     <div className={'mt-4'}>

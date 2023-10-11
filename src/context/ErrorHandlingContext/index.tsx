@@ -4,7 +4,7 @@ import {Toast} from "flowbite-react";
 
 const ErrorHandling = React.createContext({
     error: {},
-    handleSetError: (message: string) => {
+    handleSetError: (message: string,type:string) => {
     }
 })
 
@@ -14,17 +14,18 @@ interface IErrorHandlingContextProvider {
 
 const ErrorHandlingContextProvider: FC<IErrorHandlingContextProvider> = ({children}) => {
 
-    const [error, setError] = useState({type: 'error', message: ''})
+    const [error, setError] = useState({type: '', message: ''})
 
-    const handleSetError = (message: string) => {
+    const handleSetError = (message: string,type = 'error') => {
         setError({
             ...error,
+            type,
             message
         })
     }
 
     const handleHide = () => {
-        setError({type: 'error', message: ''})
+        setError({type: '', message: ''})
     }
 
 

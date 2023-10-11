@@ -90,10 +90,21 @@ const Groups = () => {
 
     }
 
+    const handleClearFilters = () => {
+        setState({
+            trainer: null,
+            OrderDateFrom: format(start, 'yyyy-MM-dd'),
+            OrderDateTo: format(end, 'yyyy-MM-dd'),
+            PageNumber: 1,
+            PageSize: {id:1,value:'10',label:'10'},
+            total: 0,
+        })
+    }
+
     return (
         <div className={'py-4'}>
             <Filter
-                handleClearFilters={() => console.log('asd')}
+                handleClearFilters={handleClearFilters}
                 trainers={trainers}
                 state={state}
                 handleChangeTrainer={handleChangeTrainer}

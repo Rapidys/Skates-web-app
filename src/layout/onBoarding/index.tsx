@@ -25,7 +25,7 @@ const OnBoardingLayout: FC<IOnBoarding> = ({children}) => {
 
     return (
         <div className={'w-screen h-screen bg-custom_dark flex justify-center items-center'}>
-            {location.pathname === '/findAccount' && (
+            {(location.pathname === '/findAccount' || location.pathname === '/changePassword') && (
                 <div
                     className={'absolute top-5 left-5 text-2xl text-white cursor-pointer hover:text-custom_loading'}
                     onClick={handleLogout}
@@ -42,7 +42,7 @@ const OnBoardingLayout: FC<IOnBoarding> = ({children}) => {
                 </div>
 
             )}
-            {isAdmin && location.pathname.includes('/findAccount') && (
+            {isAdmin && (location.pathname.includes('/findAccount') || location.pathname.includes('/changePassword')) && (
                 <div className={'absolute top-5 right-5'} >
                     <div className={'flex items-center'}>
                         <div className={'text-white mr-4'}>

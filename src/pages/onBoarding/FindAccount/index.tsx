@@ -4,14 +4,15 @@ import Input from "../../../components/fields/input";
 import Button from "../../../components/Button";
 import {useAuth} from "../../../context/AuthContext";
 import {useAccount} from "../../../context/AccountContext";
-import {faSignOutAlt} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {useNavigate} from "react-router-dom";
 
 const FindAccount = () => {
 
     const [AccountId, setAccountId] = useState('')
     const AccountIdRef = useRef<HTMLInputElement>(null);
     const {isLoggedIn} = useAuth()
+
+    const navigate = useNavigate()
 
     const {CheckAccount} = useAccount()
 
@@ -20,7 +21,7 @@ const FindAccount = () => {
         if (isLoggedIn) {
             setTimeout(() => {
                 AccountIdRef.current?.focus()
-            },600)
+            }, 600)
         }
     }, [isLoggedIn])
 
@@ -39,16 +40,23 @@ const FindAccount = () => {
                             ref={AccountIdRef}
                             onChange={(e) => setAccountId(e.target.value)}
                             onBlur={() => AccountIdRef.current?.focus()}
-                            withEye = {true}
-                            onEnterPress = {() => AccountId && CheckAccount(AccountId)}
+                            withEye={true}
+                            onEnterPress={() => AccountId && CheckAccount(AccountId)}
                         />
-                        <Button
-                            onClick={() => CheckAccount(AccountId)}
-                            className = {'mt-4'}
-                            disabled = {!AccountId}
-                        >
-                            შესვლა
-                        </Button>
+                        <div className={'flex justify-between items-center'}>
+                            <Button
+                                onClick={() => CheckAccount(AccountId)}
+                                className={'mt-4'}
+                                disabled={!AccountId}
+                            >
+                                შესვლა
+                            </Button>
+
+                            <p className={'mt-2 text-white text-sm cursor-pointer'}
+                               onClick={() => navigate('/changePassword')}
+                            >პაროლის ცვლილება</p>
+                        </div>
+
                     </div>
 
                 </div>

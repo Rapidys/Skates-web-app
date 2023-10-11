@@ -56,10 +56,6 @@ const Header:FC<IHeader> = ({MenuItems}) => {
     ]
     const itemsForAdminRoute = [
         {
-            id: 4, title: 'ადმინისტრირება', onClick: () => navigate('/admin'), icon: <FontAwesomeIcon icon={faUserEdit}
-                                                                                                      className={'hover:text-opacity-100'}/>
-        },
-        {
             id: 3, title: 'ახალი მომხმარებლის გვერდი', onClick: () => navigate('/findAccount'), icon: <FontAwesomeIcon
                 icon={faUserSecret} className={'hover:text-opacity-100'}/>
         },

@@ -8,7 +8,7 @@ import DatePicker from "../../../components/fields/DatePicker";
 import {useNavigate} from "react-router-dom";
 import {useServices} from "../../../context/Services/ServiceContextProvider";
 import {useAccount} from "../../../context/AccountContext";
-import {IClientInfo} from "../../Profile";
+import {IClientInfo} from "../../Dashboard/Profile";
 import Loader from "../../../components/Loader";
 import {format} from "date-fns";
 import ClientForm from "../../../context/_common/ClientForm";

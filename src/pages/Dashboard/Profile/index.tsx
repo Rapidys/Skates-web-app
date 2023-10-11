@@ -1,11 +1,11 @@
 import React, {FC, useEffect, useState} from 'react';
-import {useServices} from "../../context/Services/ServiceContextProvider";
-import {useAccount} from "../../context/AccountContext";
-import ClientForm from "../../context/_common/ClientForm";
+import {useServices} from "../../../context/Services/ServiceContextProvider";
+import {useAccount} from "../../../context/AccountContext";
+import ClientForm from "../../../context/_common/ClientForm";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeft} from "@fortawesome/free-solid-svg-icons";
 import {useNavigate} from "react-router-dom";
-import Button from '../../components/Button'
+import Button from '../../../components/Button'
 
 
 export interface IClientInfo {

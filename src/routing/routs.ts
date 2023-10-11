@@ -6,13 +6,14 @@ import CreateAccount from "../pages/onBoarding/CreateAccount";
 import OnBoardingLayout from "../layout/onBoarding";
 import Dashboard from "../pages/Dashboard";
 import Layout from "../layout/dashboard";
-import Profile from "../pages/Profile";
+import Profile from "../pages/Dashboard/Profile";
 import ChooseUser from "../pages/onBoarding/ChooseUser";
 import AdminLayout from "../layout/admin/index";
 import OrderLogs from "../pages/Dashboard/OrderLogs";
 import Orders from "../pages/Admin/orders";
 import Clients from "../pages/Admin/clients";
 import Groups from "../pages/Admin/groups";
+import ChangePassword from "../pages/onBoarding/ChangePassword";
 
 
 export const PublicRoutes: IRoute[] = [
@@ -21,6 +22,7 @@ export const PublicRoutes: IRoute[] = [
 
 export const PrivateRoutes : IRoute[] = [
     {id:2,name:'findAccount', path:'/findAccount',component:FindAccount,layout:OnBoardingLayout},
+    {id:13,name:'changePassword', path:'/changePassword',component:ChangePassword,layout:OnBoardingLayout},
     {id:3,name:'createAccount', path:'/createAccount',component:CreateAccount,layout:OnBoardingLayout},
     {id:4,name:'chooseUser', path:'/chooseUser',component:ChooseUser,layout:OnBoardingLayout},
     {id:5,name:'dashboard', path:'/dashboard',component:Dashboard,layout:Layout},

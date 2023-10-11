@@ -10,7 +10,7 @@ import {useServices} from "../../../../context/Services/ServiceContextProvider";
 interface ICreateUser {
     modals: any,
     setOpenModal: any,
-    getUsers:() => void,
+    getUsers?:() => void,
     currentUserItem:any,
     setCurrentUserItem:any
 }
@@ -65,7 +65,9 @@ const CreateUser: FC<ICreateUser> = ({modals, setOpenModal,getUsers,currentUserI
                         }
                         try {
                             services.Admin.updateUsers(data).then(res => {
-                                getUsers()
+                                if(getUsers){
+                                    getUsers()
+                                }
                                 handleCloseModal()
                             })
                         }catch (e) {
