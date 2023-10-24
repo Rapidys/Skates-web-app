@@ -7,7 +7,7 @@ export interface ITableHead {
 export interface IPaymentTypes {
     "id"?: number,
     "displayName"?: string
-    "isActive": boolean
+    "isActive"?: boolean
 }
 
 export interface ITrainers {

@@ -8,8 +8,7 @@ import {IService, IUsers} from "../../../types/admin";
 import {ArrayToOptions} from "../../../utils/helpers/arrayToOptions";
 import {useDebounce} from "../../../utils/hooks/useDebouncedValue";
 import MyPagination from "../../../components/Pagination";
-import {startOfYear, endOfYear, format, startOfDay, endOfDay} from 'date-fns';
-import {ca} from "date-fns/locale";
+import {format, startOfDay, endOfDay} from 'date-fns';
 
 
 const Orders = () => {

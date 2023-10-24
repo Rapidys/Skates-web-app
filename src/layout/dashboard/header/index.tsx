@@ -1,11 +1,10 @@
 import React, {FC, useEffect, useState} from 'react';
-import MenuModal from "../../../components/Modals/MenuModal";
 import {
     faBars,
     faHome,
     faSignOutAlt,
     faUser,
-    faUserEdit, faUsersCog,
+    faUsersCog,
     faUserSecret,
     faXmark
 } from "@fortawesome/free-solid-svg-icons";
@@ -15,6 +14,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {useAccount} from "../../../context/AccountContext";
 import IceSkating from '../../../assets/skating.jpg'
 import NavMenu from "../../../components/NavMenu";
+import MyDropDown from "../../../components/dropdown";
 
 
 interface IHeader {
@@ -39,39 +39,35 @@ const Header:FC<IHeader> = ({MenuItems}) => {
 
     const clientItems = [
         {
-            id: 2, title: 'პროფილი', onClick: () => navigate('/profile'), icon: <FontAwesomeIcon icon={faUser}
-                                                                                                 className={'hover:text-opacity-100'}/>
+            id: 2, label: 'პროფილი', action: () => navigate('/profile'), icon:faUser
         },
         {
-            id: 5, title: 'მთავარი გვერდი', onClick: () => navigate('/dashboard'), icon: <FontAwesomeIcon icon={faHome}
-                                                                                                          className={'hover:text-opacity-100'}/>
+            id: 5, label: 'მთავარი გვერდი', action: () => navigate('/dashboard'), icon: faHome
         },
         {
-            id: 13, title: 'ახალი მომხმარებლის გვერდი', onClick: () => {
+            id: 13, label: 'ახალი მომხმარებლის გვერდი', action: () => {
                 handleClear()
                 navigate('/findAccount')
-            }, icon: <FontAwesomeIcon
-                icon={faUserSecret} className={'hover:text-opacity-100'}/>
+            }, icon:faUserSecret
         }
     ]
     const itemsForAdminRoute = [
         {
-            id: 3, title: 'ახალი მომხმარებლის გვერდი', onClick: () => navigate('/findAccount'), icon: <FontAwesomeIcon
-                icon={faUserSecret} className={'hover:text-opacity-100'}/>
+            id: 3, label: 'ახალი მომხმარებლის გვერდი', action: () => navigate('/findAccount'), icon: faUserSecret
         },
-        {id: 1, title: 'გასვლა', onClick: handleLogout, icon: <FontAwesomeIcon icon={faSignOutAlt}/>},
+        {id: 1, label: 'გასვლა', action: handleLogout, icon: faSignOutAlt},
     ]
 
     const checkItems = location.pathname.toLowerCase().includes('admin') ? itemsForAdminRoute : clientItems
 
 
-    const [items, setItems] = useState(checkItems)
+    const [items, setItems] = useState<any[]>(checkItems)
 
     useEffect(() => {
         if (Clients?.length > 1) {
             const newItems = [...items]
             newItems.push({
-                id: 3, title: 'მომხმარებლის შეცვლა', onClick: () => navigate('/chooseUser'), icon: <FontAwesomeIcon
+                id: 3, label: 'მომხმარებლის შეცვლა', action: () => navigate('/chooseUser'), icon: <FontAwesomeIcon
                     icon={faUsersCog} className={'hover:text-opacity-100'}/>,
             },)
             setItems(newItems)
@@ -135,13 +131,18 @@ const Header:FC<IHeader> = ({MenuItems}) => {
                         }
                     </div>
 
-                    <MenuModal items={items}>
-                        <div
-                            className={'w-10 h-10 rounded-full bg-custom_dark cursor-pointer flex items-center justify-center'}>
-                            <FontAwesomeIcon icon={faUser} className={`text-white`}/>
-                        </div>
-                    </MenuModal>
-
+                    <MyDropDown
+                        label=""
+                        renderTrigger={() => (
+                            <div className={'flex items-center cursor-pointer'}>
+                                <div
+                                    className={'w-10 h-10 rounded-full bg-custom_dark cursor-pointer flex items-center justify-center'}>
+                                    <FontAwesomeIcon icon={faUser} className={`text-white`}/>
+                                </div>
+                            </div>
+                        )}
+                        items = {items}
+                    />
                 </div>
             </div>
 

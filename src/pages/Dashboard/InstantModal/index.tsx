@@ -6,6 +6,7 @@ import Select from "react-select";
 import {IServices} from "../../../types/Dashboard";
 import { useNavigate } from 'react-router-dom';
 import Input from "../../../components/fields/input";
+import MySelect from "../../../components/fields/select";
 
 
 interface IInstantModal {
@@ -128,13 +129,11 @@ const InstantModal: FC<IInstantModal> = ({openModal, handleCloseModal, onYes, in
 
 
                     <div className={'mt-5 w-1/2'}>
-                        <Select
+                        <MySelect
                             options={paymentTypes}
                             value={chosenType.label ? chosenType : ''}
                             placeholder={'გადახდის მეთოდი'}
-                            onChange={(value) => setChosenType(value)}
-                            menuPortalTarget={document.body}
-                            styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+                            onSelectChange={(value) => setChosenType(value)}
                         />
                     </div>
                 </div>

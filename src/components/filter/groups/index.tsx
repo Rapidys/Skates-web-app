@@ -7,6 +7,7 @@ import {IState} from "../../../pages/Admin/groups/types";
 import {IOptions} from "../../../pages/Admin/orders/types";
 import RangeDatePicker from "../../fields/RangeDatePicker";
 import {DateRangeType} from "react-tailwindcss-datepicker";
+import MySelect from "../../fields/select";
 
 interface IFilter {
     handleClearFilters:() => void,
@@ -31,12 +32,11 @@ const Filter:FC<IFilter> = ({handleClearFilters,trainers,state,handleChangeTrain
 
                 <div className={'w-1/3'}>
                     <div className={'text-gray-500 mb-2 text-sm font-light'}>ჯგუფები / ტრენერები</div>
-                    <Select
+                    <MySelect
                         options={trainers}
                         value = {state.trainer}
-                        onChange = {handleChangeTrainer}
+                        onSelectChange = {handleChangeTrainer}
                         placeholder={'აირჩიეთ ჯგუფი / ტრენერი'}
-                        className={'text-sm'}
                     />
 
                 </div>

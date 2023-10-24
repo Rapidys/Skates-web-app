@@ -33,3 +33,19 @@ body, html {
   border-radius: 20px;       /* roundness of the scroll thumb */
   border: 1px solid #cbcbcb;  /* creates padding around scroll thumb */
 }
+
+
+.rdp-day:hover{
+  background-color: #fae8ff !important;
+}
+.rdp-day{
+  font-size: 12px !important;
+  font-weight: normal !important;
+}
+.rdp-head_cell{
+  color: #6b7280 !important;
+  font-weight: normal !important;
+}
+.rdp-head_cell:first-letter{
+  font-size: larger;
+}

@@ -1,11 +1,11 @@
-import React, {FC, InputHTMLAttributes, RefObject, useState} from 'react';
+import React, {FC, InputHTMLAttributes, useState} from 'react';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faEye, faEyeSlash} from '@fortawesome/free-solid-svg-icons';
-
+import calendar from '../../../assets/calendar.svg'
 
 interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
     label?: string,
-    ref?: any; // Include the 'ref' prop here
+    ref?: any;
     isValid?:boolean,
     error?:string,
     labelClassName?:string,
@@ -16,9 +16,11 @@ interface IInputProps extends InputHTMLAttributes<HTMLInputElement> {
     maxLength?:number,
     withPercent?:boolean,
     inputClassName?:string,
+    withCalendar?:boolean
+    onCalendarClick?:() => void
 }
 
-const Input: FC<IInputProps> = React.forwardRef(({label,maxLength,withPercent,textColor,isValid= true,withEye,error,labelClassName,onEnterPress ,renderIcon,inputClassName,...props},ref) => {
+const Input: FC<IInputProps> = React.forwardRef(({label,maxLength,withCalendar,withPercent,textColor,isValid= true,withEye,error,onCalendarClick,labelClassName,onEnterPress ,renderIcon,inputClassName,...props},ref) => {
 
     const [toggleEye,setToggleEye] = useState(withEye)
 
@@ -64,6 +66,13 @@ const Input: FC<IInputProps> = React.forwardRef(({label,maxLength,withPercent,te
                     >
                         {'%'}
 
+                    </div>
+                )}
+                {withCalendar && (
+                    <div className={'absolute right-4 cursor-pointer'} style = {{top:'50%',transform:'translateY(-50%)'}}
+                         onClick = {onCalendarClick}
+                    >
+                        <img src={calendar} alt="#" width={20} height = {20}/>
                     </div>
                 )}
                 {renderIcon && renderIcon()}

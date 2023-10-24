@@ -4,7 +4,7 @@ import {PrivateRoutes, PublicRoutes} from './routing/routs'
 import {IRoute} from "./routing/types";
 import {useServices} from "./context/Services/ServiceContextProvider";
 import PrivateRoute from "./components/PrivateRoute";
-
+import 'react-day-picker/dist/style.css';
 const App = () => {
 
     const {token} = useServices()

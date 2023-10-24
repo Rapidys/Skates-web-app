@@ -26,7 +26,7 @@ const RangeDatePicker:FC<IRangeDatePicker> = ({startDate,endDate,onChange,label,
                 value={{startDate,endDate}}
                 onChange={onChange}
                 inputId = {'labelId'}
-                inputClassName={`w-full disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 text-gray-900 font-light focus:border-cyan-500 focus:ring-cyan-500 text-sm border-gray-300 rounded-md`}
+                inputClassName={`transition-all duration-300 w-full outline-0 disabled:cursor-not-allowed disabled:opacity-50 bg-gray-50 text-gray-900 font-light focus:ring disabled:opacity-40 focus:border-fuchsia-500 focus:ring-fuchsia-500/20 text-sm border-gray-300 rounded-md`}
                 primaryColor={"fuchsia"}
                 showShortcuts={true}
                 {...props}

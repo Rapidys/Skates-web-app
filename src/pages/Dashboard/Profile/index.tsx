@@ -6,6 +6,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faArrowLeft} from "@fortawesome/free-solid-svg-icons";
 import {useNavigate} from "react-router-dom";
 import Button from '../../../components/Button'
+import MySelect from "../../../components/fields/select";
 
 
 export interface IClientInfo {
@@ -73,9 +74,8 @@ const Profile: FC<IProfile> = ({open, setOpen}) => {
                     onSubmit={onSubmit}
                     isReadOnly={false}
                     cardNumber={state?.cardNumber}
-                    labelClassNames = {'bg-gray-500'}
+                    labelClassNames = {'gray-500'}
                 />
-
             </div>
             <div className={'fixed bottom-0 right-0 p2 w-full shadow  flex justify-between items-center px-3 py-2 z-10'}>
                     <Button className={'mr-2'}

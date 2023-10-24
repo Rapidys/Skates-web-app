@@ -51,10 +51,6 @@ const FindAccount = () => {
                             >
                                 შესვლა
                             </Button>
-
-                            <p className={'mt-2 text-white text-sm cursor-pointer'}
-                               onClick={() => navigate('/changePassword')}
-                            >პაროლის ცვლილება</p>
                         </div>
 
                     </div>

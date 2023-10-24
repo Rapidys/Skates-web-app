@@ -4,16 +4,17 @@ import Select from "react-select";
 import {IService, IUsers} from "../../../types/admin";
 import {Card, Table, Tooltip} from "flowbite-react";
 import Input from "../../fields/input";
-import {IState} from "../../../pages/Admin/orders/types";
+import {IOptions, IState} from "../../../pages/Admin/orders/types";
 import {format} from "date-fns";
 import {faMoneyBillWheat, faTrash} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import MyModal from "../../Modals";
 import RangeDatePicker from "../../fields/RangeDatePicker";
 import {DateRangeType} from "react-tailwindcss-datepicker";
+import MySelect from "../../fields/select";
 
 interface IFilter {
-    handleOptionChange: (options: IService, type: string) => void,
+    handleOptionChange: (options: IService | IOptions | IOptions[], type: string) => void,
     productServices: IService[],
     selectedService: IService,
     selectedUser: IUsers,
@@ -107,23 +108,11 @@ const Filter: FC<IFilter> = ({
                             <div className={'w-full'}>
                                 <div className={'text-gray-500 mb-2 text-sm font-light'}>სერვისები</div>
 
-                                <Select
+                                <MySelect
                                     options={productServices}
                                     value={selectedService}
-                                    menuPortalTarget={document.body}
                                     placeholder={'აირჩიეთ სერვისი'}
-                                    styles={{
-                                        menuPortal: base => (
-                                            {...base, zIndex: 9999}
-                                        ),
-                                        control: (baseStyles, state) => ({
-                                            ...baseStyles,
-                                            borderColor: state.isFocused ? '#14b8a6' : '#cbd5e1',
-                                            backgroundColor: '#f8fafc',
-                                            color: '#0f172a'
-                                        })
-                                    }}
-                                    onChange={(option) => handleOptionChange(option, 'services')}
+                                    onSelectChange={(option) => handleOptionChange(option, 'services')}
                                 />
                             </div>
 
@@ -145,21 +134,11 @@ const Filter: FC<IFilter> = ({
                     <div className={'w-full'}>
                         <h2 className={'text-gray-500 mb-2 text-sm font-light'}>ოპერატორები</h2>
 
-                        <Select
+                        <MySelect
                             options={users}
                             value={selectedUser}
-                            menuPortalTarget={document.body}
                             placeholder={'აირჩიეთ ოპერატორი'}
-                            styles={{
-                                menuPortal: base => ({...base, zIndex: 9999}),
-                                control: (baseStyles, state) => ({
-                                    ...baseStyles,
-                                    borderColor: state.isFocused ? '#14b8a6' : '#cbd5e1',
-                                    backgroundColor: '#f8fafc',
-                                    color: '#0f172a'
-                                })
-                            }}
-                            onChange={(option: any) => handleOptionChange(option, 'users')}
+                            onSelectChange={(option: any) => handleOptionChange(option, 'users')}
                         />
                     </div>
                 </div>

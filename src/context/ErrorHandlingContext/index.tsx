@@ -2,7 +2,7 @@ import React, {FC, useContext, useEffect, useState} from 'react';
 import {Toast} from "flowbite-react";
 
 
-const ErrorHandling = React.createContext({
+export const ErrorHandling = React.createContext({
     error: {},
     handleSetError: (message: string,type:string) => {
     }

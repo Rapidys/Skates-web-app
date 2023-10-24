@@ -14,6 +14,7 @@ import CreateUser from './createUser';
 import CreatePaymentType from "./createPaymentType";
 import CreateTrainers from "./createTrainers";
 import {IModal} from "./types";
+import MySelect from "../../../components/fields/select";
 
 const Admin = () => {
 
@@ -259,8 +260,10 @@ const Admin = () => {
 
 
     return (
-        <div className={'px-2 py-2'}>
-            <Select options={referenceOptions} onChange={handleReferenceChange} value={currentReference}/>
+        <div className={'px-2 py-4'}>
+            <div className={'mt-2 mb-2'}>
+                <MySelect options={referenceOptions} onSelectChange={handleReferenceChange} value={currentReference}/>
+            </div>
 
             <div className={'mb-12'}>
                 <MyTable

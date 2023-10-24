@@ -26,7 +26,6 @@ export const PrivateRoutes : IRoute[] = [
     {id:3,name:'createAccount', path:'/createAccount',component:CreateAccount,layout:OnBoardingLayout},
     {id:4,name:'chooseUser', path:'/chooseUser',component:ChooseUser,layout:OnBoardingLayout},
     {id:5,name:'dashboard', path:'/dashboard',component:Dashboard,layout:Layout},
-    {id:6,name:'dashboard/id', path:'/dashboard/:id',component:OrderLogs,layout:Layout},
     {id:7,name:'profile', path:'/profile',component:Profile,layout:Layout},
     {id:8,name:'referenceManage', path:'/admin/referenceManage',component:Admin,layout:AdminLayout},
     {id:9,name:'orders', path:'/admin/orders',component:Orders,layout:AdminLayout},

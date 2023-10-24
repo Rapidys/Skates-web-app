@@ -75,7 +75,7 @@ const CommentsModal: FC<ICommentsModal> = ({openModal, handleCloseModal, title, 
                             value={comment}
                             onChange={(e) => setComment(e.target.value)}
                             onKeyDown={(e) => {
-                                if (e.key === 'Enter' && comment) {
+                                if (e.key === 'Enter' && comment.trim().length > 0) {
                                     onSend(comment, getComments)
                                     setComment('')
                                     if (refTextArea.current) {
@@ -98,7 +98,7 @@ const CommentsModal: FC<ICommentsModal> = ({openModal, handleCloseModal, title, 
                             setComment('')
                             scrollToBottom()
                         }}
-                                disabled={!comment}
+                                disabled={comment.trim().length <= 0}
                         >
                             გაგზავნა
                         </Button>

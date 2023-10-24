@@ -1,7 +1,5 @@
-import React, {FC, useCallback, useEffect, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {Modal, Checkbox, Label} from "flowbite-react";
-import Select from 'react-select'
-import DatePicker from "../../../components/fields/DatePicker";
 import Button from '../../../components/Button'
 import {useServices} from "../../../context/Services/ServiceContextProvider";
 import {IOptions, ISelectedValues, IServices} from "../../../types/Dashboard";
@@ -11,14 +9,19 @@ import {useAccount} from "../../../context/AccountContext";
 import Counter from "../../../components/counter";
 import Input from "../../../components/fields/input";
 import {ArrayToOptions} from "../../../utils/helpers/arrayToOptions";
+import MyDatePicker from "../../../components/fields/DatePickerV2";
+import MySelect from "../../../components/fields/select";
+import {IPaymentTypes, ITrainers} from "../../../types";
 
 interface IAddService {
     openModal: boolean,
     handleCloseModal: (modalType: string) => void,
     callbackFn: any,
+    trainers:ITrainers[]
+    paymentTypes:IPaymentTypes[]
 }
 
-const AddServiceModal: FC<IAddService> = ({openModal, handleCloseModal, callbackFn}) => {
+const AddServiceModal: FC<IAddService> = ({openModal, handleCloseModal, callbackFn,trainers,paymentTypes}) => {
 
     const currentDate = new Date();
     const oneMonthLater = addMonths(currentDate, 1);
@@ -34,6 +37,7 @@ const AddServiceModal: FC<IAddService> = ({openModal, handleCloseModal, callback
         services: [],
         paymentTypes: {},
     });
+
     const [openAlertModal, setOpenAlertModal] = useState(false);
     const [discount, setDiscount] = useState('')
     const [hasDiscount, setHasDiscount] = useState(false)
@@ -43,36 +47,20 @@ const AddServiceModal: FC<IAddService> = ({openModal, handleCloseModal, callback
 
     const {services} = useServices()
 
-
-    const checkApiCallType = (url: string) => {
-        if (url.toLowerCase().includes('trainers')) {
-            return 'trainers'
-        }
-        if (url.toLowerCase().includes('services')) {
-            return 'services'
-        }
-        if (url.toLowerCase().includes('paymenttypes')) {
-            return 'paymentTypes'
-        }
-    }
-
     useEffect(() => {
-        Promise.all([
-            services.Dashboard.getServices(),
-            services.Dashboard.getTrainers(),
-            services.Dashboard.getPaymentTypes()
-        ]).then(res => {
-            res.forEach((item, i) => {
-                const {config, data} = item
-                const checkType = checkApiCallType(config?.url) || ''
-                const newArr = ArrayToOptions(data, checkType)
-                setOptions((prevState) => ({
-                    ...prevState,
-                    [checkType]:newArr
-                }))
-            })
-        })
-    }, []);
+        if(openModal){
+            services.Dashboard.getServices()
+           .then(res => {
+                    const newArr = ArrayToOptions(res?.data, 'services')
+                    setOptions((prevState) => ({
+                        ...prevState,
+                        services:newArr,
+                        trainers,
+                        paymentTypes
+                    }))
+                })
+        }
+    }, [openModal]);
 
 
     const updateState = (newValue: any, serviceId: number | undefined, objKey: string, objKeySec?: string) => {
@@ -162,30 +150,26 @@ const AddServiceModal: FC<IAddService> = ({openModal, handleCloseModal, callback
             <Modal.Body className={'overflow-y-scroll'}>
                 <div className={'h-96'}>
                     <h2 className={'text-custom_ocean mb-2 text-sm'}>აირჩიეთ სერვისი:</h2>
-                    <Select
+                    <MySelect
                         isMulti
                         options={options?.services}
                         value={selectedValues.services}
-                        menuPortalTarget={document.body}
                         placeholder={'აირჩიეთ სერვისი'}
-                        styles={{menuPortal: base => ({...base, zIndex: 9999})}}
-                        onChange={(selectedOptions) => onServiceChange(selectedOptions, 'services')}
+                        onSelectChange={(selectedOptions) => onServiceChange(selectedOptions, 'services')}
                     />
 
-                    <div className={'w-full md:w-1/3 mt-2'}>
+                    <div className={'w-full md:w-1/3 mt-4'}>
                         <h2 className={'text-custom_ocean mb-2 text-sm'}>აირჩიეთ გადახდის მეთოდი:</h2>
 
-                        <Select
+                        <MySelect
                             options={options.paymentTypes}
                             value={selectedValues.paymentTypes?.label ? selectedValues.paymentTypes : ''}
-                            menuPortalTarget={document.body}
-                            styles={{menuPortal: base => ({...base, zIndex: 9999})}}
                             placeholder={'გადახდის მეთოდი'}
-                            onChange={(selectedOptions) => onSelectChange(selectedOptions, 'paymentTypes')}
+                            onSelectChange={(selectedOptions) => onSelectChange(selectedOptions, 'paymentTypes')}
                         />
                     </div>
 
-                    <div className={'text-custom_ocean mt-2 text-sm'}>
+                    <div className={'text-custom_ocean mt-4 text-sm'}>
                         <h6 className={''}>არჩეული:</h6>
                         {selectedValues.services?.map((items: IServices) => (
                             <div
@@ -200,40 +184,36 @@ const AddServiceModal: FC<IAddService> = ({openModal, handleCloseModal, callback
                                     {items?.needTrainer && (
                                         <>
                                             <div className={'py-1'}>ტრენერი</div>
-                                            <Select
+                                            <MySelect
                                                 options={(options?.trainers as any)}
-                                                menuPortalTarget={document.body}
-                                                styles={{menuPortal: base => ({...base, zIndex: 9999})}}
                                                 value={items?.trainerInfo}
                                                 placeholder={'ტრენერი'}
-                                                onChange={(selectedOptions) => updateState(selectedOptions, items?.id, 'trainerId', 'trainerInfo')}
+                                                onSelectChange={(selectedOptions) => updateState(selectedOptions, items?.id, 'trainerId', 'trainerInfo')}
                                             />
                                         </>
                                     )}
                                 </div>
-                                {items?.needTrainer && items?.StartDate && items?.EndDate && (
+                                {items?.needTrainer && items?.StartDate !== undefined && items?.EndDate !== undefined && (
                                     <div
                                         className={'flex flex-col md:flex-row w-full md:w-auto items-center md:items-end justify-between mt-3 '}>
                                         <div className={'mr-2'}>
-                                            <DatePicker
+                                            <MyDatePicker
                                                 label={'დან'}
                                                 labelClassName={'!text-custom_ocean'}
-                                                date={new Date(items?.StartDate)}
-                                                onChange={(day) => {
-                                                    onDateChange(format(day, 'yyyy-MM-dd'), 'StartDate', items?.id)
+                                                value = {items.StartDate}
+                                                handleChange = {(value)=> {
+                                                    onDateChange(value, 'StartDate', items?.id)
                                                 }}
-                                                className={'custom-date-picker !ring-0'}
                                             />
                                         </div>
                                         <div>
-                                            <DatePicker
+                                            <MyDatePicker
                                                 label={'მდე'}
+                                                value = {items.EndDate}
                                                 labelClassName={'!text-custom_ocean'}
-                                                date={new Date(items?.EndDate)}
-                                                onChange={(day) => {
-                                                    onDateChange(format(day, 'yyyy-MM-dd'), 'EndDate', items?.id)
+                                                handleChange = {(value)=> {
+                                                    onDateChange(value, 'EndDate', items?.id)
                                                 }}
-                                                className={'custom-date-picker !ring-0'}
                                             />
                                         </div>
                                     </div>

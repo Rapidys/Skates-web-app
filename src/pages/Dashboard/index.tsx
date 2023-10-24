@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {IHeadData, ServiceData} from "../../types/Dashboard";
+import React, {useEffect, useRef, useState} from 'react';
+import {ServiceData} from "../../types/Dashboard";
 import AddServiceModal from "./AddServiceModal";
 import Button from "../../components/Button";
 import MoreModal from "./MoreModal";
@@ -14,6 +14,10 @@ import CommentsModal from "../../components/Modals/CommentsModal";
 import MyTable from "../../components/Tables";
 import dashboardCols from "./dashboardCols";
 import {Checkbox} from "flowbite-react";
+import MyModal from "../../components/Modals";
+import OrderLogs from "./OrderLogs";
+import {ArrayToOptions} from "../../utils/helpers/arrayToOptions";
+import {IPaymentTypes, ITrainers} from "../../types";
 
 const Dashboard = () => {
 
@@ -22,6 +26,8 @@ const Dashboard = () => {
     const {services} = useServices()
 
     const [onlyActive, setOnlyActive] = useState(true)
+    const [trainers, setTrainers] = useState<ITrainers[]>([])
+    const [paymentTypes, setPaymentTypes] = useState<IPaymentTypes[]>([])
     const [headCheckboxValue, setHeadCheckBoxValue] = useState(false)
     const [loading, setLoading] = useState(false)
     const [state, setState] = useState<{ row: ServiceData[] }>({row: []})
@@ -30,12 +36,14 @@ const Dashboard = () => {
         moreModal: false,
         commentsModal: false,
         instantModal: false,
+        logModal: false
     })
     const [openConsumeAlert, setOpenConsumeAlert] = useState(false)
     const [myServiceItems, setMyServiceItem] = useState<ServiceData>({})
     const [instantData, setInstantData] = useState([])
+    const [orderId, setOrderId] = useState(null)
 
-
+    const test = useRef()
     const recreateRow = (data: any) => {
         const newArr = data?.data.map((element: any) => {
             return {...element, checked: false}
@@ -109,10 +117,35 @@ const Dashboard = () => {
         }
 
     }
+    const getTrainers = () => {
+        try {
+            services.Dashboard.getTrainers().then(res => {
+                const newArr = ArrayToOptions(res?.data, '')
+                setTrainers(newArr)
+            })
+        } catch (e) {
+            console.log(e)
+        }
+
+    }
+    const getPaymentTypes = () => {
+        try {
+            services.Dashboard.getPaymentTypes().then(res => {
+                const newArr = ArrayToOptions(res?.data, '')
+                setPaymentTypes(newArr)
+            })
+        } catch (e) {
+            console.log(e)
+        }
+
+    }
+
 
     useEffect(() => {
         getClientOrders()
         getServices()
+        getTrainers()
+        getPaymentTypes()
     }, []);
 
 
@@ -217,8 +250,7 @@ const Dashboard = () => {
     }
 
     return (
-        <div className={'w-full h-full px-2'}>
-
+        <div className={'w-full h-full px-2 relative'} ref={test}>
             <div className={'flex justify-between items-center'}>
                 <div>
                     <h3 className={'text-lg text-custom_light py-2'}>
@@ -246,9 +278,29 @@ const Dashboard = () => {
                 iterationKey={'orderId'}
                 onChange={handleCheckbox}
                 onChangeHead={handleHeadCheckboxChange}
-                onRowClick={(item) => navigate(`${item.orderId}`)}
+                onRowClick={(item) => {
+                    setModals({...modals, logModal: true})
+                    setOrderId(item.orderId)
+                }}
                 loading={loading}
                 headCheckboxValue={headCheckboxValue}
+            />
+
+            <MyModal
+                openModal={modals.logModal}
+                renderBody={() => {
+                    return (
+                        <OrderLogs orderId={orderId}/>
+                    )
+                }}
+                renderHeader={() => {
+                    return (
+                        <div>
+                            გამოყენებები
+                        </div>
+                    )
+                }}
+                setOpenModal={(prop) => setModals({...modals, logModal: prop})}
             />
 
             <div style={{height: 60, width: '100%'}}/>
@@ -309,9 +361,15 @@ const Dashboard = () => {
                 data={myServiceItems}
                 setData={setMyServiceItem}
                 deleteOrder={deleteOrder}
+                trainers = {trainers}
             />
-            <AddServiceModal openModal={modals.addServiceModal} handleCloseModal={handleCloseModal}
-                             callbackFn={getClientOrders}/>
+            <AddServiceModal
+                openModal={modals.addServiceModal}
+                handleCloseModal={handleCloseModal}
+                callbackFn={getClientOrders}
+                trainers = {trainers}
+                paymentTypes = {paymentTypes}
+            />
             <CommentsModal
                 openModal={modals.commentsModal}
                 handleCloseModal={handleCloseModal}

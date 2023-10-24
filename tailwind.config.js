@@ -9,6 +9,7 @@ module.exports = {
     ),
     'node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}',
     './node_modules/react-tailwindcss-datepicker/dist/index.esm.js',
+    './node_modules/tailwind-datepicker-react/dist/**/*.js',
     ...createGlobPatternsForDependencies(__dirname),
   ],
   theme: {
@@ -26,6 +27,9 @@ module.exports = {
         custom_danger:'#8a1d36',
         custom_disabled:'#8a8a8a',
         gray_white:'#f6f6f6',
+        custom_interest:'#d946ef',
+        custom_hover_interest:'#fae8ff',
+        custom_date_border:'#d1d5db',
         // Add more custom colors here
       },
     },

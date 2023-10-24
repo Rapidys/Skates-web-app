@@ -58,7 +58,6 @@ const ClientForm: FC<ICreateAccount> = ({
                 documentNumber: ClientInfo?.identificationNumber || '',
                 clientInfoCardNumber: cardNumber || '',
                 startDate: ClientInfo?.birthDate || null,
-                endDate: ClientInfo?.birthDate || null
             }}
             validationSchema={validSchema}
             onSubmit={(values => {
@@ -140,14 +139,14 @@ const ClientForm: FC<ICreateAccount> = ({
                     </div>
                     <div className={'mb-2'}>
                         <MyDatePicker
-                            value={({startDate:values.startDate,endDate:values.endDate}) as any}
+                            value={values.startDate}
+                            name = {'startDate'}
                             handleChange={(newDate) => {
-                                setFieldValue("startDate", newDate.startDate)
-                                setFieldValue("endDate", newDate.endDate)
+                                setFieldValue("startDate", newDate)
                             }}
                             label={'დაბ.თარიღი'}
-                            isValid = {isValid}
                             error={errors.startDate as string}
+                            labelClassName={`font-light !text-gray-500`}
                         />
                     </div>
                     <div className={'mb-2'}>
