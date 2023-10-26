@@ -39,7 +39,7 @@ const MoreModal: FC<IMoreModal> = ({
 
     useEffect(() => {
         if (openModal) {
-            const trainerInfo = trainers.find(el => el.displayName === data.trainer)
+            const trainerInfo = trainers.find(el => el.id === data.trainerId)
             setCurrentTrainer(trainerInfo)
         }
     }, [openModal])

@@ -37,6 +37,7 @@ const MySelect: FC<IMySelectProps> = ({onSelectChange, ...props}) => {
             ref={selectRef}
             onChange={handleSelectChange}
             menuPortalTarget={document.body}
+            menuPlacement = {'auto'}
             styles={{
                 menuPortal: base => ({...base, zIndex: 9999}),
                 control: (baseStyles, state) => {

@@ -16,6 +16,7 @@ const ServiceDetails: FC<IServiceDetails> = ({data, trainers, value, handleChang
         <div className={'w-full text-custom_ocean'}>
             <Item text={data?.displayName} title={'სერვისის სახელი'}/>
             <Item text={data?.quantity} title={'რაოდენობა'}/>
+            <Item text={data?.paymentType} title={'გადახდის მეთოდი'}/>
             <Item
                 text={data?.trainer}
                 title={'ტრენერი'}

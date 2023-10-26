@@ -63,10 +63,12 @@ const Filter: FC<IFilter> = ({
                     setOpenModal={setOpen}
                     renderHeader={() => <span>შემოსული თანხები</span>}
                     renderBody={() => {
+                        let sum = 0 ;
+
                         return (
                             <Table className={'w-full'}>
                                 <Table.Head>
-                                    {Object.keys(sumValues)?.map(element => {
+                                    {Object.keys({...sumValues,['ჯამი']:''})?.map(element => {
                                         return (
                                             <Table.HeadCell key={element}>
                                                 {element}
@@ -76,10 +78,11 @@ const Filter: FC<IFilter> = ({
                                 </Table.Head>
                                 <Table.Body className="divide-y">
                                     <Table.Row>
-                                        {Object.keys(sumValues)?.map(element => {
+                                        {Object.keys({...sumValues,['ჯამი']:''})?.map((element) => {
+                                            sum += sumValues[element] !== undefined ? sumValues[element] : 0
                                             return (
                                                 <Table.Cell key={element}>
-                                                    {sumValues[element]} GEL
+                                                    {{...sumValues,['ჯამი']:sum }[element]} GEL
                                                 </Table.Cell>
                                             )
                                         })}

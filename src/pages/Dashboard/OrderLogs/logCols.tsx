@@ -5,7 +5,7 @@ import {TableColumn} from "../../../types";
 const orderCols:TableColumn[] = [
     {id: 1, head: 'ოპერატორი', dataKey: 'operatorConsumed'},
     {id: 2, head: 'მომხმარებლის იდენტიფიკატორი', dataKey: 'identifier'},
-    {id: 3, head: 'თარიღი', render:(item) => <span>{format(new Date(item?.consumeDate), 'yyyy-MM-dd')}</span> },
+    {id: 3, head: 'თარიღი', render:(item) => <span>{format(new Date(item?.consumeDate), 'yyyy-MM-dd HH:mm:ss')}</span> },
 ]
 
 export default orderCols

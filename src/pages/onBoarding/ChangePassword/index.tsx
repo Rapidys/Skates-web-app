@@ -100,6 +100,7 @@ const ChangePassword = () => {
                             onBlur={handleBlur}
                             isValid = {isValid}
                             error={errors.password}
+                            withEye
                         />
                         <Input
                             name={'repeatPassword'}
@@ -109,6 +110,7 @@ const ChangePassword = () => {
                             onBlur={handleBlur}
                             isValid = {isValid}
                             error={errors.repeatPassword}
+                            withEye
                         />
                         <div className={'flex justify-between items-center'}>
                             <Button

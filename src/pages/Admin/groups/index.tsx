@@ -32,6 +32,10 @@ const Groups = () => {
             services.Dashboard.getTrainers().then(res => {
                 const toOptions = ArrayToOptions(res.data, '')
                 setTrainers(toOptions)
+                setState((prevState) => ({
+                    ...prevState,
+                    trainer:toOptions[0] ? toOptions[0] : null
+                }))
             })
         } catch (e) {
             console.log(e)
@@ -50,12 +54,12 @@ const Groups = () => {
             setLoading(true)
             services.Admin.getGroupOrders(data).then(res => {
                 setGroupOrders(res?.data?.orders)
-                setState({
-                    ...state,
+                setState((prevState) => ({
+                    ...prevState,
                     PageNumber: res.data?.pageInfo?.pageNumber,
                     PageSize: {id:1,value:`${res.data?.pageInfo?.pageSize}`,label:`${res.data?.pageInfo?.pageSize}`},
-                    total: res.data?.pageInfo?.totalCount
-                })
+                    total: res.data?.pageInfo?.totalCount,
+                }))
                 setLoading(false)
             })
         } catch (e) {
@@ -122,10 +126,12 @@ const Groups = () => {
                 pageNumber={state.PageNumber}
                 pageSize={state.PageSize}
                 onPageChange={(page) => {
+                    setState(prevState => ({...prevState, pageNumber: page}))
                     getGroupOrders({page:+page})
                 }}
                 onPageSizeChange={(pageSize) => {
-                    getGroupOrders({pageSize})
+                    setState(prevState => ({...prevState, pageSize: pageSize,pageNumber: 1}))
+                    getGroupOrders({pageSize,page:1})
                 }}
             />
 

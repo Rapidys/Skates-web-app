@@ -44,7 +44,8 @@ export interface ServiceData {
     usedQuantity?: string,
     startDate?: Date,
     endDate?: Date,
-    checked?: boolean
+    checked?: boolean,
+    paymentType:string,
 }
 
 export interface IConsumeOrder {

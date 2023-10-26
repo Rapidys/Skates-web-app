@@ -174,8 +174,8 @@ const Orders = () => {
                         getOrders({pageNumber:page})
                     }}
                     onPageSizeChange={(item: IOptions) => {
-                        setPageInfo({...pageInfo, pageSize: item})
-                        getOrders({pageSize:item})
+                        setPageInfo({...pageInfo, pageSize: item,pageNumber:1})
+                        getOrders({pageSize:item,pageNumber:1})
                     }}
                     pageNumber={pageInfo.pageNumber}
                     pageSize={pageInfo.pageSize}

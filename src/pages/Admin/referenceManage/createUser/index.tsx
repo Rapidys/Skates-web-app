@@ -139,8 +139,9 @@ const CreateUser: FC<ICreateUser> = ({modals, setOpenModal,getUsers,currentUserI
                             <div className={'mt-2'}>
                                 <Checkbox id="isAdmin"
                                           className={'mr-2 mb-2 mt-2'}
+                                          name = {'isAdmin'}
                                           onChange = {handleChange}
-                                          value = {values.isAdmin}
+                                          checked = {values.isAdmin}
                                 />
                                 <Label htmlFor="isAdmin" className={'text-black'}>
                                     ადმინი

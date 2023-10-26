@@ -155,8 +155,8 @@ const Clients = () => {
                         getClients({pageNumber: page})
                     }}
                     onPageSizeChange={(pageSize) => {
-                        setState(prevState => ({...prevState, pageSize: pageSize}))
-                        getClients({pageSize: pageSize})
+                        setState(prevState => ({...prevState, pageSize: pageSize,pageNumber: 1}))
+                        getClients({pageSize: pageSize,pageNumber:1})
                     }}
                 />
             </div>
