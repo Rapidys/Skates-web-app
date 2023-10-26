@@ -1,13 +1,15 @@
 .animationIceSkating {
-   animation: animation 1s;
+   animation: animation 3s infinite linear;
+   animation-direction: alternate;
 }
 
+
 @keyframes animation {
-    from {
+    0%{
         transform: translateX(0);
     }
-    to  {
-        transform: translateX(300px);
+    100%  {
+        transform: translate(900px,0px)
     }
 }
 .animationIceSkatingLeave {

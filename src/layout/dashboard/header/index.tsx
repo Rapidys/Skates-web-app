@@ -15,7 +15,7 @@ import {useAccount} from "../../../context/AccountContext";
 import IceSkating from '../../../assets/skating.jpg'
 import NavMenu from "../../../components/NavMenu";
 import MyDropDown from "../../../components/dropdown";
-
+import s from './animation.module.css'
 
 interface IHeader {
     MenuItems:any,
@@ -30,6 +30,7 @@ const Header:FC<IHeader> = ({MenuItems}) => {
     const {displayName} = useAuth()
 
     const [isMouseEntered, setMouseEntered] = useState(false)
+    const [jump,setJump] = useState(0)
 
     const [isOpenBurger,setIsOpenBurger] = useState(false)
     const navigate = useNavigate()
@@ -79,12 +80,17 @@ const Header:FC<IHeader> = ({MenuItems}) => {
     }
 
     const handleMouseleave = () => {
-        setMouseEntered(false)
+            setMouseEntered(false)
+    }
+
+    const handleJump = () => {
+        setJump(1)
     }
 
 
     return (
         <div className={'w-full h-20 border-b-2 shadow-lg'} onMouseEnter={handleMouseEnter}
+             onClick = {handleJump}
              onMouseLeave={handleMouseleave}>
             <div className={"flex justify-between items-center h-full px-4"}>
                 {
@@ -116,7 +122,7 @@ const Header:FC<IHeader> = ({MenuItems}) => {
                         </div>
                     </div>
                     {!location.pathname.includes('admin') && (
-                        <div className={'text-custom_ocean'}>
+                        <div className={isMouseEntered ? s.animationIceSkating : ''}>
                             <img src={IceSkating} alt="#" width={40} height={40}/>
                         </div>
                     )}

@@ -9,7 +9,6 @@ import Layout from "../layout/dashboard";
 import Profile from "../pages/Dashboard/Profile";
 import ChooseUser from "../pages/onBoarding/ChooseUser";
 import AdminLayout from "../layout/admin/index";
-import OrderLogs from "../pages/Dashboard/OrderLogs";
 import Orders from "../pages/Admin/orders";
 import Clients from "../pages/Admin/clients";
 import Groups from "../pages/Admin/groups";
