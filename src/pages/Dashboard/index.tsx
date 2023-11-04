@@ -39,7 +39,7 @@ const Dashboard = () => {
         logModal: false
     })
     const [openConsumeAlert, setOpenConsumeAlert] = useState(false)
-    const [myServiceItems, setMyServiceItem] = useState<ServiceData>({})
+    const [myServiceItems, setMyServiceItem] = useState<any>({})
     const [instantData, setInstantData] = useState([])
     const [orderId, setOrderId] = useState(null)
 

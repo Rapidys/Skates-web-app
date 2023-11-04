@@ -168,19 +168,27 @@ const Orders = () => {
                     iterationKey={'dateCreated'}
                     loading={loading}
                 />
-                <MyPagination
-                    onPageChange={(page) => {
-                        setPageInfo({...pageInfo, pageNumber: page})
-                        getOrders({pageNumber:page})
-                    }}
-                    onPageSizeChange={(item: IOptions) => {
-                        setPageInfo({...pageInfo, pageSize: item,pageNumber:1})
-                        getOrders({pageSize:item,pageNumber:1})
-                    }}
-                    pageNumber={pageInfo.pageNumber}
-                    pageSize={pageInfo.pageSize}
-                    total={pageInfo.totalCount}
-                />
+                <div className={'flex items-center'}>
+                    <MyPagination
+                        onPageChange={(page) => {
+                            setPageInfo({...pageInfo, pageNumber: page})
+                            getOrders({pageNumber:page})
+                        }}
+                        onPageSizeChange={(item: IOptions) => {
+                            setPageInfo({...pageInfo, pageSize: item,pageNumber:1})
+                            getOrders({pageSize:item,pageNumber:1})
+                        }}
+                        pageNumber={pageInfo.pageNumber}
+                        pageSize={pageInfo.pageSize}
+                        total={pageInfo.totalCount}
+                    />
+                    {pageInfo.totalCount > 0 && (
+                        <div className={'mr-2'}>
+                            სულ:
+                            {pageInfo.totalCount}
+                        </div>
+                    )}
+                </div>
 
             </div>
         </div>
